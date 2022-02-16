@@ -55,6 +55,8 @@ public class Drivetrain extends SubsystemBase{
         backRightDrive = new TalonFX(BACK_RIGHT_MODULE_DRIVE_MOTOR);
         backRightSteer = new TalonFX(BACK_RIGHT_MODULE_STEER_MOTOR);
 
+        setBrakeMode(true);
+        
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
     
         frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
@@ -105,10 +107,10 @@ public class Drivetrain extends SubsystemBase{
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         setBrakeMode(true);
-
+        
         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             commander.getForwardCommand(),
-            commander.getStrafeCommand(), 
+            commander.getStrafeCommand(),
             commander.getTurnCommand(), 
             Rotation2d.fromDegrees(robotState.getTheta()));
 
@@ -132,10 +134,10 @@ public class Drivetrain extends SubsystemBase{
 
     @Override
     public void zeroActuators() {
-        frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[0].angle.getRadians());
-        frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[1].angle.getRadians());
-        backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[2].angle.getRadians());
-        backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE, states[3].angle.getRadians());
+        frontLeftModule.set(0, 0);
+        frontRightModule.set(0, 0);
+        backLeftModule.set(0, 0);
+        backRightModule.set(0, 0);
     }
 
     @Override

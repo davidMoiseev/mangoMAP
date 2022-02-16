@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 
+import static frc.robot.Constants.*;
+
 public class TeleopCommander extends RobotCommander{
 
     private static XboxController driver;
@@ -16,14 +18,23 @@ public class TeleopCommander extends RobotCommander{
     }
 
     public double getForwardCommand(){
-        return modifyAxis(driver.getLeftY());
+        return modifyAxis(driver.getLeftY()) * MAX_VELOCITY_METERS_PER_SECOND;
     }
     public double getStrafeCommand(){
-        return modifyAxis(driver.getLeftX());
+        return modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
     }
     public double getTurnCommand(){
-        return deadband(driver.getRightX(), .3);
+        return -deadband(driver.getRightX(), .3) * MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
     }
+
+    public boolean getRunRightIntake(){
+      return driver.getRightBumper();
+    }
+
+    public boolean getRunLeftIntake(){
+      return driver.getLeftBumper();
+    }
+
 
     private static double deadband(double value, double deadband){
         if(Math.abs(value) < deadband){

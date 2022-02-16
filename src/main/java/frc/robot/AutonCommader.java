@@ -1,9 +1,13 @@
 package frc.robot;
 
+import frc.robot.Autons.AutoRunner;
+
 public class AutonCommader extends RobotCommander{
 
-    public AutonCommader(RobotState robotState) {
+    AutoRunner auton;
 
+    public AutonCommader(RobotState robotState) {
+        auton = new AutoRunner(robotState);
     }
 
     @Override
@@ -22,5 +26,17 @@ public class AutonCommader extends RobotCommander{
     public double getTurnCommand() {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public boolean getRunLeftIntake() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getRunRightIntake() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }
