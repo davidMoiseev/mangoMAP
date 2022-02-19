@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
 import org.hotutilites.hotlogger.HotLogger;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -16,7 +18,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    HotLogger.Setup("Theta");
+    HotLogger.Setup("Theta", "Left Front Absolute", "Left Front Assumed", 
+                "Right Front Absolute", "Right Front Assumed",
+                "Left Rear Absolute", "Left Rear Assumed",
+                "Right Rear Absolute", "Right Rear Assumed");
 
     robotState = new RobotState();
 
@@ -31,6 +36,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     pigeon.updateState();
     drivetrain.updateState();
+    drivetrain.logData();
   }
 
   @Override
