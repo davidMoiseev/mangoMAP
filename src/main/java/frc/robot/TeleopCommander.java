@@ -95,4 +95,9 @@ public class TeleopCommander extends RobotCommander{
         }
     }
 
+      @Override
+      public boolean getRobotAim() {
+        return false;
+      }
+
 }
