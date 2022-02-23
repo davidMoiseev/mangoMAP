@@ -48,4 +48,22 @@ public final class Constants {
 
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
+
+    public static final int RIGHT_SHOOTER_MOTOR = 14;
+    public static final int LEFT_SHOOTER_MOTOR = 15;
+
+    public static final int RIGHT_BALLIVATOR_MOTOR = 11;
+    public static final int LEFT_BALLIVATOR_MOTOR = 12;
+
+    public static final int PNEUMATIC_HUB = 23;
+    public static final int LEFT_INTAKE_FWD_SOLENOID = 13;
+    public static final int LEFT_INTAKE_REV_SOLENOID = 2;
+    public static final int RIGHT_INTAKE_FWD_SOLENOID = 12;
+    public static final int RIGHT_INTAKE_REV_SOLENOID = 3;
+    public static final int CLIMBER_EXTEND_FWD_SOLENOID = 9;
+    public static final int CLIMBER_EXTEND_REV_SOLENOID = 6;
+    public static final int CLIMBER_RELEASE_SOLENOID = 8;
+
+    public static final int CLIMBER_MOTOR = 13;
+    
 }

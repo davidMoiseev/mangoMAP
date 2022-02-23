@@ -39,4 +39,34 @@ public class AutonCommader extends RobotCommander{
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public boolean getClimberExtend() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public double getClimberMotor() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public boolean getClimberRelease() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public double getRightIntakeCommand() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public double getLeftIntakeCommand() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }
