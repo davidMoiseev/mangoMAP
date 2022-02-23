@@ -6,6 +6,8 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import org.hotutilites.hotlogger.HotLogger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
+import frc.robot.RobotCommander;
 import frc.robot.RobotState;
 
 import static frc.robot.Constants.*;
@@ -25,7 +27,11 @@ public class Pigeon extends SensorBase{
     }
 
     @Override
-    public void updateState() {
+    public void updateState(RobotState robotState, RobotCommander commander) {
+        if(commander.getResetIMU()){
+            zeroSensor();
+        }
+
         theta = pigeon.getYaw();
         robotState.setTheta(theta);
     }

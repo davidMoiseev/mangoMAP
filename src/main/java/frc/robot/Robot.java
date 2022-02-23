@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    pigeon.updateState();
+    pigeon.updateState(robotState, teleopCommander);
     drivetrain.updateState();
     drivetrain.logData();
   }

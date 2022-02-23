@@ -1,5 +1,6 @@
 package frc.robot.sensors;
 
+import frc.robot.RobotCommander;
 import frc.robot.RobotState;
 
 public class Limelight extends SensorBase{
@@ -9,7 +10,7 @@ public class Limelight extends SensorBase{
     }
 
     @Override
-    public void updateState() {
+    public void updateState(RobotState robotState, RobotCommander commander) {
         
     }
 
