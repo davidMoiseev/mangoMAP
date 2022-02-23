@@ -75,4 +75,10 @@ public class AutonCommader extends RobotCommander{
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public boolean getRobotAim() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
