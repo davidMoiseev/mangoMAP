@@ -20,10 +20,10 @@ public class TeleopCommander extends RobotCommander{
     }
 
     public double getForwardCommand(){
-        return modifyAxis(driver.getLeftY()) * MAX_VELOCITY_METERS_PER_SECOND;
+        return -modifyAxis(driver.getLeftY()) * MAX_VELOCITY_METERS_PER_SECOND;
     }
     public double getStrafeCommand(){
-        return modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
+        return -modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
     }
     public double getTurnCommand(){
         return -deadband(driver.getRightX(), 0.3, 0.4) * MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
