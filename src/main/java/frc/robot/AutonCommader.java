@@ -71,6 +71,12 @@ public class AutonCommader extends RobotCommander{
     }
 
     @Override
+    public boolean getResetIMU() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public boolean getRobotAim() {
         // TODO Auto-generated method stub
         return false;

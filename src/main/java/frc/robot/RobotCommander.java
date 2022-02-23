@@ -14,5 +14,6 @@ public abstract class RobotCommander {
     public abstract boolean getClimberRelease();
     public abstract double getRightIntakeCommand();
     public abstract double getLeftIntakeCommand();
+    public abstract boolean getResetIMU();
     public abstract boolean getRobotAim();
 }
