@@ -18,16 +18,16 @@ public class BallSupervisor extends SubsystemBase{
 
     public BallSupervisor(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
-        Intake intake = new Intake(robotState, hub);
-        Ballivator ballivator = new Ballivator(robotState);
-        Shooter shooter = new Shooter(robotState, hub);
+        intake = new Intake(robotState, hub);
+        // ballivator = new Ballivator(robotState);
+        // shooter = new Shooter(robotState, hub);
     }
     
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         intake.enabledAction(robotState, commander);
-        //ballivator.enabledAction(robotState, commander);
-        shooter.enabledAction(robotState, commander);
+        // ballivator.enabledAction(robotState, commander);
+        // shooter.enabledAction(robotState, commander);
     }
 
     @Override

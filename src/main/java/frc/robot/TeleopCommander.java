@@ -49,7 +49,7 @@ public class TeleopCommander extends RobotCommander{
     public double getRightIntakeCommand() {
       if (this.getRunRightIntake()) {
         double temp = operator.getRightY();
-        return deadband(temp, 0.2, 1.0);
+        return -deadband(temp, 0.2, 1.0);
       } else {
         return 0.0;
       }
@@ -91,7 +91,7 @@ public class TeleopCommander extends RobotCommander{
         if (deadband) {
           return 0;
         } else {
-          return value * 0.33;
+          return value;
         }
     }
 
