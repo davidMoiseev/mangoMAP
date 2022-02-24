@@ -27,10 +27,12 @@ public class Climber extends SubsystemBase{
 
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
+
+        // Move Climber motor back into if statement later
         if (commander.getClimberExtend()){
             climberExtend.set(DoubleSolenoid.Value.kReverse);
-            climberMotor.set(TalonFXControlMode.PercentOutput, commander.getClimberMotor());
         }
+        climberMotor.set(TalonFXControlMode.PercentOutput, commander.getClimberMotor());
         climberRelease.set(commander.getClimberRelease());
     }
 
