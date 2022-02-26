@@ -9,7 +9,7 @@ public abstract class RobotCommander {
     public abstract double getTurnCommand();
     public abstract boolean getRunLeftIntake();
     public abstract boolean getRunRightIntake();
-    public abstract boolean getClimberExtend();
+    public abstract boolean getClimberChangeState();
     public abstract double getClimberMotor();
     public abstract boolean getClimberRelease();
     public abstract double getRightIntakeCommand();

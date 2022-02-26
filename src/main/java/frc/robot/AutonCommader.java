@@ -41,7 +41,7 @@ public class AutonCommader extends RobotCommander{
     }
 
     @Override
-    public boolean getClimberExtend() {
+    public boolean getClimberChangeState() {
         // TODO Auto-generated method stub
         return false;
     }
