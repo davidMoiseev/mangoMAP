@@ -53,13 +53,13 @@ public final class Constants {
 
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
-    public static final double SHOOTER_SPEED_1 = 2250.0;
-    public static final double SHOOTER_SPEED_2 = 2400.0;
-    public static final double SHOOTER_SPEED_3 = 2600.0;
+    public static final double SHOOTER_SPEED_1 = 1200.0; //2200
+    public static final double SHOOTER_SPEED_2 = 2600.0;
+    public static final double SHOOTER_SPEED_3 = 2200.0;
     public static final double SHOOTER_SPEED_4 = 2800.0;
-    public static final double SHOOTER_GAIN_P = 0.00026;
+    public static final double SHOOTER_GAIN_P = 0.0004;
     public static final double SHOOTER_GAIN_I = 0.00005;  //Not good yet
-    public static final double SHOOTER_GAIN_D = 0.000008;
+    public static final double SHOOTER_GAIN_D = 0.000012;
     public static final double SHOOTER_FF = 0.04;
 
     public static final int RIGHT_SHOOTER_MOTOR = 14;
