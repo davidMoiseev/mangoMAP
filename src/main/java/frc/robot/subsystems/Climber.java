@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import org.hotutilites.hotlogger.HotLogger;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -17,6 +18,11 @@ public class Climber extends SubsystemBase{
     private DoubleSolenoid climberExtend;
     private Solenoid climberRelease;
     RobotState robotState;
+    /*
+    DoubleSolenoid.Value.kReverse == climberUp
+    DoubleSolenoid.Value.kForward == climberDown
+    */
+    private Value climberState = DoubleSolenoid.Value.kForward;
 
     public Climber(RobotState robotState, PneumaticHub hub) {
         this.robotState = robotState;
@@ -29,8 +35,15 @@ public class Climber extends SubsystemBase{
     public void enabledAction(RobotState robotState, RobotCommander commander) {
 
         // Move Climber motor back into if statement later
-        if (commander.getClimberExtend()){
-            climberExtend.set(DoubleSolenoid.Value.kReverse);
+        if (commander.getClimberChangeState()){
+            if (climberState == DoubleSolenoid.Value.kForward) {
+                climberState = DoubleSolenoid.Value.kReverse;
+            } else {
+                climberState = DoubleSolenoid.Value.kForward;
+            }
+            climberExtend.set(climberState);            
+        } else {
+            climberExtend.set(DoubleSolenoid.Value.kOff);            
         }
         climberMotor.set(TalonFXControlMode.PercentOutput, commander.getClimberMotor());
         climberRelease.set(commander.getClimberRelease());
