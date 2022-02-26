@@ -81,4 +81,16 @@ public class AutonCommader extends RobotCommander{
         // TODO Auto-generated method stub
         return false;
     }
+
+    @Override
+    public int getHoodPosition() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public double getShooterSpeed() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

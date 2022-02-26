@@ -16,4 +16,6 @@ public abstract class RobotCommander {
     public abstract double getLeftIntakeCommand();
     public abstract boolean getResetIMU();
     public abstract boolean getRobotAim();
+    public abstract int getHoodPosition();
+    public abstract double getShooterSpeed();
 }

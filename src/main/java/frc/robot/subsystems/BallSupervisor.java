@@ -38,7 +38,10 @@ public class BallSupervisor extends SubsystemBase{
 
     @Override
     public void updateState() {
-        // TODO Auto-generated method stub
+        shooter.updateState();
+        ballivator.updateState();
+        intake.updateState();
+
         
     }
 
@@ -56,8 +59,11 @@ public class BallSupervisor extends SubsystemBase{
 
     @Override
     public void logData() {
-        // TODO Auto-generated method stub
-        
+        shooter.logData();
+        ballivator.logData();
+        intake.logData();
+
+
     }
     
 }

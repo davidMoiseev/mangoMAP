@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.BallSupervisor;
 import frc.robot.subsystems.Climber;
 import static frc.robot.Constants.*;
@@ -30,7 +31,7 @@ public class Robot extends TimedRobot {
                 "Right Front Absolute", "Right Front Assumed",
                 "Left Rear Absolute", "Left Rear Assumed",
                 "Right Rear Absolute", "Right Rear Assumed", "ClimberCmd", 
-                "LeftIntakeCmd", "RightIntakeCmd", "LeftShooterSpeed", "RightShooterSpeed");
+                "LeftIntakeCmd", "RightIntakeCmd", "LeftShooterSpeed", "RightShooterSpeed","TargetSpeed");
 
     robotState = new RobotState();
     hub = new PneumaticHub(PNEUMATIC_HUB);
@@ -46,7 +47,11 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     pigeon.updateState(robotState, teleopCommander);
     drivetrain.updateState();
+    ballSupervisor.updateState();
+    climber.updateState();
     drivetrain.logData();
+    ballSupervisor.logData();
+    climber.logData();
   }
 
   @Override
@@ -62,7 +67,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    hub.enableCompressorDigital();
+    hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
   }
 
   @Override
@@ -77,7 +82,7 @@ public class Robot extends TimedRobot {
     pigeon.zeroSensor();
     drivetrain.zeroActuators();
     drivetrain.zeroSensor();
-    hub.enableCompressorDigital();
+    hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
   }
 
   @Override
