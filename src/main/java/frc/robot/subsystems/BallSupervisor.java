@@ -19,15 +19,15 @@ public class BallSupervisor extends SubsystemBase{
     public BallSupervisor(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
         intake = new Intake(robotState, hub);
-        // ballivator = new Ballivator(robotState);
-        // shooter = new Shooter(robotState, hub);
+        ballivator = new Ballivator(robotState);
+        shooter = new Shooter(robotState, hub);
     }
     
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         intake.enabledAction(robotState, commander);
-        // ballivator.enabledAction(robotState, commander);
-        // shooter.enabledAction(robotState, commander);
+        ballivator.enabledAction(robotState, commander);
+        shooter.enabledAction(robotState, commander);
     }
 
     @Override
@@ -38,7 +38,10 @@ public class BallSupervisor extends SubsystemBase{
 
     @Override
     public void updateState() {
-        // TODO Auto-generated method stub
+        shooter.updateState();
+        ballivator.updateState();
+        intake.updateState();
+
         
     }
 
@@ -56,8 +59,11 @@ public class BallSupervisor extends SubsystemBase{
 
     @Override
     public void logData() {
-        // TODO Auto-generated method stub
-        
+        shooter.logData();
+        ballivator.logData();
+        intake.logData();
+
+
     }
     
 }

@@ -9,6 +9,9 @@ public class TeleopCommander extends RobotCommander{
     private static XboxController driver;
     private static XboxController operator;
     private static boolean climberUp;
+    int hoodPosition = 1;
+    double shooterSpeed;
+    boolean shooterOn;
 
     RobotState robotState;
 
@@ -17,6 +20,8 @@ public class TeleopCommander extends RobotCommander{
         driver = new XboxController(0);
         operator = new XboxController(1);
         climberUp = false;
+        shooterSpeed = 0.0;
+        shooterOn = false;
     }
 
     public double getForwardCommand(){
@@ -103,6 +108,44 @@ public class TeleopCommander extends RobotCommander{
       public boolean getResetIMU() {
         // TODO Auto-generated method stub
         return driver.getBackButton();
+      }
+
+      @Override
+      public int getHoodPosition() {
+        if (((operator.getPOV() < 20.0) || (operator.getPOV() > 340.0)) && (operator.getPOV() > -0.5)) {
+          this.hoodPosition = 1;
+          this.shooterOn = true;
+        } else if ((operator.getPOV() > 70.0) && (operator.getPOV() > 110.0)) {
+          this.hoodPosition=  2;
+          this.shooterOn = true;
+        } else if ((operator.getPOV() > 160.0) && (operator.getPOV() > 200.0)) {
+          this.hoodPosition = 3;
+          this.shooterOn = true;
+        } else if ((operator.getPOV() > 250.0) && (operator.getPOV() > 290.0)) {
+          this.hoodPosition = 4;
+          this.shooterOn = true;
+        }
+        return this.hoodPosition;
+      }
+
+      @Override
+      public double getShooterSpeed() {
+        if (operator.getAButtonReleased() || shooterOn == false) {
+          this.shooterSpeed = 0.0;
+          this.shooterOn = false;
+        }
+        if (this.shooterOn) {
+          if (hoodPosition == 1) {
+            this.shooterSpeed = SHOOTER_SPEED_1;
+          } else if (hoodPosition == 2) {
+            this.shooterSpeed = SHOOTER_SPEED_2;
+          } else if (hoodPosition == 3) {
+            this.shooterSpeed = SHOOTER_SPEED_3;
+          } else if (hoodPosition == 4) {
+            this.shooterSpeed = SHOOTER_SPEED_4;
+          }
+        }
+        return this.shooterSpeed;
       }
 
 }

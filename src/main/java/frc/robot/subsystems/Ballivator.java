@@ -9,13 +9,13 @@ import static frc.robot.Constants.*;
 
 public class Ballivator extends SubsystemBase{
     RobotState robotState;
-    CANSparkMax leftBallivatorMotor;
-    CANSparkMax rightBallivatorMotor;
+    // CANSparkMax leftBallivatorMotor;
+    // CANSparkMax rightBallivatorMotor;
 
     public Ballivator(RobotState robotState){
         this.robotState = robotState;
-        leftBallivatorMotor = new CANSparkMax(LEFT_BALLIVATOR_MOTOR, MotorType.kBrushless);
-        rightBallivatorMotor = new CANSparkMax(RIGHT_BALLIVATOR_MOTOR, MotorType.kBrushless);
+        // leftBallivatorMotor = new CANSparkMax(LEFT_BALLIVATOR_MOTOR, MotorType.kBrushless);
+        // rightBallivatorMotor = new CANSparkMax(RIGHT_BALLIVATOR_MOTOR, MotorType.kBrushless);
     }
 
     @Override
