@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    hub.enableCompressorDigital();
+    hub.enableCompressorAnalog(90, 115);
   }
 
   @Override
@@ -77,7 +77,7 @@ public class Robot extends TimedRobot {
     pigeon.zeroSensor();
     drivetrain.zeroActuators();
     drivetrain.zeroSensor();
-    hub.enableCompressorDigital();
+    hub.enableCompressorAnalog(90, 115);
   }
 
   @Override

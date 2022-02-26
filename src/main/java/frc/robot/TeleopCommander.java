@@ -26,7 +26,9 @@ public class TeleopCommander extends RobotCommander{
         return -modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
     }
     public double getTurnCommand(){
-        return -deadband(driver.getRightX(), 0.3, 0.4) * MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        double value = deadband(driver.getRightX(), 0.3, 0.4) * MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+
+        return - (Math.abs(value) * value);
     }
 
     public boolean getRunRightIntake(){
@@ -56,11 +58,8 @@ public class TeleopCommander extends RobotCommander{
     }
 
     @Override
-    public boolean getClimberExtend() {
-      if (operator.getBButtonReleased()) {
-        climberUp = !climberUp;
-      }
-      return climberUp;
+    public boolean getClimberChangeState() {
+      return operator.getBButtonReleased();
     }
 
     @Override
@@ -91,7 +90,7 @@ public class TeleopCommander extends RobotCommander{
         if (deadband) {
           return 0;
         } else {
-          return value;
+          return Math.abs(value) * value;
         }
     }
 
