@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import org.hotutilites.hotlogger.HotLogger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -47,6 +49,8 @@ public class Shooter extends SubsystemBase{
 		leftShooterMotor.config_kI(0, SHOOTER_GAIN_I, 30);
 		leftShooterMotor.config_kD(0, SHOOTER_GAIN_D, 30);
 
+        insidePneu = hub.makeDoubleSolenoid(SHOOTER_INSIDE_SOLENOID_FOWARD, SHOOTER_INSIDE_SOLENOID_REVERSE);
+        outsidePneu = hub.makeDoubleSolenoid(SHOOTER_OUSIDE_SOLENOID_FOWARD, SHOOTER_OUTSIDE_SOLENOID_REVERSE);
     }
 
     @Override
@@ -69,13 +73,13 @@ public class Shooter extends SubsystemBase{
         }
 
         targetRPM = commander.getShooterSpeed();
-        targetVelocity_UnitsPer100ms = targetRPM * 2048.0 / 600.0;
+        targetVelocity_UnitsPer100ms = (targetRPM * 2048) / 600;
         leftShooterMotor.set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100ms);
     }
 
     @Override
     public void disabledAction(RobotState robotState) {
-        this.robotState = robotState;
+        // this.robotState = robotState;
     }
 
     @Override
@@ -98,10 +102,10 @@ public class Shooter extends SubsystemBase{
 
     @Override
     public void logData() {
-        HotLogger.Log("LeftShooterSpeed", leftShooterMotor.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("LeftShooterSpeed", leftShooterMotor.getSelectedSensorVelocity());
-        HotLogger.Log("RightShooterSpeed", rightShooterMotor.getSelectedSensorVelocity());
-        SmartDashboard.putNumber("RightShooterSpeed", rightShooterMotor.getSelectedSensorVelocity()); 
+        HotLogger.Log("LeftShooterSpeed", (leftShooterMotor.getSelectedSensorVelocity() / 2048) * 600);
+        SmartDashboard.putNumber("LeftShooterSpeed", (leftShooterMotor.getSelectedSensorVelocity() / 2048) * 600);
+        HotLogger.Log("RightShooterSpeed", (rightShooterMotor.getSelectedSensorVelocity() / 2048) * 600);
+        SmartDashboard.putNumber("RightShooterSpeed", (rightShooterMotor.getSelectedSensorVelocity() / 2048 ) * 600); 
         HotLogger.Log("TargetSpeed", targetRPM);
         SmartDashboard.putNumber("TargetSpeed", targetRPM); 
     }
