@@ -115,13 +115,13 @@ public class TeleopCommander extends RobotCommander{
         if (((operator.getPOV() < 20.0) || (operator.getPOV() > 340.0)) && (operator.getPOV() > -0.5)) {
           this.hoodPosition = 1;
           this.shooterOn = true;
-        } else if ((operator.getPOV() > 70.0) && (operator.getPOV() > 110.0)) {
+        } else if ((operator.getPOV() > 70.0) && (operator.getPOV() < 110.0)) {
           this.hoodPosition=  2;
           this.shooterOn = true;
-        } else if ((operator.getPOV() > 160.0) && (operator.getPOV() > 200.0)) {
+        } else if ((operator.getPOV() > 160.0) && (operator.getPOV() < 200.0)) {
           this.hoodPosition = 3;
           this.shooterOn = true;
-        } else if ((operator.getPOV() > 250.0) && (operator.getPOV() > 290.0)) {
+        } else if ((operator.getPOV() > 250.0) && (operator.getPOV() < 290.0)) {
           this.hoodPosition = 4;
           this.shooterOn = true;
         }
