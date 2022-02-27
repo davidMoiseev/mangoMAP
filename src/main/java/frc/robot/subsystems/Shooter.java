@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import frc.robot.RobotCommander;
 import frc.robot.RobotState;
@@ -48,6 +49,8 @@ public class Shooter extends SubsystemBase{
 		leftShooterMotor.config_kP(0, SHOOTER_GAIN_P, 30);
 		leftShooterMotor.config_kI(0, SHOOTER_GAIN_I, 30);
 		leftShooterMotor.config_kD(0, SHOOTER_GAIN_D, 30);
+        leftShooterMotor.setNeutralMode((NeutralMode.Coast));
+        rightShooterMotor.setNeutralMode((NeutralMode.Coast));
 
         insidePneu = hub.makeDoubleSolenoid(SHOOTER_INSIDE_SOLENOID_FOWARD, SHOOTER_INSIDE_SOLENOID_REVERSE);
         outsidePneu = hub.makeDoubleSolenoid(SHOOTER_OUSIDE_SOLENOID_FOWARD, SHOOTER_OUTSIDE_SOLENOID_REVERSE);
@@ -60,16 +63,16 @@ public class Shooter extends SubsystemBase{
             outside(false);
         }
         else if (commander.getHoodPosition() == 2){
-            inside(true);
-            outside(false);
+            //inside(true);
+            //outside(false);
         }
         else if (commander.getHoodPosition() == 3){
-            inside(false);
-            outside(true);
+            //inside(false);
+           // outside(true);
         }
         else if (commander.getHoodPosition() == 4){
-            inside(true);
-            outside(true);
+            //inside(true);
+            //outside(true);
         }
 
         targetRPM = commander.getShooterSpeed();
