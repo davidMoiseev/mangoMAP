@@ -18,4 +18,5 @@ public abstract class RobotCommander {
     public abstract boolean getRobotAim();
     public abstract int getHoodPosition();
     public abstract double getShooterSpeed();
+    public abstract boolean[] getBallivator();
 }

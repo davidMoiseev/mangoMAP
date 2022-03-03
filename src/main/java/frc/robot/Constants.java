@@ -53,9 +53,9 @@ public final class Constants {
 
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
-    public static final double SHOOTER_SPEED_1 = 1200.0; //2200
-    public static final double SHOOTER_SPEED_2 = 2600.0;
-    public static final double SHOOTER_SPEED_3 = 2200.0;
+    public static final double SHOOTER_SPEED_1 = 1100.0; //2200
+    public static final double SHOOTER_SPEED_2 = 2525.0;
+    public static final double SHOOTER_SPEED_3 = 2100.0;
     public static final double SHOOTER_SPEED_4 = 2800.0;
     public static final double SHOOTER_GAIN_P = 0.1; // 0.0005
     public static final double SHOOTER_GAIN_I = 0.0003;  // 0.00005
@@ -67,6 +67,9 @@ public final class Constants {
 
     public static final int RIGHT_BALLIVATOR_MOTOR = 11;
     public static final int LEFT_BALLIVATOR_MOTOR = 12;
+    public static final int BALLIVATOR_SENSOR = 0;
+    public static final int BALLIVATOR_SOLENOID = 0;
+    public static final int SHOOTER_OK_SPEED_TOLERANCE = 9000;
 
     public static final int PNEUMATIC_HUB = 23;
     public static final int LEFT_INTAKE_FWD_SOLENOID = 13;
@@ -77,7 +80,7 @@ public final class Constants {
     public static final int CLIMBER_EXTEND_REV_SOLENOID = 6;
     public static final int CLIMBER_RELEASE_SOLENOID = 8;
     public static final double MINIMUM_PRESSURE = 90.0;
-    public static final double MAXIMUM_PRESSURE = 115.0;
+    public static final double MAXIMUM_PRESSURE = 110.0;
 
     public static final int SHOOTER_INSIDE_SOLENOID_FOWARD = 11;
     public static final int SHOOTER_INSIDE_SOLENOID_REVERSE = 4;
