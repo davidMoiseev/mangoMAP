@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj.XboxController;
 
 import static frc.robot.Constants.*;
@@ -37,11 +38,11 @@ public class TeleopCommander extends RobotCommander{
     }
 
     public boolean getRunRightIntake(){
-      return driver.getRightBumper();
+      return operator.getRightBumper();
     }
 
     public boolean getRunLeftIntake(){
-      return driver.getLeftBumper();
+      return operator.getLeftBumper();
     }
 
     public double getLeftIntakeCommand() {
@@ -134,6 +135,7 @@ public class TeleopCommander extends RobotCommander{
           this.shooterSpeed = 0.0;
           this.shooterOn = false;
         }
+
         if (this.shooterOn) {
           if (hoodPosition == 1) {
             this.shooterSpeed = SHOOTER_SPEED_1;
@@ -148,4 +150,24 @@ public class TeleopCommander extends RobotCommander{
         return this.shooterSpeed;
       }
 
+      public boolean[] getBallivator(){
+        boolean RT= false, LT = false, dRT = false, shoot = operator.getStartButton();
+        if(operator.getRightTriggerAxis() > .5){
+          RT= true;
+        } else {
+          RT= false;
+        }
+        if(operator.getLeftTriggerAxis() > .5){
+          LT = true;
+        } else {
+          LT = false;
+        }
+        if(driver.getRightTriggerAxis() > .5){
+          dRT = true;
+        } else {
+          dRT = false;
+        }
+        boolean[] tmp = {RT, LT, shoot, dRT};
+        return tmp;
+      }
 }

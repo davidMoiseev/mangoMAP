@@ -19,8 +19,8 @@ public class BallSupervisor extends SubsystemBase{
     public BallSupervisor(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
         intake = new Intake(robotState, hub);
-        ballivator = new Ballivator(robotState);
         shooter = new Shooter(robotState, hub);
+        ballivator = new Ballivator(robotState, hub, shooter);
     }
     
     @Override

@@ -6,6 +6,7 @@ import org.hotutilites.hotlogger.HotLogger;
 
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;

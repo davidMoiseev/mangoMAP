@@ -28,6 +28,7 @@ public class Shooter extends SubsystemBase{
     double targetRPM = 0;
     double FF = 0;
     double targetVelocity_UnitsPer100ms;
+    double RPM;
 
     public Shooter(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
@@ -63,21 +64,22 @@ public class Shooter extends SubsystemBase{
             outside(false);
         }
         else if (commander.getHoodPosition() == 2){
-            //inside(true);
-            //outside(false);
+            inside(true);
+            outside(false);
         }
         else if (commander.getHoodPosition() == 3){
-            //inside(false);
-           // outside(true);
+            inside(false);
+            outside(true);
         }
         else if (commander.getHoodPosition() == 4){
-            //inside(true);
-            //outside(true);
+            inside(true);
+            outside(true);
         }
-
+        
         targetRPM = commander.getShooterSpeed();
         targetVelocity_UnitsPer100ms = (targetRPM * 2048) / 600;
         leftShooterMotor.set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100ms);
+        RPM = (leftShooterMotor.getSelectedSensorVelocity() / 2048) * 600;
     }
 
     @Override
@@ -132,6 +134,18 @@ public class Shooter extends SubsystemBase{
             x = Value.kReverse;
         }
         outsidePneu.set(x);
+    }
+
+    public boolean getShooterState() {
+        if (targetRPM == 0) {
+         return false;
+        } 
+        else if (Math.abs(targetRPM - RPM) < SHOOTER_OK_SPEED_TOLERANCE) {
+            return true;
+        } 
+        else {
+            return false;
+        }
     }
     
 }

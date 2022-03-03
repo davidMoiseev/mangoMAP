@@ -2,6 +2,11 @@ package frc.robot.subsystems;
 
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotCommander;
 import frc.robot.RobotState;
 
@@ -9,19 +14,80 @@ import static frc.robot.Constants.*;
 
 public class Ballivator extends SubsystemBase{
     RobotState robotState;
-    // CANSparkMax leftBallivatorMotor;
-    // CANSparkMax rightBallivatorMotor;
+    CANSparkMax leftBallivatorMotor;
+    CANSparkMax rightBallivatorMotor;
+    DigitalInput ballSense;
+    boolean ON;
+    private Solenoid ballivatorSolenoid;
+    Shooter shooter;
 
-    public Ballivator(RobotState robotState){
+    public Ballivator(RobotState robotState, PneumaticHub hub, Shooter shooter){
         this.robotState = robotState;
-        // leftBallivatorMotor = new CANSparkMax(LEFT_BALLIVATOR_MOTOR, MotorType.kBrushless);
-        // rightBallivatorMotor = new CANSparkMax(RIGHT_BALLIVATOR_MOTOR, MotorType.kBrushless);
+        leftBallivatorMotor = new CANSparkMax(LEFT_BALLIVATOR_MOTOR, MotorType.kBrushless);
+        rightBallivatorMotor = new CANSparkMax(RIGHT_BALLIVATOR_MOTOR, MotorType.kBrushless);
+        ballSense = new DigitalInput(BALLIVATOR_SENSOR);
+        ON = false;
+        ballivatorSolenoid = hub.makeSolenoid(BALLIVATOR_SOLENOID);
+        this.shooter = shooter;
     }
 
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         // TODO Auto-generated method stub
+        // tmp {right T, left T, start, stick}
+        // 
+        boolean[] buttons = commander.getBallivator();
+        if (buttons[0]){
+            ON = true;
+        }
+        if (buttons[1]){
+            ON = false;
+        }
+
+        if (buttons[2] == true) {
+            if (ballSense.get()){
+                if (buttons[0]){
+                    setBallivatorSpeed(1, true, false);
+                }
+                else if (buttons[1]){
+                    setBallivatorSpeed(-1, true, true);
+                }
+                else {
+                    setBallivatorSpeed(0, false, false);
+                }
+            }
+            else {
+                if (buttons[0]){
+                    setBallivatorSpeed(1, true, true);
+                }
+                else if (buttons[1]){
+                    setBallivatorSpeed(-1, true, true);
+                }
+                else{
+                    setBallivatorSpeed(0, false, false);
+                }
+            }
+        }
+
+        if (shooter.getShooterState()) {
         
+            if (buttons[3]){
+                setBallivatorSpeed(1, true, true);
+                ballivatorSolenoid.set(true);
+                SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
+            }
+            else {
+                setBallivatorSpeed(0, false, false);
+                ballivatorSolenoid.set(false);
+            }
+            SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
+        } else{
+            ballivatorSolenoid.set(false);
+            SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
+        }
+
+        
+        SmartDashboard.putBoolean("Ballivator Sensei: ", ballSense.get());
     }
 
     @Override
@@ -54,4 +120,18 @@ public class Ballivator extends SubsystemBase{
         
     }
     
+    private void setBallivatorSpeed(double speed, boolean topOn, boolean btmOn){
+        if (btmOn){
+            rightBallivatorMotor.set(speed);
+        }
+        else {
+            rightBallivatorMotor.set(0);
+        }
+        if (topOn){
+            leftBallivatorMotor.set(speed);
+        }
+        else {
+            leftBallivatorMotor.set(0);
+        } 
+    }
 }

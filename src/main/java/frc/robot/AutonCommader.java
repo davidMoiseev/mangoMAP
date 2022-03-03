@@ -93,4 +93,9 @@ public class AutonCommader extends RobotCommander{
         // TODO Auto-generated method stub
         return 0;
     }
+
+    public boolean[] getBallivator(){
+        boolean[] x = {false, false};
+        return x;
+    }
 }
