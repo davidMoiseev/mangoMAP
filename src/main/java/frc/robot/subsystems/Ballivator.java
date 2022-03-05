@@ -20,8 +20,9 @@ public class Ballivator extends SubsystemBase{
     boolean ON;
     private Solenoid ballivatorSolenoid;
     Shooter shooter;
+    Intake intake;
 
-    public Ballivator(RobotState robotState, PneumaticHub hub, Shooter shooter){
+    public Ballivator(RobotState robotState, PneumaticHub hub, Shooter shooter, Intake intake){
         this.robotState = robotState;
         leftBallivatorMotor = new CANSparkMax(LEFT_BALLIVATOR_MOTOR, MotorType.kBrushless);
         rightBallivatorMotor = new CANSparkMax(RIGHT_BALLIVATOR_MOTOR, MotorType.kBrushless);
@@ -29,6 +30,7 @@ public class Ballivator extends SubsystemBase{
         ON = false;
         ballivatorSolenoid = hub.makeSolenoid(BALLIVATOR_SOLENOID);
         this.shooter = shooter;
+        this.intake = intake;
     }
 
     @Override
@@ -37,11 +39,21 @@ public class Ballivator extends SubsystemBase{
         // tmp {right T, left T, start, stick}
         // 
         boolean[] buttons = commander.getBallivator();
-        if (buttons[0]){
-            ON = true;
-        }
-        if (buttons[1]){
+        
+        if (buttons[4]){
             ON = false;
+        }
+
+        if (intake.getIntakeState()) {
+            ON = true;
+        } 
+        
+        if (ON) {
+            if (ballSense.get()){
+                setBallivatorSpeed(1, true, false);
+            } else {
+                setBallivatorSpeed(1, true, true);
+            }
         }
 
         if (buttons[2] == true) {
@@ -68,6 +80,9 @@ public class Ballivator extends SubsystemBase{
                 }
             }
         }
+        else if (ON == false){
+            setBallivatorSpeed(0, false, false);
+        }
 
         if (shooter.getShooterState()) {
         
@@ -77,16 +92,24 @@ public class Ballivator extends SubsystemBase{
                 SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
             }
             else {
-                setBallivatorSpeed(0, false, false);
+                if (ON) {
+                    if (ballSense.get()){
+                        setBallivatorSpeed(1, true, false);
+                    } 
+                    else {
+                        setBallivatorSpeed(1, true, true);
+                    }
+                }
+                else {
+                    setBallivatorSpeed(0, false, false);
+                }
                 ballivatorSolenoid.set(false);
             }
-            SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
         } else{
             ballivatorSolenoid.set(false);
-            SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
         }
 
-        
+        SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
         SmartDashboard.putBoolean("Ballivator Sensei: ", ballSense.get());
     }
 
