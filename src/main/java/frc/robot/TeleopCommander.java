@@ -13,6 +13,9 @@ public class TeleopCommander extends RobotCommander{
     int hoodPosition = 1;
     double shooterSpeed;
     boolean shooterOn;
+    boolean climbState = false;
+    boolean downCalled = false;
+    boolean upCalled = false;
 
     RobotState robotState;
 
@@ -32,7 +35,7 @@ public class TeleopCommander extends RobotCommander{
         return -modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
     }
     public double getTurnCommand(){
-        double value = deadband(driver.getRightX(), 0.3, 0.4) * MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND;
+        double value = deadband(driver.getRightX(), 0.3, 0.4) * (MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND) * 0.5;
 
         return - (Math.abs(value) * value);
     }
@@ -65,7 +68,20 @@ public class TeleopCommander extends RobotCommander{
 
     @Override
     public boolean getClimberChangeState() {
-      return operator.getBButtonReleased();
+      if ((operator.getPOV() < 20 || operator.getPOV() > 340) && (operator.getPOV() != -1)) {
+        if (downCalled == false){
+          downCalled = true;
+          upCalled = false;
+          return true;
+        }
+      } else if (operator.getPOV() > 160 && operator.getPOV() < 200) {
+        if (upCalled == false){
+          downCalled = false;
+          upCalled = true;
+          return true;
+        }
+      }
+      return false;
     }
 
     @Override
@@ -75,7 +91,12 @@ public class TeleopCommander extends RobotCommander{
 
     @Override
     public boolean getClimberRelease() {
-      return operator.getXButton();
+      if (operator.getPOV() > 70 && operator.getPOV() < 110) {
+        return true;
+      }
+      else{
+        return false;
+      }
     }
 
     private static double deadband(double value, double deadband, double maxRange){
@@ -113,16 +134,16 @@ public class TeleopCommander extends RobotCommander{
 
       @Override
       public int getHoodPosition() {
-        if (((operator.getPOV() < 20.0) || (operator.getPOV() > 340.0)) && (operator.getPOV() > -0.5)) {
+        if (operator.getAButtonPressed()) {
           this.hoodPosition = 1;
           this.shooterOn = true;
-        } else if ((operator.getPOV() > 70.0) && (operator.getPOV() < 110.0)) {
+        } else if (operator.getBButtonPressed()) {
           this.hoodPosition=  2;
           this.shooterOn = true;
-        } else if ((operator.getPOV() > 160.0) && (operator.getPOV() < 200.0)) {
+        } else if (operator.getXButtonPressed()) {
           this.hoodPosition = 3;
           this.shooterOn = true;
-        } else if ((operator.getPOV() > 250.0) && (operator.getPOV() < 290.0)) {
+        } else if (operator.getYButtonPressed()) {
           this.hoodPosition = 4;
           this.shooterOn = true;
         }
@@ -131,7 +152,7 @@ public class TeleopCommander extends RobotCommander{
 
       @Override
       public double getShooterSpeed() {
-        if (operator.getAButtonReleased() || shooterOn == false) {
+        if (operator.getBackButton() || shooterOn == false) {
           this.shooterSpeed = 0.0;
           this.shooterOn = false;
         }
@@ -151,7 +172,7 @@ public class TeleopCommander extends RobotCommander{
       }
 
       public boolean[] getBallivator(){
-        boolean RT= false, LT = false, dRT = false, shoot = operator.getStartButton();
+        boolean RT= false, LT = false, dRT = false, enable = operator.getStartButton(), stop = operator.getBackButtonReleased();
         if(operator.getRightTriggerAxis() > .5){
           RT= true;
         } else {
@@ -167,7 +188,7 @@ public class TeleopCommander extends RobotCommander{
         } else {
           dRT = false;
         }
-        boolean[] tmp = {RT, LT, shoot, dRT};
+        boolean[] tmp = {RT, LT, enable, dRT, stop};
         return tmp;
       }
 }
