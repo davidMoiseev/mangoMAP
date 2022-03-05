@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
     climber = new Climber(robotState, hub);
     limelight = new Limelight(robotState);
     
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(6);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
   }
 

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.AutonCommader;
+import frc.robot.Constants;
 import frc.robot.RobotCommander;
 import frc.robot.RobotState;
 
@@ -142,14 +143,14 @@ public class Drivetrain extends SubsystemBase {
                         yOffset = 0;
                         // if pressing A
                 } else {
-                        yOffset += commander.getForwardCommand() * 0.02;
-                        // if limelight has target
+                       yOffset += commander.getForwardCommand() * Constants.Y_OFFSET; //makes the robot go forwards or backwards(robot centric) while turning around the hub
+                        // if limelight has target 
                         if (robotState.getDetecting() == 1) {
                                 // auto aim
                                 chassisSpeeds = new ChassisSpeeds(
-                                                (robotState.getTyReal() - yOffset) * 0.12,
-                                                1.333 * commander.getStrafeCommand(),
-                                                robotState.getTxReal() * 0.2666);
+                                                (Math.abs(robotState.getTyReal() + yOffset) > Constants.ALLOWED_Y_OFFSET) ? (robotState.getTyReal() + yOffset) * Constants.Y_ADJUST_SPEED : 0,
+                                                Constants.STRAFE_SPEED * commander.getStrafeCommand(),
+                                                (Math.abs(robotState.getTxReal()) > Constants.ALLOWED_X_OFFSET) ? robotState.getTxReal() * Constants.X_ADJUST_SPEED : 0);
                         }
                 }
 

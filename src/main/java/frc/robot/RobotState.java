@@ -7,47 +7,48 @@ public class RobotState {
     private double tyReal;
     public double txReal;
     public double detecting;
-    private double DetectingDelay;
 
-    public void setTheta(double theta){
+    public void setTheta(double theta) {
         this.theta = theta;
     }
 
-    public double getTheta(){
+    public double getTheta() {
         return this.theta;
     }
 
-    public void setTyReal(double tyReal){
+    public void setTyReal(double tyReal) {
         this.tyReal = tyReal;
     }
 
-    public double getTyReal(){
+    public double getTyReal() {
         return this.tyReal;
     }
 
-    public void setTxReal(double txReal){
+    public void setTxReal(double txReal) {
         this.txReal = txReal;
     }
 
-    public double getTxReal(){
+    public double getTxReal() {
         return this.txReal;
     }
 
-    public void setDetecting(double detecting){
+    public void setDetecting(double detecting) {
         this.detecting = detecting;
     }
 
-    public double getDetecting(){
+    public double getDetecting() {
         return this.detecting;
     }
 
-    public void setDetectingDelay(double DetectingDelay){
-        this.DetectingDelay = DetectingDelay;
+    public double getTargetOffset() {
+        return Math.pow(Math.abs(Math.sqrt(tyReal)) + Math.abs(Math.sqrt(txReal)), 2);
     }
 
-    public double getDetectingDelay(){
-        return this.DetectingDelay;
+    public boolean getWithinRange() {
+        if (getTargetOffset() < Constants.ALLOWED_OFFSET) {
+            return true;
+        } else {
+            return false;
+        }
     }
-
-
 }
