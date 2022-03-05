@@ -4,9 +4,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import org.hotutilites.hotlogger.HotLogger;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.sensors.Limelight;
 import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
@@ -24,15 +27,16 @@ public class Robot extends TimedRobot {
   private PneumaticHub hub;
   private BallSupervisor ballSupervisor;
   private Climber climber;
-
+  private Limelight limelight;
+  XboxController driver = new XboxController(0);
 
   @Override
   public void robotInit() {
-    HotLogger.Setup("Theta", "Left Front Absolute", "Left Front Assumed", 
-                "Right Front Absolute", "Right Front Assumed",
-                "Left Rear Absolute", "Left Rear Assumed",
-                "Right Rear Absolute", "Right Rear Assumed", "ClimberCmd", 
-                "LeftIntakeCmd", "RightIntakeCmd", "LeftShooterSpeed", "RightShooterSpeed","TargetSpeed");
+    HotLogger.Setup("Theta", "Left Front Absolute", "Left Front Assumed",
+        "Right Front Absolute", "Right Front Assumed",
+        "Left Rear Absolute", "Left Rear Assumed",
+        "Right Rear Absolute", "Right Rear Assumed", "ClimberCmd",
+        "LeftIntakeCmd", "RightIntakeCmd", "LeftShooterSpeed", "RightShooterSpeed", "TargetSpeed");
 
     robotState = new RobotState();
     hub = new PneumaticHub(PNEUMATIC_HUB);
@@ -42,11 +46,16 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain(robotState);
     ballSupervisor = new BallSupervisor(robotState, hub);
     climber = new Climber(robotState, hub);
+    limelight = new Limelight(robotState);
+    
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(6);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
   }
 
   @Override
   public void robotPeriodic() {
     pigeon.updateState(robotState, teleopCommander);
+    limelight.updateState(robotState, teleopCommander);
     drivetrain.updateState();
     ballSupervisor.updateState();
     climber.updateState();
@@ -91,5 +100,6 @@ public class Robot extends TimedRobot {
     drivetrain.enabledAction(robotState, teleopCommander);
     ballSupervisor.enabledAction(robotState, teleopCommander);
     climber.enabledAction(robotState, teleopCommander);
+    SmartDashboard.putBoolean("Button A", driver.getAButton());
   }
 }
