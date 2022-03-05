@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase {
         rightIntakeSolenoid = hub.makeDoubleSolenoid(RIGHT_INTAKE_FWD_SOLENOID, RIGHT_INTAKE_REV_SOLENOID);
         leftIntakeSolenoid = hub.makeDoubleSolenoid(LEFT_INTAKE_FWD_SOLENOID, LEFT_INTAKE_REV_SOLENOID);
     }
-
+    boolean intakeState = false;
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         if (commander.getRunLeftIntake()) {
@@ -43,6 +43,11 @@ public class Intake extends SubsystemBase {
         } else {
             rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
             rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+        }
+        if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
+            intakeState = true;
+        } else {
+            intakeState = false;
         }
     }
 
@@ -76,5 +81,8 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("LeftIntakeCmd", leftIntakeMotor.getMotorOutputPercent());
         HotLogger.Log("RightIntakeCmd", rightIntakeMotor.getMotorOutputPercent());
         SmartDashboard.putNumber("RightIntakeCmd", rightIntakeMotor.getMotorOutputPercent()); 
+    }
+    public boolean getIntakeState(){
+        return intakeState;
     }
 }

@@ -60,8 +60,8 @@ public class Shooter extends SubsystemBase{
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         if (commander.getHoodPosition() == 1){
-            inside(false);
-            outside(false);
+            inside(true);
+            outside(true);
         }
         else if (commander.getHoodPosition() == 2){
             inside(true);
