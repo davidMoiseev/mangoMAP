@@ -88,5 +88,16 @@ public final class Constants {
     public static final int SHOOTER_OUTSIDE_SOLENOID_REVERSE = 5;
 
     public static final int CLIMBER_MOTOR = 13;
-    
+
+
+    //AutoAim
+    public static final double ALLOWED_OFFSET = 5;
+    public static final double ALLOWED_Y_OFFSET = 4;
+    public static final double ALLOWED_X_OFFSET = 4;
+
+    public static final double X_ADJUST_SPEED = 0.2;
+    public static final double Y_ADJUST_SPEED = 0.04;
+    public static final double STRAFE_SPEED = 0.5;
+
+    public static final double Y_OFFSET = 0.06;
 }

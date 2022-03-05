@@ -13,6 +13,7 @@ public class TeleopCommander extends RobotCommander{
     int hoodPosition = 1;
     double shooterSpeed;
     boolean shooterOn;
+    boolean autoAimMode = false;
     boolean climbState = false;
     boolean downCalled = false;
     boolean upCalled = false;
@@ -123,7 +124,7 @@ public class TeleopCommander extends RobotCommander{
 
       @Override
       public boolean getRobotAim() {
-        return false;
+        return driver.getAButton();
       }
 
       @Override
