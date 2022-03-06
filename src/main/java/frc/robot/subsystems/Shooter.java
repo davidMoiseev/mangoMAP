@@ -7,6 +7,7 @@ import org.hotutilites.hotlogger.HotLogger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -22,6 +23,14 @@ public class Shooter extends SubsystemBase{
     private  DoubleSolenoid insidePneu;
     private  DoubleSolenoid outsidePneu;
 
+    public enum Shot {
+        NEUTRAL,
+        FENDER,
+        WALL,
+        TARMACK,
+        PROTECTED, AUTO
+     }
+
     double pGain = 0.00026;
     double iGain = 0.00005;//Not good yet
     double dGain = 0.000008;
@@ -29,6 +38,10 @@ public class Shooter extends SubsystemBase{
     double FF = 0;
     double targetVelocity_UnitsPer100ms;
     double RPM;
+    private double shooterLatchTimer;
+    private boolean shooterLatch;
+    private int shooterSpeedTolerance = 9000;
+    private double shooterTimeTolerance = 0;
 
     public Shooter(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
@@ -59,27 +72,53 @@ public class Shooter extends SubsystemBase{
 
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
-        if (commander.getHoodPosition() == 1){
-            inside(true);
-            outside(true);
+        boolean disableShooter;
+
+        shooterSpeedTolerance = commander.getShooterSpeedThreshHold();
+        shooterTimeTolerance = commander.getShooterTimeThreshHold();
+
+        if (commander.getHoodPosition() == Shot.FENDER){
+            inside(Piston.EXTEND);
+            outside(Piston.EXTEND);
+            targetRPM = SHOOTER_SPEED_FENDER;
+            disableShooter = false;
         }
-        else if (commander.getHoodPosition() == 2){
-            inside(true);
-            outside(false);
+        else if (commander.getHoodPosition() == Shot.AUTO){
+            inside(Piston.RETRACT);
+            outside(Piston.EXTEND);
+            targetRPM = SHOOTER_SPEED_AUTO;
+            disableShooter = false;
         }
-        else if (commander.getHoodPosition() == 3){
-            inside(false);
-            outside(true);
+        else if (commander.getHoodPosition() == Shot.WALL){
+            inside(Piston.EXTEND);
+            outside(Piston.RETRACT);
+            targetRPM = SHOOTER_SPEED_WALL;
+            disableShooter = false;
         }
-        else if (commander.getHoodPosition() == 4){
-            inside(true);
-            outside(true);
+        else if (commander.getHoodPosition() == Shot.TARMACK){
+            inside(Piston.RETRACT);
+            outside(Piston.EXTEND);
+            targetRPM = SHOOTER_SPEED_TARMACK;
+            disableShooter = false;
         }
-        
-        targetRPM = commander.getShooterSpeed();
+        else if (commander.getHoodPosition() == Shot.PROTECTED){
+            inside(Piston.EXTEND);
+            outside(Piston.EXTEND);
+            targetRPM = SHOOTER_SPEED_PROTECTED;
+            disableShooter = false;
+        } else {
+            inside(Piston.OFF);
+            outside(Piston.OFF);
+            targetRPM = 0;
+            disableShooter = true;
+        }
+
         targetVelocity_UnitsPer100ms = (targetRPM * 2048) / 600;
-        leftShooterMotor.set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100ms);
-        RPM = (leftShooterMotor.getSelectedSensorVelocity() / 2048) * 600;
+        if ( ! commander.getOverrideShooterMotor() || disableShooter) {
+          leftShooterMotor.set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100ms);
+        } else  {
+          leftShooterMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+        }
     }
 
     @Override
@@ -89,8 +128,27 @@ public class Shooter extends SubsystemBase{
 
     @Override
     public void updateState() {
-        // TODO Auto-generated method stub
-        
+        RPM = (leftShooterMotor.getSelectedSensorVelocity() / 2048) * 600;
+            if (targetRPM == 0) {
+                robotState.setShooterReady(false);
+                shooterLatch = false;
+                shooterLatchTimer = 0;
+            }  else if (shooterLatch) {
+                robotState.setShooterReady(true);
+            }  else if (Math.abs(targetRPM - RPM) < shooterSpeedTolerance) {
+                shooterLatchTimer = shooterLatchTimer + .02;
+                if (shooterLatchTimer >= shooterTimeTolerance) {
+                    shooterLatch = true;
+                }    
+            } else {
+                robotState.setShooterReady(false);
+                shooterLatch = false;
+            }
+
+           SmartDashboard.putNumber("targetRPM", targetRPM);
+           SmartDashboard.putNumber("RPM", RPM);
+           SmartDashboard.putBoolean("shooterReady", robotState.isShooterReady());
+           SmartDashboard.putNumber("shooterLatchTimer",shooterLatchTimer);
     }
 
     @Override
@@ -115,37 +173,32 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("TargetSpeed", targetRPM); 
     }
 
-    public void inside(boolean tmp){
+    enum Piston {
+        OFF,
+        RETRACT,
+        EXTEND
+    }
+
+    public void inside(Piston tmp){
         Value x = Value.kOff;
-        if (tmp){
+        if (tmp == Piston.EXTEND){
             x = Value.kForward;
-        }
-        else {
+        } else if (tmp == Piston.RETRACT) {
             x = Value.kReverse;
+        } else {
+            x = Value.kOff;
         }
         insidePneu.set(x);
     }
-    public void outside(boolean tmp){
+    public void outside(Piston tmp){
         Value x = Value.kOff;
-        if (tmp){
+        if (tmp == Piston.EXTEND){
             x = Value.kForward;
-        }
-        else {
+        } else if (tmp == Piston.RETRACT) {
             x = Value.kReverse;
+        } else {
+            x = Value.kOff;
         }
         outsidePneu.set(x);
-    }
-
-    public boolean getShooterState() {
-        if (targetRPM == 0) {
-         return false;
-        } 
-        else if (Math.abs(targetRPM - RPM) < SHOOTER_OK_SPEED_TOLERANCE) {
-            return true;
-        } 
-        else {
-            return false;
-        }
-    }
-    
+    } 
 }

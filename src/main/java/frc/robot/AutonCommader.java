@@ -12,10 +12,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static frc.robot.Constants.*;
 
 public abstract class AutonCommader extends RobotCommander{
 
-    private RobotState robotState;
+    protected RobotState robotState;
     protected boolean resetIMU = false;
     protected double resetIMUAngle = 0.0;
     private Timer timer;
@@ -66,6 +67,7 @@ public abstract class AutonCommader extends RobotCommander{
     public abstract void updateCommand();
 
     public abstract boolean getAutonInProgress();
+    public abstract boolean getDriveRequested();
 
     protected Trajectory readTrajectoryFile(String fileName) {
         Trajectory trajectory;
@@ -77,6 +79,16 @@ public abstract class AutonCommader extends RobotCommander{
             trajectory = null;
          }
          return trajectory;
+    }
+
+    @Override
+    public int getShooterSpeedThreshHold() {
+      return AUTO_SHOOTER_OK_SPEED_TOLERANCE;
+    }
+
+    @Override
+    public double getShooterTimeThreshHold() {
+      return AUTO_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE;
     }
 
 }

@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import edu.wpi.first.hal.HAL.SimPeriodicAfterCallback;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.AutonCommader;
 import frc.robot.Constants;
 import frc.robot.RobotState;
+import frc.robot.subsystems.Shooter.Shot;
 
 public class AutonRight extends AutonCommader {
 
@@ -49,6 +51,15 @@ public class AutonRight extends AutonCommader {
 
 
     private Trajectory trajectoryStartToSecondBall;
+
+
+    private Shot hoodPosition = Shot.NEUTRAL;
+
+
+    private boolean driveRequested;
+
+
+    private boolean shoot = false;
 
     public AutonRight(RobotState robotState) {
         super(robotState);
@@ -157,21 +168,31 @@ public class AutonRight extends AutonCommader {
     }
 
     @Override
-    public int getHoodPosition() {
+    public Shot getHoodPosition() {
         // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public double getShooterSpeed() {
-        // TODO Auto-generated method stub
-        return 0;
+        return hoodPosition;
     }
 
     @Override
     public boolean[] getBallivator() {
-        // TODO Auto-generated method stub
-        return null;
+        boolean RT= false, LT = false, dRT = false, enable = false, stop = !shoot;
+        if(false){
+          RT= true;
+        } else {
+          RT= false;
+        }
+        if(false){
+          LT = true;
+        } else {
+          LT = false;
+        }
+        if(shoot){
+          dRT = true;
+        } else {
+          dRT = false;
+        }
+        boolean[] tmp = {RT, LT, enable, dRT, stop};
+        return tmp;
     }
 
 
@@ -179,7 +200,7 @@ public class AutonRight extends AutonCommader {
 
     @Override
     public Pose2d getInitialPose() {
-        return trajectoryStartToFirstBall.getInitialPose();
+        return lastDesiredState.poseMeters;
     }
 
 
@@ -187,7 +208,8 @@ public class AutonRight extends AutonCommader {
 
     @Override
     public void initializeAuton() {
-        
+        lastDesiredState = new State(0.0, 0.0, 0.0, new Pose2d(10.2,5.93,new Rotation2d(Math.toRadians(42))), 
+        1000);
     }
 
 
@@ -199,48 +221,41 @@ public class AutonRight extends AutonCommader {
     public void updateCommand() {
         if (autoState == AutoState.prepareToShootInitialBall) {
             autonInProgress = true;
-            if(true) {
+            hoodPosition = Shot.AUTO;
+            if(robotState.isShooterReady()) {
                 autoState = AutoState.shootInitialBall;
+                timer.reset();
+                timer.start();
             }
         }
         if (autoState == AutoState.shootInitialBall) {
             autonInProgress = true;
-            if(true) {
+            driveRequested = false;
+            shoot = true;
+            if(timer.get() > .5) {
                 timer.reset();
                 timer.start();
-                autoState = AutoState.driveToWall;
+                autoState = AutoState.driveToWall;        
+
             }
         }
         if (autoState == AutoState.driveToWall) {
             autonInProgress = true;
-            desiredState = trajectoryStartToFirstBall.sample(timer.get()); 
-            setTargetTheta(trajectoryStartToFirstBall.sample(trajectoryStartToFirstBall.getTotalTimeSeconds()).poseMeters.getRotation());
-            
-            SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
-            SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
-            SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
-            if (timer.get() > trajectoryStartToFirstBall.getTotalTimeSeconds()-.1) {
-                autoState = AutoState.pickUpBall;
-                lastDesiredState = desiredState;
-                timer.reset();
-                timer.start();
-            }
-        }
-        if (autoState == AutoState.pickUpBall) {
-            autonInProgress = true;
-            desiredState = new State(timer.get(), 1/.2*timer.get(), .75, new Pose2d(lastDesiredState.poseMeters.getX()-.5/.2*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY(),
+            driveRequested = true;
+            desiredState = new State(timer.get(), .5/.5*timer.get(), .75, new Pose2d(lastDesiredState.poseMeters.getX()-.75/2*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()+1.75/2*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
-            setTargetTheta(lastDesiredState.poseMeters.getRotation());    
-            if (timer.get() > .3) {
-                autoState = AutoState.pathToSecondBall;
+            setTargetTheta(new Rotation2d(42));    
+            if (timer.get() > 2) {
+                autoState = AutoState.autoComplete;
                 timer.reset();
                 timer.start();
             }                  
         }
         if (autoState == AutoState.pathToSecondBall) {
             autonInProgress = true;
+            driveRequested = true;
             desiredState = trajectoryStartToSecondBall.sample(timer.get()); 
             setTargetTheta(trajectoryStartToSecondBall.sample(trajectoryStartToFirstBall.getTotalTimeSeconds()).poseMeters.getRotation());
             
@@ -256,7 +271,44 @@ public class AutonRight extends AutonCommader {
         }
         if (autoState == AutoState.autoComplete) {
             autonInProgress = false;
+            driveRequested = false;
         }
-        
+        SmartDashboard.putString("AutoState", ""+autoState);
+    }
+
+
+
+
+    @Override
+    public boolean getOverrideShooterMotor() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+
+
+    @Override
+    public boolean getOverrideBallivatorMotor() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+
+
+    @Override
+    public boolean getOverrideIntakmotor() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+
+
+    @Override
+    public boolean getDriveRequested() {
+        // TODO Auto-generated method stub
+        return driveRequested;
     }
 }

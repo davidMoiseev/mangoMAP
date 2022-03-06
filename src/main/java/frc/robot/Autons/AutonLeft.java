@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.AutonCommader;
 import frc.robot.RobotState;
+import frc.robot.subsystems.Shooter.Shot;
 
 public class AutonLeft extends AutonCommader {
     
@@ -104,15 +105,9 @@ public class AutonLeft extends AutonCommader {
     }
 
     @Override
-    public int getHoodPosition() {
+    public Shot getHoodPosition() {
         // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public double getShooterSpeed() {
-        // TODO Auto-generated method stub
-        return 0;
+        return Shot.NEUTRAL;
     }
 
     @Override
@@ -143,6 +138,30 @@ public class AutonLeft extends AutonCommader {
     public Rotation2d getTargetTheta() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public boolean getOverrideShooterMotor() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getOverrideBallivatorMotor() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getOverrideIntakmotor() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getDriveRequested() {
+        // TODO Auto-generated method stub
+        return false;
     }
     
     

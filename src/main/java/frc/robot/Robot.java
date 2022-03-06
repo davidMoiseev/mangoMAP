@@ -112,8 +112,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     selectedAuton.updateCommand();
     drivetrain.autonenabledAction(selectedAuton);
-    // ballSupervisor.enabledAction(robotState, selectedAuton);
-    // climber.enabledAction(robotState, selectedAuton);
+    ballSupervisor.enabledAction(robotState, selectedAuton);
   }
 
   @Override

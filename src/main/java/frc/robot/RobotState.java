@@ -7,9 +7,18 @@ public class RobotState {
     private double tyReal;
     public double txReal;
     public double detecting;
+    private boolean shooterReady;
 
     public RobotState() {
        rotation2d = new Rotation2d();
+    }
+
+    public boolean isShooterReady() {
+        return shooterReady;
+    }
+
+    public void setShooterReady(boolean shooterReady) {
+        this.shooterReady = shooterReady;
     }
 
     public Rotation2d getRotation2d() {

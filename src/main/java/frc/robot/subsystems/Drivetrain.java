@@ -180,7 +180,7 @@ public class Drivetrain extends SubsystemBase {
 
         public void autonenabledAction(AutonCommader commander) {
 
-                if (commander.getAutonInProgress()) {
+                if (commander.getAutonInProgress() && commander.getDriveRequested()) {
                         setSwerveModuleStates(holonomicController.calculate(poseExstimator.getEstimatedPosition(), 
                                                         commander.getDesiredState(),
                                                         commander.getTargetTheta()));

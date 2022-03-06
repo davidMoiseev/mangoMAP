@@ -11,7 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
-    public static boolean realBot = false;
+    public static boolean realBot = true;
 
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = realBot ? 0.57785 : 0.4445;
 
@@ -61,10 +61,11 @@ public final class Constants {
 
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
-    public static final double SHOOTER_SPEED_1 = 1100.0; //2200
-    public static final double SHOOTER_SPEED_2 = 2525.0;
-    public static final double SHOOTER_SPEED_3 = 2100.0;
-    public static final double SHOOTER_SPEED_4 = 2800.0;
+    public static final double SHOOTER_SPEED_FENDER = 1100.0; //2200
+    public static final double SHOOTER_SPEED_WALL = 2525.0;
+    public static final double SHOOTER_SPEED_TARMACK = 2100.0;
+    public static final double SHOOTER_SPEED_AUTO = 1930.0;
+    public static final double SHOOTER_SPEED_PROTECTED = 2800.0;
     public static final double SHOOTER_GAIN_P = 0.1; // 0.0005
     public static final double SHOOTER_GAIN_I = 0.0003;  // 0.00005
     public static final double SHOOTER_GAIN_D = 0.0003; // 0.000012
@@ -77,7 +78,10 @@ public final class Constants {
     public static final int LEFT_BALLIVATOR_MOTOR = 12;
     public static final int BALLIVATOR_SENSOR = 0;
     public static final int BALLIVATOR_SOLENOID = 0;
-    public static final int SHOOTER_OK_SPEED_TOLERANCE = 9000;
+    public static final int TELE_SHOOTER_OK_SPEED_TOLERANCE = 9000;
+    public static final double TELE_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE = 0;
+    public static final int AUTO_SHOOTER_OK_SPEED_TOLERANCE = 100;
+    public static final double AUTO_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE = .1;
 
     public static final int PNEUMATIC_HUB = 23;
     public static final int LEFT_INTAKE_FWD_SOLENOID = 13;

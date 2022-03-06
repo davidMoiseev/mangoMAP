@@ -84,7 +84,7 @@ public class Ballivator extends SubsystemBase{
             setBallivatorSpeed(0, false, false);
         }
 
-        if (shooter.getShooterState()) {
+        if (robotState.isShooterReady()) {
         
             if (buttons[3]){
                 setBallivatorSpeed(1, true, true);
