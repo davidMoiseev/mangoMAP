@@ -106,8 +106,20 @@ public class AutonCommader extends RobotCommander{
     }
 
     @Override
-    public double getClimberAngle() {
+    public boolean getClimberManualControl() {
         // TODO Auto-generated method stub
-        return 0;
+        return false;
+    }
+
+    @Override
+    public boolean getAbuttonHeld() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getBbuttonHeld() {
+        // TODO Auto-generated method stub
+        return false;
     }
 }

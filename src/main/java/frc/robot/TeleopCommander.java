@@ -202,16 +202,21 @@ public class TeleopCommander extends RobotCommander{
       }
 
       @Override
-      public double getClimberAngle() {
-        if ((driver.getPOV() < 20 || driver.getPOV() > 340) && (driver.getPOV() != -1)) {
-          climberAngle = 0.0;
-        } else if (driver.getPOV() > 70 && driver.getPOV() < 110) {
-          climberAngle = 90.0;
-        } else if (driver.getPOV() > 160 && driver.getPOV() < 200) {
-          climberAngle = 180.0;
-        } else if (driver.getPOV() > 250 && driver.getPOV() < 290) {
-          climberAngle = 270.0;
+      public boolean getClimberManualControl() {
+        if ((robotState.getClimberExtended() == true) && (operator.getBackButton() == true)) {
+          return true;
+        } else {
+          return false;
         }
-        return climberAngle;
+      }
+
+      @Override
+      public boolean getAbuttonHeld() {
+        return operator.getAButton();
+      }
+
+      @Override
+      public boolean getBbuttonHeld() {
+        return operator.getBButton();
       }
 }

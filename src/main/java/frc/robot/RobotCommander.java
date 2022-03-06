@@ -20,5 +20,7 @@ public abstract class RobotCommander {
     public abstract boolean[] getBallivator();
     public abstract boolean getClimberExtend();
     public abstract boolean getClimberRetract();
-    public abstract double getClimberAngle();
+    public abstract boolean getClimberManualControl();
+    public abstract boolean getAbuttonHeld();
+    public abstract boolean getBbuttonHeld();
 }
