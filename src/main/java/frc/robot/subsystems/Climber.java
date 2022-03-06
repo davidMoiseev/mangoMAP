@@ -67,6 +67,7 @@ public class Climber extends SubsystemBase{
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
 
+
         if (commander.getClimberExtend()) {
             robotState.setClimberExtended(true);
             climberExtend.set(DoubleSolenoid.Value.kReverse);

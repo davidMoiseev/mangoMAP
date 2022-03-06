@@ -124,22 +124,44 @@ public class Shooter extends SubsystemBase{
 
     public void inside(boolean tmp){
         Value x = Value.kOff;
-        if (tmp){
-            x = Value.kForward;
+
+        if(compBot){
+            if (tmp){
+                x = Value.kForward;
+            }
+            else {
+                x = Value.kReverse;
+            }
+        } else {
+            if (tmp){
+                x = Value.kForward;
+            }
+            else {
+                x = Value.kReverse;
+            }
         }
-        else {
-            x = Value.kReverse;
-        }
+
         insidePneu.set(x);
     }
     public void outside(boolean tmp){
         Value x = Value.kOff;
-        if (tmp){
-            x = Value.kForward;
+
+        if(compBot){
+            if (tmp){
+                x = Value.kForward;
+            }
+            else {
+                x = Value.kReverse;
+            }
+        } else {
+            if (tmp){
+                x = Value.kForward;
+            }
+            else {
+                x = Value.kReverse;
+            }
         }
-        else {
-            x = Value.kReverse;
-        }
+
         outsidePneu.set(x);
     }
 

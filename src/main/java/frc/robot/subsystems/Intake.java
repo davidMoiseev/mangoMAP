@@ -17,6 +17,8 @@ public class Intake extends SubsystemBase {
     TalonFX leftIntakeMotor;
     DoubleSolenoid rightIntakeSolenoid;
     DoubleSolenoid leftIntakeSolenoid;
+    boolean runLeftIntake;
+    boolean runRightIntake;
 
     public Intake(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
@@ -26,28 +28,64 @@ public class Intake extends SubsystemBase {
         rightIntakeSolenoid = hub.makeDoubleSolenoid(RIGHT_INTAKE_FWD_SOLENOID, RIGHT_INTAKE_REV_SOLENOID);
         leftIntakeSolenoid = hub.makeDoubleSolenoid(LEFT_INTAKE_FWD_SOLENOID, LEFT_INTAKE_REV_SOLENOID);
     }
+    
     boolean intakeState = false;
+
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
-        if (commander.getRunLeftIntake()) {
-            leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-            leftIntakeMotor.set(ControlMode.PercentOutput, .65);
-        } else {
-            leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-            leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
-        }
+        if(compBot){
 
-        if (commander.getRunRightIntake()) {
-            rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-            rightIntakeMotor.set(ControlMode.PercentOutput, -.65);
+            runLeftIntake = true;
+            if (commander.getRunLeftIntake()) {
+                runLeftIntake = true;
+                leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+            } else {
+                runLeftIntake = false;
+                leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            } 
+
+
+            if (commander.getRunRightIntake()) {
+                runRightIntake = true;
+                rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+            } else {
+                runRightIntake = false;
+                rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            }
+            if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
+                intakeState = true;
+            } else {
+                intakeState = false;
+            }
         } else {
-            rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-            rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
-        }
-        if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
-            intakeState = true;
-        } else {
-            intakeState = false;
+            if (commander.getRunLeftIntake()) {
+                runLeftIntake = true;
+                leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+            } else {
+                runLeftIntake = false;
+                leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            }
+
+            if (commander.getRunRightIntake()) {
+                runRightIntake = true;
+                rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+            } else {
+                runRightIntake = false;
+                rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            }
+            if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
+                intakeState = true;
+            } else {
+                intakeState = false;
+            }
         }
     }
 
@@ -81,6 +119,8 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("LeftIntakeCmd", leftIntakeMotor.getMotorOutputPercent());
         HotLogger.Log("RightIntakeCmd", rightIntakeMotor.getMotorOutputPercent());
         SmartDashboard.putNumber("RightIntakeCmd", rightIntakeMotor.getMotorOutputPercent()); 
+        SmartDashboard.putBoolean("runRightIntake", runRightIntake); 
+        SmartDashboard.putBoolean("runLeftIntake", runLeftIntake); 
     }
     public boolean getIntakeState(){
         return intakeState;
