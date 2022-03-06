@@ -81,6 +81,16 @@ public final class Constants {
     public static final int CLIMBER_RELEASE_SOLENOID = 8;
     public static final double MINIMUM_PRESSURE = 90.0;
     public static final double MAXIMUM_PRESSURE = 110.0;
+    public static final double CLIMBER_P = 0.2;
+    public static final double CLIMBER_I = 0.01;
+    public static final double CLIMBER_D = 0.0;
+    public static final double CLIMBER_F = 0.2;
+    public static final double CLIMBER_IZONE = 0.0;
+    public static final double PACKAGE_ANGLE = 35.0;
+    public static final double CLIMBER_CRUISE_VELOCITY = 19000.0;
+    public static final double CLIMBER_CRUISE_ACCELERATION = 15000.0;
+    public static final double CLIMBER_TICKS_PER_DEGREE = 1954.1;
+
 
     public static final int SHOOTER_INSIDE_SOLENOID_FOWARD = 11;
     public static final int SHOOTER_INSIDE_SOLENOID_REVERSE = 4;

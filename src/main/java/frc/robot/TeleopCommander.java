@@ -10,13 +10,14 @@ public class TeleopCommander extends RobotCommander{
     private static XboxController driver;
     private static XboxController operator;
     private static boolean climberUp;
-    int hoodPosition = 1;
+    int hoodPosition = 5;
     double shooterSpeed;
     boolean shooterOn;
     boolean autoAimMode = false;
     boolean climbState = false;
     boolean downCalled = false;
     boolean upCalled = false;
+    double climberAngle = (PACKAGE_ANGLE);
 
     RobotState robotState;
 
@@ -68,31 +69,17 @@ public class TeleopCommander extends RobotCommander{
     }
 
     @Override
-    public boolean getClimberChangeState() {
-      if ((operator.getPOV() < 20 || operator.getPOV() > 340) && (operator.getPOV() != -1)) {
-        if (downCalled == false){
-          downCalled = true;
-          upCalled = false;
-          return true;
-        }
-      } else if (operator.getPOV() > 160 && operator.getPOV() < 200) {
-        if (upCalled == false){
-          downCalled = false;
-          upCalled = true;
-          return true;
-        }
-      }
-      return false;
-    }
-
-    @Override
     public double getClimberMotor() {
-      return deadband(operator.getLeftY(), 0.2, 0.9);
+      if (robotState.getClimberExtended() == true) {
+        return deadband(operator.getLeftY(), 0.2, 0.9);
+      } else {
+        return 0.0;
+      }
     }
 
     @Override
     public boolean getClimberRelease() {
-      if (operator.getPOV() > 70 && operator.getPOV() < 110) {
+      if (operator.getPOV() > 70 && operator.getPOV() < 110 && robotState.getClimberExtended() == true) {
         return true;
       }
       else{
@@ -135,7 +122,10 @@ public class TeleopCommander extends RobotCommander{
 
       @Override
       public int getHoodPosition() {
-        if (operator.getAButtonPressed()) {
+        if (robotState.getClimberExtended() == true) {
+          this.hoodPosition = 5;
+          this.shooterOn = false;
+        } else if (operator.getAButtonPressed()) {
           this.hoodPosition = 1;
           this.shooterOn = true;
         } else if (operator.getBButtonPressed()) {
@@ -153,7 +143,7 @@ public class TeleopCommander extends RobotCommander{
 
       @Override
       public double getShooterSpeed() {
-        if (operator.getBackButton() || shooterOn == false) {
+        if (operator.getBackButton() || shooterOn == false || robotState.getClimberExtended() == true) {
           this.shooterSpeed = 0.0;
           this.shooterOn = false;
         }
@@ -191,5 +181,37 @@ public class TeleopCommander extends RobotCommander{
         }
         boolean[] tmp = {RT, LT, enable, dRT, stop};
         return tmp;
+      }
+
+      @Override
+      public boolean getClimberExtend() {
+        if ((robotState.getClimberExtended() == false) && ((operator.getPOV() < 20 || operator.getPOV() > 340) && (operator.getPOV() != -1))) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      @Override
+      public boolean getClimberRetract() {
+        if ((robotState.getClimberExtended() == true) && (operator.getPOV() > 160 && operator.getPOV() < 200)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      @Override
+      public double getClimberAngle() {
+        if ((driver.getPOV() < 20 || driver.getPOV() > 340) && (driver.getPOV() != -1)) {
+          climberAngle = 0.0;
+        } else if (driver.getPOV() > 70 && driver.getPOV() < 110) {
+          climberAngle = 90.0;
+        } else if (driver.getPOV() > 160 && driver.getPOV() < 200) {
+          climberAngle = 180.0;
+        } else if (driver.getPOV() > 250 && driver.getPOV() < 290) {
+          climberAngle = 270.0;
+        }
+        return climberAngle;
       }
 }

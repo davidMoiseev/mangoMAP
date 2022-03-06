@@ -41,12 +41,6 @@ public class AutonCommader extends RobotCommander{
     }
 
     @Override
-    public boolean getClimberChangeState() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
     public double getClimberMotor() {
         // TODO Auto-generated method stub
         return 0;
@@ -97,5 +91,23 @@ public class AutonCommader extends RobotCommander{
     public boolean[] getBallivator(){
         boolean[] x = {false, false};
         return x;
+    }
+
+    @Override
+    public boolean getClimberExtend() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getClimberRetract() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public double getClimberAngle() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }
