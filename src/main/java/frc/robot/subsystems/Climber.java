@@ -36,11 +36,20 @@ public class Climber extends SubsystemBase{
 
         // Move Climber motor back into if statement later
         if (commander.getClimberChangeState()){
-            if (climberState == DoubleSolenoid.Value.kForward) {
-                climberState = DoubleSolenoid.Value.kReverse;
+            if(compBot){
+                if (climberState == DoubleSolenoid.Value.kForward) {
+                    climberState = DoubleSolenoid.Value.kReverse;
+                } else {
+                    climberState = DoubleSolenoid.Value.kForward;
+                }
             } else {
-                climberState = DoubleSolenoid.Value.kForward;
+                if (climberState == DoubleSolenoid.Value.kReverse) {
+                    climberState = DoubleSolenoid.Value.kForward;
+                } else {
+                    climberState = DoubleSolenoid.Value.kReverse;
+                }
             }
+
             climberExtend.set(climberState);            
         } else {
             climberExtend.set(DoubleSolenoid.Value.kOff);            

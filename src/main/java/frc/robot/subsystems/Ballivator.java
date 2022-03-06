@@ -88,7 +88,11 @@ public class Ballivator extends SubsystemBase{
         
             if (buttons[3]){
                 setBallivatorSpeed(1, true, true);
-                ballivatorSolenoid.set(false);
+                if (compBot){
+                    ballivatorSolenoid.set(false);
+                } else {
+                    ballivatorSolenoid.set(true);
+                }
                 SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
             }
             else {
@@ -103,10 +107,18 @@ public class Ballivator extends SubsystemBase{
                 else {
                     setBallivatorSpeed(0, false, false);
                 }
-                ballivatorSolenoid.set(true);
+                if (compBot){
+                    ballivatorSolenoid.set(true);
+                } else {
+                    ballivatorSolenoid.set(false);
+                }
             }
         } else{
-            ballivatorSolenoid.set(true);
+            if (compBot){
+                ballivatorSolenoid.set(true);
+            } else {
+                ballivatorSolenoid.set(false);
+            }        
         }
 
         SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());

@@ -26,29 +26,58 @@ public class Intake extends SubsystemBase {
         rightIntakeSolenoid = hub.makeDoubleSolenoid(RIGHT_INTAKE_FWD_SOLENOID, RIGHT_INTAKE_REV_SOLENOID);
         leftIntakeSolenoid = hub.makeDoubleSolenoid(LEFT_INTAKE_FWD_SOLENOID, LEFT_INTAKE_REV_SOLENOID);
     }
+    
     boolean intakeState = false;
+
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
-        if (commander.getRunLeftIntake()) {
-            leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-            leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+        if(compBot){
+            if (commander.getRunLeftIntake()) {
+                if (commander.getRunLeftIntake()) {
+                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+                } else {
+                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                } 
+            }
+
+            if (commander.getRunRightIntake()) {
+                rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+            } else {
+                rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            }
+            if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
+                intakeState = true;
+            } else {
+                intakeState = false;
+            }
         } else {
-            leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-            leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            if (commander.getRunLeftIntake()) {
+                leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+            } else {
+                leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            }
+
+            if (commander.getRunRightIntake()) {
+                rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+            } else {
+                rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            }
+            if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
+                intakeState = true;
+            } else {
+                intakeState = false;
+            }
         }
 
-        if (commander.getRunRightIntake()) {
-            rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-            rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
-        } else {
-            rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-            rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
-        }
-        if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
-            intakeState = true;
-        } else {
-            intakeState = false;
-        }
+
     }
 
     @Override
