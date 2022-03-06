@@ -125,7 +125,7 @@ public class Shooter extends SubsystemBase{
     public void inside(boolean tmp){
         Value x = Value.kOff;
 
-        if(compBot){
+        if(COMP_BOT){
             if (tmp){
                 x = Value.kForward;
             }
@@ -146,7 +146,7 @@ public class Shooter extends SubsystemBase{
     public void outside(boolean tmp){
         Value x = Value.kOff;
 
-        if(compBot){
+        if(COMP_BOT){
             if (tmp){
                 x = Value.kForward;
             }

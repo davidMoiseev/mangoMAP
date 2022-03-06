@@ -125,16 +125,16 @@ public class TeleopCommander extends RobotCommander{
         if (robotState.getClimberExtended() == true) {
           this.hoodPosition = 5;
           this.shooterOn = false;
-        } else if (operator.getAButtonPressed()) {
+        } else if (operator.getAButton()) {
           this.hoodPosition = 1;
           this.shooterOn = true;
-        } else if (operator.getBButtonPressed()) {
+        } else if (operator.getBButton()) {
           this.hoodPosition=  2;
           this.shooterOn = true;
-        } else if (operator.getXButtonPressed()) {
+        } else if (operator.getXButton()) {
           this.hoodPosition = 3;
           this.shooterOn = true;
-        } else if (operator.getYButtonPressed()) {
+        } else if (operator.getYButton()) {
           this.hoodPosition = 4;
           this.shooterOn = true;
         }

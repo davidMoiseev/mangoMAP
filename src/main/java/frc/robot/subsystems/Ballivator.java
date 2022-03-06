@@ -88,7 +88,7 @@ public class Ballivator extends SubsystemBase{
         
             if (buttons[3]){
                 setBallivatorSpeed(1, true, true);
-                if (compBot){
+                if (COMP_BOT){
                     ballivatorSolenoid.set(false);
                 } else {
                     ballivatorSolenoid.set(true);
@@ -107,14 +107,14 @@ public class Ballivator extends SubsystemBase{
                 else {
                     setBallivatorSpeed(0, false, false);
                 }
-                if (compBot){
+                if (COMP_BOT){
                     ballivatorSolenoid.set(true);
                 } else {
                     ballivatorSolenoid.set(false);
                 }
             }
         } else{
-            if (compBot){
+            if (COMP_BOT){
                 ballivatorSolenoid.set(true);
             } else {
                 ballivatorSolenoid.set(false);
