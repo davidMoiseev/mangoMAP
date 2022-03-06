@@ -55,6 +55,17 @@ public class Drivetrain extends SubsystemBase {
         private SwerveDrivePoseEstimator poseExstimator;
         private RobotState robotState;
 
+        private TalonFX leftFrontDrive;
+        private TalonFX rightFrontDrive;
+        private TalonFX leftBackDrive;
+        private TalonFX rightBackDrive;
+
+        private TalonFX leftFrontSteer;
+        private TalonFX rightFrontSteer;
+        private TalonFX leftBackSteer;
+        private TalonFX rightBackSteer;
+
+
         public Drivetrain(RobotState robotState) {
                 this.robotState = robotState;
                 ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -144,11 +155,21 @@ public class Drivetrain extends SubsystemBase {
                         new Rotation2d(),
                         new Pose2d(),
                         Constants.KINEMATICS,
-                        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+                        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(10)),
                         VecBuilder.fill(Units.degreesToRadians(0.01)),
                         VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
                 states = kinematics.toSwerveModuleStates(new ChassisSpeeds());
+
+                // leftFrontDrive = new TalonFX(FRONT_LEFT_MODULE_DRIVE_MOTOR);
+                // rightFrontDrive = new TalonFX(FRONT_RIGHT_MODULE_DRIVE_MOTOR);
+                // leftBackDrive = new TalonFX(BACK_LEFT_MODULE_DRIVE_MOTOR);
+                // rightBackDrive = new TalonFX(FRONT_LEFT_MODULE_DRIVE_MOTOR);
+
+                // leftFrontSteer = new TalonFX(FRONT_LEFT_MODULE_STEER_MOTOR);
+                // rightFrontSteer = new TalonFX(FRONT_RIGHT_MODULE_STEER_MOTOR);
+                // leftBackSteer = new TalonFX(BACK_LEFT_MODULE_STEER_MOTOR);
+                // rightBackSteer = new TalonFX(FRONT_LEFT_MODULE_STEER_MOTOR);
         }
 
         private void setSwerveModuleStates(ChassisSpeeds chassisSpeeds) {
@@ -168,7 +189,7 @@ public class Drivetrain extends SubsystemBase {
         public void initializeAuton (AutonCommader commander){
                 poseExstimator.resetPosition(commander.getInitialPose(), robotState.getRotation2d());
 
-                ProfiledPIDController thetaController = new ProfiledPIDController(7.5, 1.1, .06,  // Theta
+                ProfiledPIDController thetaController = new ProfiledPIDController(14, 1.4, .08,  // Theta
                                                         new TrapezoidProfile.Constraints(6.28, 3.14));
 
                 thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -224,6 +245,7 @@ public class Drivetrain extends SubsystemBase {
         public void updateState() {
                 poseExstimator.update(robotState.getRotation2d(), states[0],states[1],states[2],states[3]);
 
+                SmartDashboard.putNumber("Robot State Theta", robotState.getRotation2d().getDegrees());
                 SmartDashboard.putNumber("poseX", poseExstimator.getEstimatedPosition().getX());
                 SmartDashboard.putNumber("poseY", poseExstimator.getEstimatedPosition().getY());
                 SmartDashboard.putNumber("poseTheta", poseExstimator.getEstimatedPosition().getRotation().getDegrees());
@@ -248,6 +270,26 @@ public class Drivetrain extends SubsystemBase {
         }
 
         public void setBrakeMode(boolean brakes) {
+                // if(brakes){
+                //         leftFrontDrive.setNeutralMode(NeutralMode.Brake);
+                //         rightFrontDrive.setNeutralMode(NeutralMode.Brake);
+                //         leftBackDrive.setNeutralMode(NeutralMode.Brake);
+                //         rightBackDrive.setNeutralMode(NeutralMode.Brake);
 
+                //         leftFrontSteer.setNeutralMode(NeutralMode.Brake);
+                //         rightFrontSteer.setNeutralMode(NeutralMode.Brake);
+                //         leftBackSteer.setNeutralMode(NeutralMode.Brake);
+                //         rightBackSteer.setNeutralMode(NeutralMode.Brake);
+                // } else {
+                //         leftFrontDrive.setNeutralMode(NeutralMode.Coast);
+                //         rightFrontDrive.setNeutralMode(NeutralMode.Coast);
+                //         leftBackDrive.setNeutralMode(NeutralMode.Coast);
+                //         rightBackDrive.setNeutralMode(NeutralMode.Coast);
+
+                //         leftFrontSteer.setNeutralMode(NeutralMode.Coast);
+                //         rightFrontSteer.setNeutralMode(NeutralMode.Coast);
+                //         leftBackSteer.setNeutralMode(NeutralMode.Coast);
+                //         rightBackSteer.setNeutralMode(NeutralMode.Coast);
+                // }
         }
 }

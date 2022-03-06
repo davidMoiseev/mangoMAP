@@ -61,6 +61,12 @@ public class AutonRight extends AutonCommader {
 
     private boolean shoot = false;
 
+
+    private boolean deployRightIntake = false;
+
+
+    private boolean deployLeftIntake = false;
+
     public AutonRight(RobotState robotState) {
         super(robotState);
         autoState = AutoState.prepareToShootInitialBall;
@@ -176,12 +182,12 @@ public class AutonRight extends AutonCommader {
     @Override
     public boolean[] getBallivator() {
         boolean RT= false, LT = false, dRT = false, enable = false, stop = !shoot;
-        if(false){
+        if(deployRightIntake){
           RT= true;
         } else {
           RT= false;
         }
-        if(false){
+        if(deployLeftIntake){
           LT = true;
         } else {
           LT = false;
@@ -242,11 +248,17 @@ public class AutonRight extends AutonCommader {
         if (autoState == AutoState.driveToWall) {
             autonInProgress = true;
             driveRequested = true;
-            desiredState = new State(timer.get(), .5/.5*timer.get(), .75, new Pose2d(lastDesiredState.poseMeters.getX()-.75/2*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()+1.75/2*timer.get(),
+            deployRightIntake = true;
+            desiredState = new State(timer.get(), .5/1*timer.get(), .25, new Pose2d(lastDesiredState.poseMeters.getX()+.75/2*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()-1.75/2*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
-            setTargetTheta(new Rotation2d(42));    
+            setTargetTheta(Rotation2d.fromDegrees(0));
+            
+            SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
+            SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
+            SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
+
             if (timer.get() > 2) {
                 autoState = AutoState.autoComplete;
                 timer.reset();
@@ -270,6 +282,8 @@ public class AutonRight extends AutonCommader {
             }
         }
         if (autoState == AutoState.autoComplete) {
+            deployRightIntake = false;
+            deployLeftIntake = false;
             autonInProgress = false;
             driveRequested = false;
         }

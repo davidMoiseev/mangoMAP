@@ -75,6 +75,7 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     drivetrain.zeroActuators();
     hub.disableCompressor();
+    // drivetrain.setBrakeMode(false);
   }
 
   @Override
@@ -106,6 +107,8 @@ public class Robot extends TimedRobot {
     drivetrain.initializeAuton(selectedAuton);
     drivetrain.zeroActuators();
     pigeon.initializeAuton(selectedAuton);
+
+    // drivetrain.setBrakeMode(true);
   }
 
   @Override
