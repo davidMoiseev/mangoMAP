@@ -50,7 +50,7 @@ public class Ballivator extends SubsystemBase{
         
         if (ON) {
             if (ballSense.get()){
-                setBallivatorSpeed(1, true, true);
+                setBallivatorSpeed(1, false, true);
             } else {
                 setBallivatorSpeed(1, true, true);
             }
@@ -59,13 +59,13 @@ public class Ballivator extends SubsystemBase{
         if (buttons[2] == true) {
             if (ballSense.get()){
                 if (buttons[0]){
-                    setBallivatorSpeed(1, true, true);
+                    setBallivatorSpeed(1, true, false);
                 }
                 else if (buttons[1]){
                     setBallivatorSpeed(-1, true, true);
                 }
                 else {
-                    setBallivatorSpeed(0, false, true);
+                    setBallivatorSpeed(0, false, false);
                 }
             }
             else {
@@ -94,7 +94,7 @@ public class Ballivator extends SubsystemBase{
             else {
                 if (ON) {
                     if (ballSense.get()){
-                        setBallivatorSpeed(1, true, true);
+                        setBallivatorSpeed(1, true, false);
                     } 
                     else {
                         setBallivatorSpeed(1, true, true);

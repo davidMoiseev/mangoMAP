@@ -31,7 +31,7 @@ public class Intake extends SubsystemBase {
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         if (commander.getRunLeftIntake()) {
             leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-            leftIntakeMotor.set(ControlMode.PercentOutput, .65);
+            leftIntakeMotor.set(ControlMode.PercentOutput, .85);
         } else {
             leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
             leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
 
         if (commander.getRunRightIntake()) {
             rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-            rightIntakeMotor.set(ControlMode.PercentOutput, -.65);
+            rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
         } else {
             rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
             rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
