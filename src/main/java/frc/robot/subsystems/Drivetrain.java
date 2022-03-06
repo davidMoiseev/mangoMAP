@@ -9,11 +9,19 @@ import com.swervedrivespecialties.swervelib.SwerveModule;
 
 import org.hotutilites.hotlogger.HotLogger;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.HolonomicDriveController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -43,8 +51,12 @@ public class Drivetrain extends SubsystemBase {
                         new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
         private double yOffset = 0;
+        private HolonomicDriveController holonomicController;
+        private SwerveDrivePoseEstimator poseExstimator;
+        private RobotState robotState;
 
         public Drivetrain(RobotState robotState) {
+                this.robotState = robotState;
                 ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
                 if (realBot) {
@@ -128,6 +140,53 @@ public class Drivetrain extends SubsystemBase {
                                         BACK_RIGHT_MODULE_STEER_ENCODER,
                                         BACK_RIGHT_MODULE_STEER_OFFSET);
                 }
+                poseExstimator = new SwerveDrivePoseEstimator(
+                        new Rotation2d(),
+                        new Pose2d(),
+                        Constants.KINEMATICS,
+                        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+                        VecBuilder.fill(Units.degreesToRadians(0.01)),
+                        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+
+                states = kinematics.toSwerveModuleStates(new ChassisSpeeds());
+        }
+
+        private void setSwerveModuleStates(ChassisSpeeds chassisSpeeds) {
+                states = kinematics.toSwerveModuleStates(chassisSpeeds);
+                SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
+
+                frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+                                states[0].angle.getRadians());
+                frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+                                states[1].angle.getRadians());
+                backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+                                states[2].angle.getRadians());
+                backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
+                                states[3].angle.getRadians());
+        }
+
+        public void initializeAuton (AutonCommader commander){
+                poseExstimator.resetPosition(commander.getInitialPose(), robotState.getRotation2d());
+
+                ProfiledPIDController thetaController = new ProfiledPIDController(7.5, 1.1, .06,  // Theta
+                                                        new TrapezoidProfile.Constraints(6.28, 3.14));
+
+                thetaController.enableContinuousInput(-Math.PI, Math.PI);
+                holonomicController = new HolonomicDriveController(
+                        new PIDController(16, 1.4, 0.2),  //x Long side of field
+                        new PIDController(16, 1.4, 0.2), //y Short side of field
+                        thetaController); // (2Pk,PI) constrains to 1 2pi/sec
+        }
+
+        public void autonenabledAction(AutonCommader commander) {
+
+                if (commander.getAutonInProgress()) {
+                        setSwerveModuleStates(holonomicController.calculate(poseExstimator.getEstimatedPosition(), 
+                                                        commander.getDesiredState(),
+                                                        commander.getTargetTheta()));
+                } else {
+                        setSwerveModuleStates(new ChassisSpeeds());
+                }
         }
 
         @Override
@@ -138,7 +197,7 @@ public class Drivetrain extends SubsystemBase {
                                         commander.getForwardCommand(),
                                         commander.getStrafeCommand(),
                                         commander.getTurnCommand(),
-                                        Rotation2d.fromDegrees(robotState.getTheta()));
+                                        robotState.getRotation2d());
                         
                         yOffset = 0;
                         // if pressing A
@@ -153,18 +212,7 @@ public class Drivetrain extends SubsystemBase {
                                                 (Math.abs(robotState.getTxReal()) > Constants.ALLOWED_X_OFFSET) ? robotState.getTxReal() * Constants.X_ADJUST_SPEED : 0);
                         }
                 }
-
-                states = kinematics.toSwerveModuleStates(chassisSpeeds);
-                SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY_METERS_PER_SECOND);
-
-                frontLeftModule.set(states[0].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                                states[0].angle.getRadians());
-                frontRightModule.set(states[1].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                                states[1].angle.getRadians());
-                backLeftModule.set(states[2].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                                states[2].angle.getRadians());
-                backRightModule.set(states[3].speedMetersPerSecond / MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE,
-                                states[3].angle.getRadians());
+                setSwerveModuleStates(chassisSpeeds);
         }
 
         @Override
@@ -174,7 +222,11 @@ public class Drivetrain extends SubsystemBase {
 
         @Override
         public void updateState() {
+                poseExstimator.update(robotState.getRotation2d(), states[0],states[1],states[2],states[3]);
 
+                SmartDashboard.putNumber("poseX", poseExstimator.getEstimatedPosition().getX());
+                SmartDashboard.putNumber("poseY", poseExstimator.getEstimatedPosition().getY());
+                SmartDashboard.putNumber("poseTheta", poseExstimator.getEstimatedPosition().getRotation().getDegrees());
         }
 
         @Override

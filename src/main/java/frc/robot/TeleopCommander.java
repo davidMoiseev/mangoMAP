@@ -133,6 +133,11 @@ public class TeleopCommander extends RobotCommander{
         return driver.getBackButton();
       }
 
+
+      public double getResetIMUAngle() {
+        return 0;
+      }
+
       @Override
       public int getHoodPosition() {
         if (operator.getAButtonPressed()) {

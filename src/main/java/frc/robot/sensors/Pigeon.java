@@ -6,6 +6,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import org.hotutilites.hotlogger.HotLogger;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.AutonCommader;
 import frc.robot.Robot;
 import frc.robot.RobotCommander;
 import frc.robot.RobotState;
@@ -27,13 +28,9 @@ public class Pigeon extends SensorBase{
     }
 
     @Override
-    public void updateState(RobotState robotState, RobotCommander commander) {
-        if(commander.getResetIMU()){
-            zeroSensor();
-        }
-
+    public void updateState() {
         theta = pigeon.getYaw();
-        robotState.setTheta(theta);
+        robotState.setRotation2d(theta);
     }
 
     @Override
@@ -47,6 +44,18 @@ public class Pigeon extends SensorBase{
         SmartDashboard.putNumber("Theta", theta);
 
         HotLogger.Log("Theta", theta);
+    }
+
+    public void initializeAuton(AutonCommader selectedAuton) {
+        pigeon.setYaw(selectedAuton.getInitialPose().getRotation().getDegrees());
+
+        SmartDashboard.putNumber("InitializedPigeon", selectedAuton.getInitialPose().getRotation().getDegrees());
+    }
+
+    public void enabledAction(RobotCommander commander) {
+        if (commander.getResetIMU()) {
+            pigeon.setYaw(commander.getResetIMUAngle());
+        }
     }
     
 }
