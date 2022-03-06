@@ -29,6 +29,7 @@ public class Shooter extends SubsystemBase{
     double FF = 0;
     double targetVelocity_UnitsPer100ms;
     double RPM;
+    int hoodPosition;
 
     public Shooter(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
@@ -75,7 +76,11 @@ public class Shooter extends SubsystemBase{
             inside(true);
             outside(true);
         }
-        
+        else if (commander.getHoodPosition() == 5){
+            inside(false);
+            outside(false);
+        }
+        hoodPosition = commander.getHoodPosition();
         targetRPM = commander.getShooterSpeed();
         targetVelocity_UnitsPer100ms = (targetRPM * 2048) / 600;
         leftShooterMotor.set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100ms);
@@ -111,8 +116,10 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("LeftShooterSpeed", (leftShooterMotor.getSelectedSensorVelocity() / 2048) * 600);
         HotLogger.Log("RightShooterSpeed", (rightShooterMotor.getSelectedSensorVelocity() / 2048) * 600);
         SmartDashboard.putNumber("RightShooterSpeed", (rightShooterMotor.getSelectedSensorVelocity() / 2048 ) * 600); 
-        HotLogger.Log("TargetSpeed", targetRPM);
-        SmartDashboard.putNumber("TargetSpeed", targetRPM); 
+        HotLogger.Log("TargetRPM", targetRPM);
+        SmartDashboard.putNumber("TargetRPM", targetRPM); 
+        HotLogger.Log("hoodPosition", hoodPosition);
+        SmartDashboard.putNumber("hoodPosition", hoodPosition); 
     }
 
     public void inside(boolean tmp){

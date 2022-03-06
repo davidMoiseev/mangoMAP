@@ -7,6 +7,7 @@ public class RobotState {
     private double tyReal;
     public double txReal;
     public double detecting;
+    private boolean climberExtended;
 
     public void setTheta(double theta) {
         this.theta = theta;
@@ -14,6 +15,14 @@ public class RobotState {
 
     public double getTheta() {
         return this.theta;
+    }
+
+    public void setClimberExtended(boolean climberExt) {
+        this.climberExtended = climberExt;
+    }
+
+    public boolean getClimberExtended() {
+        return this.climberExtended;
     }
 
     public void setTyReal(double tyReal) {
