@@ -50,7 +50,7 @@ public class Ballivator extends SubsystemBase{
         
         if (ON) {
             if (ballSense.get()){
-                setBallivatorSpeed(1, true, false);
+                setBallivatorSpeed(1, true, true);
             } else {
                 setBallivatorSpeed(1, true, true);
             }
@@ -59,13 +59,13 @@ public class Ballivator extends SubsystemBase{
         if (buttons[2] == true) {
             if (ballSense.get()){
                 if (buttons[0]){
-                    setBallivatorSpeed(1, true, false);
+                    setBallivatorSpeed(1, true, true);
                 }
                 else if (buttons[1]){
                     setBallivatorSpeed(-1, true, true);
                 }
                 else {
-                    setBallivatorSpeed(0, false, false);
+                    setBallivatorSpeed(0, false, true);
                 }
             }
             else {
@@ -88,13 +88,13 @@ public class Ballivator extends SubsystemBase{
         
             if (buttons[3]){
                 setBallivatorSpeed(1, true, true);
-                ballivatorSolenoid.set(true);
+                ballivatorSolenoid.set(false);
                 SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
             }
             else {
                 if (ON) {
                     if (ballSense.get()){
-                        setBallivatorSpeed(1, true, false);
+                        setBallivatorSpeed(1, true, true);
                     } 
                     else {
                         setBallivatorSpeed(1, true, true);
@@ -103,10 +103,10 @@ public class Ballivator extends SubsystemBase{
                 else {
                     setBallivatorSpeed(0, false, false);
                 }
-                ballivatorSolenoid.set(false);
+                ballivatorSolenoid.set(true);
             }
         } else{
-            ballivatorSolenoid.set(false);
+            ballivatorSolenoid.set(true);
         }
 
         SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
