@@ -17,6 +17,8 @@ public class Intake extends SubsystemBase {
     TalonFX leftIntakeMotor;
     DoubleSolenoid rightIntakeSolenoid;
     DoubleSolenoid leftIntakeSolenoid;
+    boolean runLeftIntake;
+    boolean runRightIntake;
 
     public Intake(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
@@ -32,20 +34,25 @@ public class Intake extends SubsystemBase {
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         if(compBot){
+
+            runLeftIntake = true;
             if (commander.getRunLeftIntake()) {
-                if (commander.getRunLeftIntake()) {
-                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                    leftIntakeMotor.set(ControlMode.PercentOutput, .85);
-                } else {
-                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-                    leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
-                } 
-            }
+                runLeftIntake = true;
+                leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+            } else {
+                runLeftIntake = false;
+                leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+            } 
+
 
             if (commander.getRunRightIntake()) {
+                runRightIntake = true;
                 rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
                 rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
             } else {
+                runRightIntake = false;
                 rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
                 rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
             }
@@ -56,17 +63,21 @@ public class Intake extends SubsystemBase {
             }
         } else {
             if (commander.getRunLeftIntake()) {
+                runLeftIntake = true;
                 leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
                 leftIntakeMotor.set(ControlMode.PercentOutput, .85);
             } else {
+                runLeftIntake = false;
                 leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
                 leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
             }
 
             if (commander.getRunRightIntake()) {
+                runRightIntake = true;
                 rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
                 rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
             } else {
+                runRightIntake = false;
                 rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
                 rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
             }
@@ -76,8 +87,6 @@ public class Intake extends SubsystemBase {
                 intakeState = false;
             }
         }
-
-
     }
 
     @Override
@@ -110,6 +119,8 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("LeftIntakeCmd", leftIntakeMotor.getMotorOutputPercent());
         HotLogger.Log("RightIntakeCmd", rightIntakeMotor.getMotorOutputPercent());
         SmartDashboard.putNumber("RightIntakeCmd", rightIntakeMotor.getMotorOutputPercent()); 
+        SmartDashboard.putBoolean("runRightIntake", runRightIntake); 
+        SmartDashboard.putBoolean("runLeftIntake", runLeftIntake); 
     }
     public boolean getIntakeState(){
         return intakeState;

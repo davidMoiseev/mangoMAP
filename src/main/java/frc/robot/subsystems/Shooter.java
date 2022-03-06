@@ -120,10 +120,10 @@ public class Shooter extends SubsystemBase{
 
         if(compBot){
             if (tmp){
-                x = Value.kReverse;
+                x = Value.kForward;
             }
             else {
-                x = Value.kForward;
+                x = Value.kReverse;
             }
         } else {
             if (tmp){
@@ -141,10 +141,10 @@ public class Shooter extends SubsystemBase{
 
         if(compBot){
             if (tmp){
-                x = Value.kReverse;
+                x = Value.kForward;
             }
             else {
-                x = Value.kForward;
+                x = Value.kReverse;
             }
         } else {
             if (tmp){
