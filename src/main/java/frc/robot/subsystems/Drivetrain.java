@@ -47,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
         public Drivetrain(RobotState robotState) {
                 ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-                if (realBot) {
+                if (REAL_BOT) {
                         frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
                                         tab.getLayout("Front Left Module", BuiltInLayouts.kList)
                                                         .withSize(2, 4)

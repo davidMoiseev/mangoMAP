@@ -48,25 +48,47 @@ public class Climber extends SubsystemBase{
         climberMotor.configNominalOutputForward(0, 30);
 		climberMotor.configNominalOutputReverse(0, 30);
 		climberMotor.configPeakOutputForward(1, 30);
-		climberMotor.configPeakOutputReverse(-1, 30);
+		climberMotor.configPeakOutputReverse(-1, 30); 
         climberMotor.selectProfileSlot(0, 0);
 		climberMotor.config_kF(0, CLIMBER_F, 30);
 		climberMotor.config_kP(0, CLIMBER_P, 30);
 		climberMotor.config_kI(0, CLIMBER_I, 30);
 		climberMotor.config_kD(0, CLIMBER_D, 30);
         climberMotor.configNeutralDeadband(0.001, 30);
-        climberMotor.setSensorPhase(true);
-		climberMotor.setInverted(true);
+        climberMotor.setSensorPhase(false);
+		climberMotor.setInverted(false);
         climberMotor.configMotionCruiseVelocity(CLIMBER_CRUISE_VELOCITY, 30);
         climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 30);
 		climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
 		climberMotor.configMotionAcceleration(CLIMBER_CRUISE_ACCELERATION, 30);
         climberMotor.setSelectedSensorPosition(degreeToTicks(PACKAGE_ANGLE), 0, 30);
+        climberMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
 
+        if (COMP_BOT) {
+            if (commander.getClimberExtend()) {
+                robotState.setClimberExtended(true);
+                climberExtend.set(DoubleSolenoid.Value.kForward);
+            }
+            
+            if (commander.getClimberRetract()) {
+                robotState.setClimberExtended(false);
+                climberExtend.set(DoubleSolenoid.Value.kReverse);
+            }
+        } else {
+            if (commander.getClimberExtend()) {
+                robotState.setClimberExtended(true);
+                climberExtend.set(DoubleSolenoid.Value.kReverse);
+            }
+
+            if (commander.getClimberRetract()) {
+                robotState.setClimberExtended(false);
+                climberExtend.set(DoubleSolenoid.Value.kForward);
+            }
+        }
 
         if (commander.getClimberExtend()) {
             robotState.setClimberExtended(true);

@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
 
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
-        if(compBot){
+        if(COMP_BOT){
 
             runLeftIntake = true;
             if (commander.getRunLeftIntake()) {
