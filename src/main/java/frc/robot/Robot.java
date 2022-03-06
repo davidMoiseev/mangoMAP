@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    selectedAuton.updateCommand();
+    ((AutonRight)selectedAuton).updateCommand(pigeon, drivetrain);
     drivetrain.autonenabledAction(selectedAuton);
     ballSupervisor.enabledAction(robotState, selectedAuton);
   }

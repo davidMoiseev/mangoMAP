@@ -155,7 +155,7 @@ public class Drivetrain extends SubsystemBase {
                         new Rotation2d(),
                         new Pose2d(),
                         Constants.KINEMATICS,
-                        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(10)),
+                        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
                         VecBuilder.fill(Units.degreesToRadians(0.01)),
                         VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
@@ -189,7 +189,7 @@ public class Drivetrain extends SubsystemBase {
         public void initializeAuton (AutonCommader commander){
                 poseExstimator.resetPosition(commander.getInitialPose(), robotState.getRotation2d());
 
-                ProfiledPIDController thetaController = new ProfiledPIDController(14, 1.4, .08,  // Theta
+                ProfiledPIDController thetaController = new ProfiledPIDController(6.5, 1.4, .09,  // Theta
                                                         new TrapezoidProfile.Constraints(6.28, 3.14));
 
                 thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -201,7 +201,28 @@ public class Drivetrain extends SubsystemBase {
 
         public void autonenabledAction(AutonCommader commander) {
 
-                if (commander.getAutonInProgress() && commander.getDriveRequested()) {
+                if (commander.getRobotAim()) {
+                        yOffset += commander.getForwardCommand() * Constants.Y_OFFSET; //makes the robot go forwards or backwards(robot centric) while turning around the hub
+                         // if limelight has target 
+                         if(commander.getAutonInProgress()){
+                                if (robotState.getDetecting() == 1) {
+                                        // auto aim
+                                        SmartDashboard.putBoolean("Auton Auto Aiming", true);
+                                        chassisSpeeds = new ChassisSpeeds(
+                                                        0,
+                                                        0,
+                                                        (Math.abs(robotState.getTxReal()) > Constants.ALLOWED_X_OFFSET) ? robotState.getTxReal() * Constants.X_ADJUST_SPEED : 0);
+                                }
+                         } else {
+                                if (robotState.getDetecting() == 1) {
+                                        // auto aim
+                                        chassisSpeeds = new ChassisSpeeds(
+                                                        (Math.abs(robotState.getTyReal() + yOffset) > Constants.ALLOWED_Y_OFFSET) ? (robotState.getTyReal() + yOffset) * Constants.Y_ADJUST_SPEED : 0,
+                                                        Constants.STRAFE_SPEED * commander.getStrafeCommand(),
+                                                        (Math.abs(robotState.getTxReal()) > Constants.ALLOWED_X_OFFSET) ? robotState.getTxReal() * Constants.X_ADJUST_SPEED : 0);
+                                }
+                         }
+                 } else if (commander.getAutonInProgress() && commander.getDriveRequested()) {
                         setSwerveModuleStates(holonomicController.calculate(poseExstimator.getEstimatedPosition(), 
                                                         commander.getDesiredState(),
                                                         commander.getTargetTheta()));
@@ -243,7 +264,7 @@ public class Drivetrain extends SubsystemBase {
 
         @Override
         public void updateState() {
-                poseExstimator.update(robotState.getRotation2d(), states[0],states[1],states[2],states[3]);
+                poseExstimator.update(robotState.getRotation2d(), states);
 
                 SmartDashboard.putNumber("Robot State Theta", robotState.getRotation2d().getDegrees());
                 SmartDashboard.putNumber("poseX", poseExstimator.getEstimatedPosition().getX());
