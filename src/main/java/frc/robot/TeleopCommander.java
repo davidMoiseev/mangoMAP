@@ -2,6 +2,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Controller;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Shooter.Shot;
 
 import static frc.robot.Constants.*;
 
@@ -10,7 +12,7 @@ public class TeleopCommander extends RobotCommander{
     private static XboxController driver;
     private static XboxController operator;
     private static boolean climberUp;
-    int hoodPosition = 5;
+    Shot hoodPosition = Shot.NEUTRAL;
     double shooterSpeed;
     boolean shooterOn;
     boolean autoAimMode = false;
@@ -120,46 +122,32 @@ public class TeleopCommander extends RobotCommander{
         return driver.getBackButton();
       }
 
-      @Override
-      public int getHoodPosition() {
-        if (robotState.getClimberExtended() == true) {
-          this.hoodPosition = 5;
-          this.shooterOn = false;
-        } else if (operator.getAButton()) {
-          this.hoodPosition = 1;
-          this.shooterOn = true;
-        } else if (operator.getBButton()) {
-          this.hoodPosition=  2;
-          this.shooterOn = true;
-        } else if (operator.getXButton()) {
-          this.hoodPosition = 3;
-          this.shooterOn = true;
-        } else if (operator.getYButton()) {
-          this.hoodPosition = 4;
-          this.shooterOn = true;
-        }
-        return this.hoodPosition;
+
+      public double getResetIMUAngle() {
+        return 0;
       }
 
       @Override
-      public double getShooterSpeed() {
-        if (operator.getBackButton() || shooterOn == false || robotState.getClimberExtended() == true) {
-          this.shooterSpeed = 0.0;
+      public Shot getHoodPosition() {
+        if (robotState.getClimberExtended() == true) {
+          this.hoodPosition = Shooter.Shot.CLIMB;
           this.shooterOn = false;
+        } else if (operator.getAButtonPressed()) {
+          this.hoodPosition = Shooter.Shot.FENDER;
+          this.shooterOn = true;
+        } else if (operator.getBButtonPressed()) {
+          this.hoodPosition=  Shooter.Shot.WALL;
+          this.shooterOn = true;
+        } else if (operator.getXButtonPressed()) {
+          this.hoodPosition = Shooter.Shot.TARMACK;
+          this.shooterOn = true;
+        } else if (operator.getYButtonPressed()) {
+          this.hoodPosition = Shooter.Shot.PROTECTED;
+          this.shooterOn = true;
+        } else if (operator.getBackButtonPressed()){
+          hoodPosition = Shot.NEUTRAL;
         }
-
-        if (this.shooterOn) {
-          if (hoodPosition == 1) {
-            this.shooterSpeed = SHOOTER_SPEED_1;
-          } else if (hoodPosition == 2) {
-            this.shooterSpeed = SHOOTER_SPEED_2;
-          } else if (hoodPosition == 3) {
-            this.shooterSpeed = SHOOTER_SPEED_3;
-          } else if (hoodPosition == 4) {
-            this.shooterSpeed = SHOOTER_SPEED_4;
-          }
-        }
-        return this.shooterSpeed;
+        return this.hoodPosition;
       }
 
       public boolean[] getBallivator(){
@@ -181,6 +169,31 @@ public class TeleopCommander extends RobotCommander{
         }
         boolean[] tmp = {RT, LT, enable, dRT, stop};
         return tmp;
+      }
+
+      @Override
+      public boolean getOverrideShooterMotor() {
+        return operator.getBackButton();
+      }
+
+      @Override
+      public boolean getOverrideBallivatorMotor() {
+        return operator.getBackButton();
+      }
+
+      @Override
+      public boolean getOverrideIntakmotor() {
+        return operator.getBackButton();
+      }
+
+      @Override
+      public int getShooterSpeedThreshHold() {
+        return TELE_SHOOTER_OK_SPEED_TOLERANCE;
+      }
+
+      @Override
+      public double getShooterTimeThreshHold() {
+        return TELE_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE;
       }
 
       @Override

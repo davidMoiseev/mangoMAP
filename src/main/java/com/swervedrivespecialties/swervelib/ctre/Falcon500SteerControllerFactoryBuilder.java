@@ -125,6 +125,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
             motor.setSensorPhase(true);
             motor.setInverted(moduleConfiguration.isSteerInverted() ? TalonFXInvertType.CounterClockwise : TalonFXInvertType.Clockwise);
             motor.setNeutralMode(NeutralMode.Brake);
+            motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 45, 1));
 
             checkCtreError(motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS), "Failed to set Falcon 500 encoder position");
 

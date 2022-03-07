@@ -12,6 +12,14 @@ import static frc.robot.Constants.*;
 public class BallSupervisor extends SubsystemBase{
     RobotState robotState;
     
+    enum SupervisorState {
+        IDLE,
+        INTAKE_LEFT,
+        INTAK_RIGHT,
+        STAND_BY_TO_SHOOT,
+        SHOOT
+    }
+
     Shooter shooter;
     Intake intake;
     Ballivator ballivator;

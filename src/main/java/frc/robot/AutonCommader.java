@@ -1,43 +1,61 @@
 package frc.robot;
 
-import frc.robot.Autons.AutoRunner;
+import java.io.IOException;
+import java.nio.file.Path;
 
-public class AutonCommader extends RobotCommander{
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.Trajectory.State;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import static frc.robot.Constants.*;
 
-    AutoRunner auton;
+public abstract class AutonCommader extends RobotCommander{
+
+    protected RobotState robotState;
+    protected boolean resetIMU = false;
+    protected double resetIMUAngle = 0.0;
+    private Timer timer;
+    protected State desiredState;
+    private Rotation2d targetTheta;
+    
+    public abstract String getName();
+
+    public Rotation2d getTargetTheta() {
+        return targetTheta;
+    }
+
+    public void setTargetTheta(Rotation2d targetTheta) {
+        this.targetTheta = targetTheta;
+    }
 
     public AutonCommader(RobotState robotState) {
-        auton = new AutoRunner(robotState);
+        this.robotState = robotState;
+        setTargetTheta(new Rotation2d());
+        
+        timer = new Timer();
     }
 
-    @Override
-    public double getForwardCommand() {
-        // TODO Auto-generated method stub
-        return 0;
+    public AutonCommader(RobotState robotState, String trajectoryJSON) {
+        this.robotState = robotState;
+        setTargetTheta(new Rotation2d());
+ 
+        timer = new Timer();
     }
 
-    @Override
-    public double getStrafeCommand() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
+    public abstract Pose2d getInitialPose();
 
     @Override
-    public double getTurnCommand() {
-        // TODO Auto-generated method stub
-        return 0;
+    public boolean getResetIMU() {
+        return resetIMU;
     }
-
-    @Override
-    public boolean getRunLeftIntake() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean getRunRightIntake() {
-        // TODO Auto-generated method stub
-        return false;
+    
+    public double getResetIMUAngle() {
+        return resetIMUAngle;
     }
 
     @Override
@@ -45,47 +63,38 @@ public class AutonCommader extends RobotCommander{
         // TODO Auto-generated method stub
         return 0;
     }
+    
+    public State getDesiredState() {
+        return desiredState;
+    }
 
-    @Override
-    public boolean getClimberRelease() {
-        // TODO Auto-generated method stub
-        return false;
+    public abstract void initializeAuton();
+
+    public abstract void updateCommand();
+
+    public abstract boolean getAutonInProgress();
+    public abstract boolean getDriveRequested();
+
+    protected Trajectory readTrajectoryFile(String fileName) {
+        Trajectory trajectory;
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(fileName);
+            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+         } catch (IOException ex) {
+            DriverStation.reportError("Unable to open trajectory: " + fileName, ex.getStackTrace());
+            trajectory = null;
+         }
+         return trajectory;
     }
 
     @Override
-    public double getRightIntakeCommand() {
-        // TODO Auto-generated method stub
-        return 0;
+    public int getShooterSpeedThreshHold() {
+      return AUTO_SHOOTER_OK_SPEED_TOLERANCE;
     }
 
     @Override
-    public double getLeftIntakeCommand() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public boolean getResetIMU() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public boolean getRobotAim() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public int getHoodPosition() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public double getShooterSpeed() {
-        // TODO Auto-generated method stub
-        return 0;
+    public double getShooterTimeThreshHold() {
+      return AUTO_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE;
     }
 
     public boolean[] getBallivator(){

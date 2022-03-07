@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.fasterxml.jackson.databind.util.RootNameLookup;
 
 import org.hotutilites.hotlogger.HotLogger;
 
@@ -9,6 +10,8 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Autons.AutonLeft;
+import frc.robot.Autons.AutonRight;
 import frc.robot.sensors.Limelight;
 import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
@@ -21,7 +24,6 @@ public class Robot extends TimedRobot {
 
   private RobotState robotState;
   private TeleopCommander teleopCommander;
-  private AutonCommader autonCommander;
   private Drivetrain drivetrain;
   private Pigeon pigeon;
   private PneumaticHub hub;
@@ -29,6 +31,9 @@ public class Robot extends TimedRobot {
   private Climber climber;
   private Limelight limelight;
   XboxController driver = new XboxController(0);
+  private AutonCommader selectedAuton;
+  private String autonSelection;
+  private Object autonSelectionPrev;
 
   @Override
   public void robotInit() {
@@ -42,7 +47,6 @@ public class Robot extends TimedRobot {
     robotState = new RobotState();
     hub = new PneumaticHub(PNEUMATIC_HUB);
     teleopCommander = new TeleopCommander(robotState);
-    autonCommander = new AutonCommader(robotState);
     pigeon = new Pigeon(robotState);
     drivetrain = new Drivetrain(robotState);
     ballSupervisor = new BallSupervisor(robotState, hub);
@@ -51,12 +55,15 @@ public class Robot extends TimedRobot {
     
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+
+    autonSelection = "none";
   }
 
   @Override
   public void robotPeriodic() {
-    pigeon.updateState(robotState, teleopCommander);
-    limelight.updateState(robotState, teleopCommander);
+    pigeon.updateState();
+    pigeon.logData();
+    limelight.updateState();
     drivetrain.updateState();
     ballSupervisor.updateState();
     climber.updateState();
@@ -69,28 +76,52 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     drivetrain.zeroActuators();
     hub.disableCompressor();
+    // drivetrain.setBrakeMode(false);
   }
 
   @Override
   public void disabledPeriodic() {
     drivetrain.disabledAction(robotState);
+    SmartDashboard.getString("AutonSelection(LeftOrRight)", autonSelection);
+    
+    drivetrain.zeroActuators();
+
+    if (! autonSelection.equals(autonSelectionPrev)) {
+      if (autonSelection.equals("Left")) {
+        selectedAuton = new AutonLeft(robotState);
+        SmartDashboard.putString("AutonSelected", selectedAuton.getName());
+      } else if (autonSelection.equals("Right")) {
+        selectedAuton = new AutonRight(robotState);
+        SmartDashboard.putString("AutonSelected", selectedAuton.getName());
+      } else {
+        SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
+        selectedAuton = new AutonRight(robotState);
+      }
+    }
   }
 
   @Override
   public void autonomousInit() {
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
+
+    selectedAuton.initializeAuton();
+    drivetrain.initializeAuton(selectedAuton);
+    drivetrain.zeroActuators();
+    pigeon.initializeAuton(selectedAuton);
+
+    // drivetrain.setBrakeMode(true);
   }
 
   @Override
   public void autonomousPeriodic() {
-    drivetrain.enabledAction(robotState, autonCommander);
-    ballSupervisor.enabledAction(robotState, autonCommander);
-    climber.enabledAction(robotState, autonCommander);
+    ((AutonRight)selectedAuton).updateCommand(pigeon, drivetrain);
+    drivetrain.autonenabledAction(selectedAuton);
+    ballSupervisor.enabledAction(robotState, selectedAuton);
   }
 
   @Override
   public void teleopInit() {
-    pigeon.zeroSensor();
+    //pigeon.zeroSensor();
     drivetrain.zeroActuators();
     drivetrain.zeroSensor();
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
@@ -98,6 +129,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    pigeon.enabledAction(teleopCommander);
     drivetrain.enabledAction(robotState, teleopCommander);
     ballSupervisor.enabledAction(robotState, teleopCommander);
     climber.enabledAction(robotState, teleopCommander);

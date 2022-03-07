@@ -2,6 +2,7 @@ package com.swervedrivespecialties.swervelib.ctre;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -67,6 +68,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
             }
 
             motor.setNeutralMode(NeutralMode.Brake);
+            motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 45, 1));
 
             motor.setInverted(moduleConfiguration.isDriveInverted() ? TalonFXInvertType.Clockwise : TalonFXInvertType.CounterClockwise);
             motor.setSensorPhase(true);

@@ -13,8 +13,10 @@ public class Limelight extends SensorBase{
     private double txReal = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     private double tyReal = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
     private double Detecting = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+    private RobotState robotState;
 
     public Limelight(RobotState robotState) {
+        this.robotState = robotState;
         NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
@@ -37,7 +39,7 @@ public class Limelight extends SensorBase{
     }
 
     @Override
-    public void updateState(RobotState robotState, RobotCommander commander) {
+    public void updateState() {
         txReal = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         tyReal = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         Detecting = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);

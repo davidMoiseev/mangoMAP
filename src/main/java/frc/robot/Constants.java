@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
@@ -30,6 +32,12 @@ public final class Constants {
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = MAX_VELOCITY_METERS_PER_SECOND /
         Math.hypot(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0);
 
+    public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
+        new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+        new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+        new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+        new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0));
+    
     public static final int DRIVETRAIN_PIGEON_ID = REAL_BOT ? 20 : 50;
 
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = REAL_BOT ? 1 : 1;
@@ -54,10 +62,11 @@ public final class Constants {
 
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
-    public static final double SHOOTER_SPEED_1 = 1100.0; //2200
-    public static final double SHOOTER_SPEED_2 = 2525.0;
-    public static final double SHOOTER_SPEED_3 = 2100.0;
-    public static final double SHOOTER_SPEED_4 = 2800.0;
+    public static final double SHOOTER_SPEED_FENDER = 1100.0; //2200
+    public static final double SHOOTER_SPEED_WALL = 2525.0;
+    public static final double SHOOTER_SPEED_TARMACK = 2100.0;
+    public static final double SHOOTER_SPEED_AUTO = 1930.0;
+    public static final double SHOOTER_SPEED_PROTECTED = 2800.0;
     public static final double SHOOTER_GAIN_P = 0.1; // 0.0005
     public static final double SHOOTER_GAIN_I = 0.0003;  // 0.00005
     public static final double SHOOTER_GAIN_D = 0.0003; // 0.000012
@@ -70,7 +79,10 @@ public final class Constants {
     public static final int LEFT_BALLIVATOR_MOTOR = 12;
     public static final int BALLIVATOR_SENSOR = 0;
     public static final int BALLIVATOR_SOLENOID = 0;
-    public static final int SHOOTER_OK_SPEED_TOLERANCE = 9000;
+    public static final int TELE_SHOOTER_OK_SPEED_TOLERANCE = 9000;
+    public static final double TELE_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE = 0;
+    public static final int AUTO_SHOOTER_OK_SPEED_TOLERANCE = 100;
+    public static final double AUTO_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE = .1;
 
     public static final int PNEUMATIC_HUB = 23;
     public static final int LEFT_INTAKE_FWD_SOLENOID = 13;
