@@ -8,6 +8,7 @@ public class RobotState {
     public double txReal;
     public double detecting;
     private boolean shooterReady;
+    private boolean climberExtended;
 
     public RobotState() {
        rotation2d = new Rotation2d();
@@ -31,6 +32,14 @@ public class RobotState {
 
     public double getTheta() {
         return this.rotation2d.getDegrees();
+    }
+
+    public void setClimberExtended(boolean climberExt) {
+        this.climberExtended = climberExt;
+    }
+
+    public boolean getClimberExtended() {
+        return this.climberExtended;
     }
 
     public void setTyReal(double tyReal) {

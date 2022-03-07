@@ -139,12 +139,6 @@ public class AutonRight extends AutonCommader {
     }
 
     @Override
-    public boolean getClimberChangeState() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
     public double getClimberMotor() {
         // TODO Auto-generated method stub
         return 0;

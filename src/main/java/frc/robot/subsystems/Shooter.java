@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase{
         WALL,
         TARMACK,
         PROTECTED, AUTO
-     }
+     , CLIMB}
 
     double pGain = 0.00026;
     double iGain = 0.00005;//Not good yet
@@ -42,6 +42,7 @@ public class Shooter extends SubsystemBase{
     private boolean shooterLatch;
     private int shooterSpeedTolerance = 9000;
     private double shooterTimeTolerance = 0;
+    private Shot hoodPosition = Shot.NEUTRAL;
 
     public Shooter(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
@@ -82,30 +83,41 @@ public class Shooter extends SubsystemBase{
             outside(Piston.EXTEND);
             targetRPM = SHOOTER_SPEED_FENDER;
             disableShooter = false;
+            hoodPosition = Shot.FENDER;
         }
         else if (commander.getHoodPosition() == Shot.AUTO){
             inside(Piston.RETRACT);
             outside(Piston.EXTEND);
             targetRPM = SHOOTER_SPEED_AUTO;
             disableShooter = false;
+            hoodPosition = Shot.AUTO;
         }
         else if (commander.getHoodPosition() == Shot.WALL){
             inside(Piston.EXTEND);
             outside(Piston.RETRACT);
             targetRPM = SHOOTER_SPEED_WALL;
             disableShooter = false;
+            hoodPosition = Shot.WALL;
         }
         else if (commander.getHoodPosition() == Shot.TARMACK){
             inside(Piston.RETRACT);
             outside(Piston.EXTEND);
             targetRPM = SHOOTER_SPEED_TARMACK;
             disableShooter = false;
+            hoodPosition = Shot.TARMACK;
         }
         else if (commander.getHoodPosition() == Shot.PROTECTED){
             inside(Piston.EXTEND);
             outside(Piston.EXTEND);
             targetRPM = SHOOTER_SPEED_PROTECTED;
             disableShooter = false;
+            hoodPosition = Shot.PROTECTED;
+        } else if (commander.getHoodPosition() == Shot.CLIMB){
+            inside(Piston.RETRACT);
+            outside(Piston.RETRACT);
+            targetRPM = 0;
+            disableShooter = true;
+            hoodPosition = Shot.CLIMB;
         } else {
             inside(Piston.OFF);
             outside(Piston.OFF);
@@ -169,8 +181,10 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("LeftShooterSpeed", (leftShooterMotor.getSelectedSensorVelocity() / 2048) * 600);
         HotLogger.Log("RightShooterSpeed", (rightShooterMotor.getSelectedSensorVelocity() / 2048) * 600);
         SmartDashboard.putNumber("RightShooterSpeed", (rightShooterMotor.getSelectedSensorVelocity() / 2048 ) * 600); 
-        HotLogger.Log("TargetSpeed", targetRPM);
-        SmartDashboard.putNumber("TargetSpeed", targetRPM); 
+        HotLogger.Log("TargetRPM", targetRPM);
+        SmartDashboard.putNumber("TargetRPM", targetRPM); 
+        HotLogger.Log("hoodPosition", ""+hoodPosition);
+        SmartDashboard.putString("hoodPosition", ""+hoodPosition); 
     }
 
     enum Piston {
@@ -181,24 +195,52 @@ public class Shooter extends SubsystemBase{
 
     public void inside(Piston tmp){
         Value x = Value.kOff;
-        if (tmp == Piston.EXTEND){
-            x = Value.kForward;
-        } else if (tmp == Piston.RETRACT) {
-            x = Value.kReverse;
+
+        if(COMP_BOT){
+            if (tmp == Piston.EXTEND){
+                x = Value.kForward;
+            }
+            else if (tmp == Piston.RETRACT) {
+                x = Value.kReverse;
+            } else {
+                x = Value.kOff;
+            }
         } else {
-            x = Value.kOff;
+            if (tmp == Piston.EXTEND){
+                x = Value.kForward;
+            }
+            else if (tmp == Piston.RETRACT) {
+                x = Value.kReverse;
+            } else {
+                x = Value.kOff;
+            }
         }
+
         insidePneu.set(x);
     }
     public void outside(Piston tmp){
         Value x = Value.kOff;
-        if (tmp == Piston.EXTEND){
-            x = Value.kForward;
-        } else if (tmp == Piston.RETRACT) {
-            x = Value.kReverse;
+
+        if(COMP_BOT){
+             if (tmp == Piston.EXTEND) {
+                x = Value.kForward;
+            }
+            else if (tmp == Piston.RETRACT) {
+                x = Value.kReverse;
+            } else {
+                x = Value.kOff;
+            }
         } else {
-            x = Value.kOff;
+            if (tmp == Piston.EXTEND){
+                x = Value.kForward;
+            }
+            else if (tmp == Piston.RETRACT){
+                x = Value.kReverse;
+            } else {
+                x = Value.kOff;
+            }
         }
+
         outsidePneu.set(x);
     } 
 }

@@ -19,6 +19,7 @@ public class TeleopCommander extends RobotCommander{
     boolean climbState = false;
     boolean downCalled = false;
     boolean upCalled = false;
+    double climberAngle = (PACKAGE_ANGLE);
 
     RobotState robotState;
 
@@ -70,31 +71,17 @@ public class TeleopCommander extends RobotCommander{
     }
 
     @Override
-    public boolean getClimberChangeState() {
-      if ((operator.getPOV() < 20 || operator.getPOV() > 340) && (operator.getPOV() != -1)) {
-        if (downCalled == false){
-          downCalled = true;
-          upCalled = false;
-          return true;
-        }
-      } else if (operator.getPOV() > 160 && operator.getPOV() < 200) {
-        if (upCalled == false){
-          downCalled = false;
-          upCalled = true;
-          return true;
-        }
-      }
-      return false;
-    }
-
-    @Override
     public double getClimberMotor() {
-      return deadband(operator.getLeftY(), 0.2, 0.9);
+      if (robotState.getClimberExtended() == true) {
+        return deadband(operator.getLeftY(), 0.2, 0.9);
+      } else {
+        return 0.0;
+      }
     }
 
     @Override
     public boolean getClimberRelease() {
-      if (operator.getPOV() > 70 && operator.getPOV() < 110) {
+      if (operator.getPOV() > 70 && operator.getPOV() < 110 && robotState.getClimberExtended() == true) {
         return true;
       }
       else{
@@ -142,7 +129,10 @@ public class TeleopCommander extends RobotCommander{
 
       @Override
       public Shot getHoodPosition() {
-        if (operator.getAButtonPressed()) {
+        if (robotState.getClimberExtended() == true) {
+          this.hoodPosition = Shooter.Shot.CLIMB;
+          this.shooterOn = false;
+        } else if (operator.getAButtonPressed()) {
           this.hoodPosition = Shooter.Shot.FENDER;
           this.shooterOn = true;
         } else if (operator.getBButtonPressed()) {
@@ -204,5 +194,42 @@ public class TeleopCommander extends RobotCommander{
       @Override
       public double getShooterTimeThreshHold() {
         return TELE_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE;
+      }
+
+      @Override
+      public boolean getClimberExtend() {
+        if ((robotState.getClimberExtended() == false) && ((operator.getPOV() < 20 || operator.getPOV() > 340) && (operator.getPOV() != -1))) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      @Override
+      public boolean getClimberRetract() {
+        if ((robotState.getClimberExtended() == true) && (operator.getPOV() > 160 && operator.getPOV() < 200)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      @Override
+      public boolean getClimberManualControl() {
+        if ((robotState.getClimberExtended() == true) && (operator.getBackButton() == true)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      @Override
+      public boolean getAbuttonHeld() {
+        return operator.getAButton();
+      }
+
+      @Override
+      public boolean getBbuttonHeld() {
+        return operator.getBButton();
       }
 }

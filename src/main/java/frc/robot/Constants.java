@@ -11,15 +11,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
-    public static boolean realBot = true;
+    public static boolean REAL_BOT = true;
+    public static boolean COMP_BOT = true;
 
-    public static final double DRIVETRAIN_TRACKWIDTH_METERS = realBot ? 0.57785 : 0.4445;
+    public static final double DRIVETRAIN_TRACKWIDTH_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
-    public static final double DRIVETRAIN_WHEELBASE_METERS = realBot ? 0.57785 : 0.4445;
+    public static final double DRIVETRAIN_WHEELBASE_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
     public static final double MAX_VOLTAGE = 12.0;
 
-    public static final double MAX_VELOCITY_METERS_PER_SECOND = realBot ?
+    public static final double MAX_VELOCITY_METERS_PER_SECOND = REAL_BOT ?
         6380.0 / 60.0 *
         SdsModuleConfigurations.MK4I_L2.getDriveReduction() *
         SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * Math.PI
@@ -37,27 +38,27 @@ public final class Constants {
         new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
         new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0));
     
-    public static final int DRIVETRAIN_PIGEON_ID = realBot ? 20 : 50;
+    public static final int DRIVETRAIN_PIGEON_ID = REAL_BOT ? 20 : 50;
 
-    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = realBot ? 1 : 1;
-    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = realBot ? 2 : 3;
-    public static final int FRONT_LEFT_MODULE_STEER_ENCODER = realBot ? 16 : 13;
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = realBot ? -Math.toRadians(219.55078125) : -Math.toRadians(21.97265625);
+    public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = REAL_BOT ? 1 : 1;
+    public static final int FRONT_LEFT_MODULE_STEER_MOTOR = REAL_BOT ? 2 : 3;
+    public static final int FRONT_LEFT_MODULE_STEER_ENCODER = REAL_BOT ? 16 : 13;
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(197.666015625) : -Math.toRadians(219.55078125) : -Math.toRadians(21.97265625);
 
-    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = realBot ? 3 : 5;
-    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = realBot ? 4 : 7;
-    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = realBot ? 17 : 17;
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = realBot ? -Math.toRadians(181.93359375) : -Math.toRadians(58.71093750000001);
+    public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = REAL_BOT ? 3 : 5;
+    public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = REAL_BOT ? 4 : 7;
+    public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = REAL_BOT ? 17 : 17;
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(137.109375) : -Math.toRadians(181.93359375) : -Math.toRadians(58.71093750000001);
 
-    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = realBot ? 5 : 2;
-    public static final int BACK_LEFT_MODULE_STEER_MOTOR = realBot ? 6 : 4;
-    public static final int BACK_LEFT_MODULE_STEER_ENCODER = realBot ? 18 : 14;
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = realBot ? -Math.toRadians(325.634765625) : -Math.toRadians(309.27886962890625);
+    public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = REAL_BOT ? 5 : 2;
+    public static final int BACK_LEFT_MODULE_STEER_MOTOR = REAL_BOT ? 6 : 4;
+    public static final int BACK_LEFT_MODULE_STEER_ENCODER = REAL_BOT ? 18 : 14;
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(137.724609375) : -Math.toRadians(325.634765625) : -Math.toRadians(309.27886962890625);
 
-    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = realBot ? 7 : 6;
-    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = realBot ? 8 : 8;
-    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = realBot ? 19 : 18;
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = realBot ? -Math.toRadians(348.92578125) : -Math.toRadians(212.2890625);
+    public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = REAL_BOT ? 7 : 6;
+    public static final int BACK_RIGHT_MODULE_STEER_MOTOR = REAL_BOT ? 8 : 8;
+    public static final int BACK_RIGHT_MODULE_STEER_ENCODER = REAL_BOT ? 19 : 18;
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(172.001953125) : -Math.toRadians(348.92578125) : -Math.toRadians(212.2890625);
 
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
@@ -93,6 +94,25 @@ public final class Constants {
     public static final int CLIMBER_RELEASE_SOLENOID = 8;
     public static final double MINIMUM_PRESSURE = 90.0;
     public static final double MAXIMUM_PRESSURE = 110.0;
+    public static final double CLIMBER_P = 0.2;
+    public static final double CLIMBER_I = 0.01;
+    public static final double CLIMBER_D = 0.0;
+    public static final double CLIMBER_F = 0.2;
+    public static final double CLIMBER_IZONE = 0.0;
+    public static final double CLIMBER_CRUISE_VELOCITY = 19000.0;
+    public static final double CLIMBER_CRUISE_ACCELERATION = 15000.0;
+    public static final double CLIMBER_TICKS_PER_DEGREE = (347.222/360.0) * 2048;  // 1975.307
+    public static final double CLIMBER_ANGLE_HYSTERESIS = 3.0;
+    public static final double PACKAGE_ANGLE = -120.0;
+    public static final double CLIMBER_STATE3_ANGLE = 0.0;
+    public static final double CLIMBER_STATE4_ANGLE = 139.0;
+    public static final double CLIMBER_STATE5_ANGLE = 115.0;
+    public static final double CLIMBER_STATE6_ANGLE = 340.0;
+    public static final double CLIMBER_STATE7_ANGLE = 315.0;
+    public static final double CLIMBER_STATE8_ANGLE = 368.0;
+    public static final long CLIMBER_LATCH_RELEASE_TIME = 2000;
+    public static final long CLIMBER_EXTEND_TIME = 1000;
+
 
     public static final int SHOOTER_INSIDE_SOLENOID_FOWARD = 11;
     public static final int SHOOTER_INSIDE_SOLENOID_REVERSE = 4;

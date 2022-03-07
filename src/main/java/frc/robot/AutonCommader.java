@@ -54,10 +54,16 @@ public abstract class AutonCommader extends RobotCommander{
         return resetIMU;
     }
     
-    @Override
     public double getResetIMUAngle() {
         return resetIMUAngle;
     }
+
+    @Override
+    public double getClimberMotor() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+    
     public State getDesiredState() {
         return desiredState;
     }
@@ -91,4 +97,38 @@ public abstract class AutonCommader extends RobotCommander{
       return AUTO_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE;
     }
 
+    public boolean[] getBallivator(){
+        boolean[] x = {false, false};
+        return x;
+    }
+
+    @Override
+    public boolean getClimberExtend() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getClimberRetract() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getClimberManualControl() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getAbuttonHeld() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean getBbuttonHeld() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
