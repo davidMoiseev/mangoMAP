@@ -12,7 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static boolean REAL_BOT = true;
-    public static boolean COMP_BOT = true;
+    public static boolean COMP_BOT = false;
 
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
@@ -99,17 +99,17 @@ public final class Constants {
     public static final double CLIMBER_D = 0.0;
     public static final double CLIMBER_F = 0.2;
     public static final double CLIMBER_IZONE = 0.0;
-    public static final double CLIMBER_CRUISE_VELOCITY = 19000.0;
-    public static final double CLIMBER_CRUISE_ACCELERATION = 15000.0;
+    public static final double CLIMBER_CRUISE_VELOCITY = 19000.0 / 1.5; // 19000.0
+    public static final double CLIMBER_CRUISE_ACCELERATION = 15000.0 / 1.5; // 15000.0
     public static final double CLIMBER_TICKS_PER_DEGREE = (347.222/360.0) * 2048;  // 1975.307
     public static final double CLIMBER_ANGLE_HYSTERESIS = 3.0;
     public static final double PACKAGE_ANGLE = -120.0;
-    public static final double CLIMBER_STATE3_ANGLE = 0.0;
-    public static final double CLIMBER_STATE4_ANGLE = 139.0;
+    public static final double CLIMBER_STATE3_ANGLE = -4.0;
+    public static final double CLIMBER_STATE4_ANGLE = 155.0;
     public static final double CLIMBER_STATE5_ANGLE = 115.0;
-    public static final double CLIMBER_STATE6_ANGLE = 340.0;
-    public static final double CLIMBER_STATE7_ANGLE = 315.0;
-    public static final double CLIMBER_STATE8_ANGLE = 368.0;
+    public static final double CLIMBER_STATE6_ANGLE = 333.0;
+    public static final double CLIMBER_STATE7_ANGLE = 290.0;
+    public static final double CLIMBER_STATE8_ANGLE = 360.0;
     public static final long CLIMBER_LATCH_RELEASE_TIME = 2000;
     public static final long CLIMBER_EXTEND_TIME = 1000;
 
