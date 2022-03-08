@@ -55,8 +55,8 @@ public class Climber extends SubsystemBase{
 		climberMotor.config_kI(0, CLIMBER_I, 30);
 		climberMotor.config_kD(0, CLIMBER_D, 30);
         climberMotor.configNeutralDeadband(0.001, 30);
-        climberMotor.setSensorPhase(false);
-		climberMotor.setInverted(false);
+        climberMotor.setSensorPhase((COMP_BOT) ? false : true);
+		climberMotor.setInverted((COMP_BOT) ? false : true);
         climberMotor.configMotionCruiseVelocity(CLIMBER_CRUISE_VELOCITY, 30);
         climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 30);
 		climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
@@ -104,7 +104,7 @@ public class Climber extends SubsystemBase{
             climberMotor.set(TalonFXControlMode.PercentOutput, commander.getClimberMotor());
             climberRelease.set(commander.getClimberRelease());
             manualControlFlag = true;
-        } else {
+        } else if (robotState.getClimberExtended()) {
             manualControlFlag = false;
             if (climberState == 1) {  // Climber Retracted
                 if (robotState.getClimberExtended() == true) {
