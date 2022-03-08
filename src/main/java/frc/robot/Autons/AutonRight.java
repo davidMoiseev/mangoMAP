@@ -5,6 +5,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.revrobotics.SparkMaxRelativeEncoder;
+
 import edu.wpi.first.hal.HAL.SimPeriodicAfterCallback;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -237,7 +239,7 @@ public class AutonRight extends AutonCommader {
             shoot = true;
             autoAim = false;
             
-            if(timer.get() > .5) {
+            if(timer.get() > .5) { // .5
                 timer.reset();
                 timer.start();
                 drivetrain.initializeAuton(this);
@@ -322,8 +324,8 @@ public class AutonRight extends AutonCommader {
             autoAim = false;
             hoodPosition = Shot.NEUTRAL;
 
-            desiredState = new State(timer.get(), .075/1.25*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX()-1.55/1.25*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()+1.2/1.25*timer.get(),
+            desiredState = new State(timer.get(), .075/1.25*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX()-1.4/1.25*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()+1.4/1.25*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
             setTargetTheta(Rotation2d.fromDegrees(60));
@@ -367,8 +369,8 @@ public class AutonRight extends AutonCommader {
             hoodPosition = Shot.NEUTRAL;
             autoAim = false;
 
-            desiredState = new State(timer.get(), .075/1.25*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX() + (startState.poseMeters.getX() - lastDesiredState.poseMeters.getX())/1.25*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY() + (lastDesiredState.poseMeters.getY() - startState.poseMeters.getY())/1.25*timer.get(),
+            desiredState = new State(timer.get(), .075/1.5*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX() + (startState.poseMeters.getX() - lastDesiredState.poseMeters.getX())/1.5*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY() + (startState.poseMeters.getY() - lastDesiredState.poseMeters.getY())/3*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
             setTargetTheta(Rotation2d.fromDegrees(42));
@@ -387,7 +389,7 @@ public class AutonRight extends AutonCommader {
             autonInProgress = true;
             driveRequested = false;
             hoodPosition = Shot.TARMACK;
-            autoAim = true;
+            autoAim = false;
             shoot = true;
             
             if(timer.get() > 3) {
@@ -405,6 +407,10 @@ public class AutonRight extends AutonCommader {
             hoodPosition = Shot.NEUTRAL;
         }
         SmartDashboard.putString("AutoState", ""+autoState);
+
+        SmartDashboard.putNumber("Start Pose X", startState.poseMeters.getX());
+        SmartDashboard.putNumber("Start Pose Y", startState.poseMeters.getY());
+
     }
 
 

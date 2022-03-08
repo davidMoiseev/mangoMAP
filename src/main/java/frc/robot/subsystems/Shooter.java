@@ -86,8 +86,8 @@ public class Shooter extends SubsystemBase{
             hoodPosition = Shot.FENDER;
         }
         else if (commander.getHoodPosition() == Shot.AUTO){
-            inside(Piston.RETRACT);
-            outside(Piston.EXTEND);
+            inside(Piston.EXTEND);
+            outside(Piston.RETRACT);
             targetRPM = SHOOTER_SPEED_AUTO;
             disableShooter = false;
             hoodPosition = Shot.AUTO;
@@ -95,13 +95,13 @@ public class Shooter extends SubsystemBase{
         else if (commander.getHoodPosition() == Shot.WALL){
             inside(Piston.EXTEND);
             outside(Piston.RETRACT);
-            targetRPM = SHOOTER_SPEED_WALL;
+            targetRPM = SHOOTER_SPEED_AUTO;
             disableShooter = false;
             hoodPosition = Shot.WALL;
         }
         else if (commander.getHoodPosition() == Shot.TARMACK){
-            inside(Piston.RETRACT);
-            outside(Piston.EXTEND);
+            inside(Piston.EXTEND);
+            outside(Piston.RETRACT);
             targetRPM = SHOOTER_SPEED_TARMACK;
             disableShooter = false;
             hoodPosition = Shot.TARMACK;
@@ -125,11 +125,15 @@ public class Shooter extends SubsystemBase{
             disableShooter = true;
         }
 
-        targetVelocity_UnitsPer100ms = (targetRPM * 2048) / 600;
-        if ( ! commander.getOverrideShooterMotor() || disableShooter) {
-          leftShooterMotor.set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100ms);
-        } else  {
-          leftShooterMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+        if(targetRPM == 0){
+            leftShooterMotor.set(TalonFXControlMode.PercentOutput, 0);
+        } else {
+            targetVelocity_UnitsPer100ms = (targetRPM * 2048) / 600;
+            if ( ! commander.getOverrideShooterMotor() || disableShooter) {
+            leftShooterMotor.set(TalonFXControlMode.Velocity, targetVelocity_UnitsPer100ms);
+            } else  {
+            leftShooterMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+            }
         }
     }
 
@@ -166,7 +170,7 @@ public class Shooter extends SubsystemBase{
     @Override
     public void zeroActuators() {
         // TODO Auto-generated method stub
-        
+        targetRPM = 0;
     }
 
     @Override
@@ -196,7 +200,16 @@ public class Shooter extends SubsystemBase{
     public void inside(Piston tmp){
         Value x = Value.kOff;
 
-        if(COMP_BOT){
+        // if(COMP_BOT){
+        //     if (tmp == Piston.EXTEND){
+        //         x = Value.kReverse;
+        //     }
+        //     else if (tmp == Piston.RETRACT) {
+        //         x = Value.kForward;
+        //     } else {
+        //         x = Value.kOff;
+        //     }
+        // } else {
             if (tmp == Piston.EXTEND){
                 x = Value.kForward;
             }
@@ -205,32 +218,23 @@ public class Shooter extends SubsystemBase{
             } else {
                 x = Value.kOff;
             }
-        } else {
-            if (tmp == Piston.EXTEND){
-                x = Value.kForward;
-            }
-            else if (tmp == Piston.RETRACT) {
-                x = Value.kReverse;
-            } else {
-                x = Value.kOff;
-            }
-        }
+        // }
 
         insidePneu.set(x);
     }
     public void outside(Piston tmp){
         Value x = Value.kOff;
 
-        if(COMP_BOT){
-             if (tmp == Piston.EXTEND) {
-                x = Value.kForward;
-            }
-            else if (tmp == Piston.RETRACT) {
-                x = Value.kReverse;
-            } else {
-                x = Value.kOff;
-            }
-        } else {
+        // if(COMP_BOT){
+        //      if (tmp == Piston.EXTEND) {
+        //         x = Value.kReverse;
+        //     }
+        //     else if (tmp == Piston.RETRACT) {
+        //         x = Value.kForward;
+        //     } else {
+        //         x = Value.kOff;
+        //     }
+        // } else {
             if (tmp == Piston.EXTEND){
                 x = Value.kForward;
             }
@@ -239,7 +243,7 @@ public class Shooter extends SubsystemBase{
             } else {
                 x = Value.kOff;
             }
-        }
+        // }
 
         outsidePneu.set(x);
     } 

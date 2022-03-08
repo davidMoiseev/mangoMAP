@@ -64,7 +64,7 @@ public final class Constants {
     public static final int LEFT_INTAKE_MOTOR = 9;
     public static final double SHOOTER_SPEED_FENDER = 1100.0; //2200
     public static final double SHOOTER_SPEED_WALL = 2525.0;
-    public static final double SHOOTER_SPEED_TARMACK = 2100.0;
+    public static final double SHOOTER_SPEED_TARMACK = 2000.0; // Taking 100 off
     public static final double SHOOTER_SPEED_AUTO = 1930.0;
     public static final double SHOOTER_SPEED_PROTECTED = 2800.0;
     public static final double SHOOTER_GAIN_P = 0.1; // 0.0005
