@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revrobotics.*;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -31,6 +33,8 @@ public class Ballivator extends SubsystemBase{
         ballivatorSolenoid = hub.makeSolenoid(BALLIVATOR_SOLENOID);
         this.shooter = shooter;
         this.intake = intake;
+        leftBallivatorMotor.setIdleMode(IdleMode.kBrake);
+        rightBallivatorMotor.setIdleMode(IdleMode.kBrake);
     }
 
     @Override
@@ -47,7 +51,7 @@ public class Ballivator extends SubsystemBase{
         if (intake.getIntakeState()) {
             ON = true;
         } 
-        
+                
         if (ON) {
             if (ballSense.get()){
                 setBallivatorSpeed(1, false, true);
@@ -80,6 +84,7 @@ public class Ballivator extends SubsystemBase{
                 }
             }
         }
+
         else if (ON == false){
             setBallivatorSpeed(0, false, false);
         }
@@ -88,11 +93,11 @@ public class Ballivator extends SubsystemBase{
         
             if (buttons[3]){
                 setBallivatorSpeed(1, true, true);
-                if (COMP_BOT){
-                    ballivatorSolenoid.set(false);
-                } else {
+                // if (COMP_BOT){
+                //     ballivatorSolenoid.set(false);
+                // } else {
                     ballivatorSolenoid.set(true);
-                }
+                // }
                 SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
             }
             else {
@@ -107,18 +112,18 @@ public class Ballivator extends SubsystemBase{
                 else {
                     setBallivatorSpeed(0, false, false);
                 }
-                if (COMP_BOT){
-                    ballivatorSolenoid.set(true);
-                } else {
+                // if (COMP_BOT){
+                //     ballivatorSolenoid.set(true);
+                // } else {
                     ballivatorSolenoid.set(false);
-                }
+                // }
             }
         } else{
-            if (COMP_BOT){
-                ballivatorSolenoid.set(true);
-            } else {
+            // if (COMP_BOT){
+            //     ballivatorSolenoid.set(true);
+            // } else {
                 ballivatorSolenoid.set(false);
-            }        
+            // }        
         }
 
         SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
