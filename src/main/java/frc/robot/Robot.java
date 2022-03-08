@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 
-    autonSelection = "none";
+    autonSelection = "LEFT";
   }
 
   @Override
