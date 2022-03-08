@@ -95,7 +95,7 @@ public class Shooter extends SubsystemBase{
         else if (commander.getHoodPosition() == Shot.WALL){
             inside(Piston.EXTEND);
             outside(Piston.RETRACT);
-            targetRPM = SHOOTER_SPEED_WALL;
+            targetRPM = SHOOTER_SPEED_AUTO;
             disableShooter = false;
             hoodPosition = Shot.WALL;
         }
@@ -170,7 +170,7 @@ public class Shooter extends SubsystemBase{
     @Override
     public void zeroActuators() {
         // TODO Auto-generated method stub
-        
+        targetRPM = 0;
     }
 
     @Override

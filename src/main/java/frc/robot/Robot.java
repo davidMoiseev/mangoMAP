@@ -17,6 +17,7 @@ import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.BallSupervisor;
+import frc.robot.subsystems.Ballivator;
 import frc.robot.subsystems.Climber;
 import static frc.robot.Constants.*;
 
@@ -107,6 +108,7 @@ public class Robot extends TimedRobot {
     selectedAuton.initializeAuton();
     drivetrain.initializeAuton(selectedAuton);
     drivetrain.zeroActuators();
+    ballSupervisor.zeroSensor();
     pigeon.initializeAuton(selectedAuton);
 
     // drivetrain.setBrakeMode(true);
@@ -122,6 +124,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     //pigeon.zeroSensor();
+    ballSupervisor.zeroSensor();
     drivetrain.zeroActuators();
     drivetrain.zeroSensor();
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);

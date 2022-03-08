@@ -91,33 +91,40 @@ public class Ballivator extends SubsystemBase{
 
         if (robotState.isShooterReady()) {
         
-            if (buttons[3]){
+            if(buttons[3]){
                 setBallivatorSpeed(1, true, true);
-                // if (COMP_BOT){
-                //     ballivatorSolenoid.set(false);
-                // } else {
-                    ballivatorSolenoid.set(true);
-                // }
-                SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
+                ballivatorSolenoid.set(true);
+            } else {
+                setBallivatorSpeed(0, false, false);
+                ballivatorSolenoid.set(false);
             }
-            else {
-                if (ON) {
-                    if (ballSense.get()){
-                        setBallivatorSpeed(1, true, false);
-                    } 
-                    else {
-                        setBallivatorSpeed(1, true, true);
-                    }
-                }
-                else {
-                    setBallivatorSpeed(0, false, false);
-                }
-                // if (COMP_BOT){
-                //     ballivatorSolenoid.set(true);
-                // } else {
-                    ballivatorSolenoid.set(false);
-                // }
-            }
+            // if (buttons[3]){
+            //     setBallivatorSpeed(1, true, true);
+            //     // if (COMP_BOT){
+            //     //     ballivatorSolenoid.set(false);
+            //     // } else {
+            //         ballivatorSolenoid.set(true);
+            //     // }
+            //     SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
+            // }
+            // else {
+            //     if (ON) {
+            //         if (ballSense.get()){
+            //             setBallivatorSpeed(1, true, false);
+            //         } 
+            //         else {
+            //             setBallivatorSpeed(1, true, true);
+            //         }
+            //     }
+            //     else {
+            //         setBallivatorSpeed(0, false, false);
+            //     }
+            //     // if (COMP_BOT){
+            //     //     ballivatorSolenoid.set(true);
+            //     // } else {
+            //         ballivatorSolenoid.set(false);
+            //     // }
+            // }
         } else{
             // if (COMP_BOT){
             //     ballivatorSolenoid.set(true);
@@ -151,6 +158,9 @@ public class Ballivator extends SubsystemBase{
     @Override
     public void zeroSensor() {
         // TODO Auto-generated method stub
+        rightBallivatorMotor.set(0);
+        leftBallivatorMotor.set(0);
+
         
     }
 
