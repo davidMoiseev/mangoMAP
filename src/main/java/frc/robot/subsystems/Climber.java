@@ -36,6 +36,7 @@ public class Climber extends SubsystemBase{
             6:  Progress to 4th Bar
             7:  Unload/Release 3rd Bar
             8:  Move to final State
+            9:  Process End
             */
 
     public Climber(RobotState robotState, PneumaticHub hub) {
@@ -183,6 +184,7 @@ public class Climber extends SubsystemBase{
                 if ((unlatchTrigger == true) && ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_RELEASE_TIME)) {
                     climberState = 8;
                     unlatchTrigger = false;
+                    latchTimer = System.currentTimeMillis();
                     climberRelease.set(false);
                 }
                 if ((commander.getBbuttonHeld() == true)) {
@@ -192,6 +194,12 @@ public class Climber extends SubsystemBase{
             } else if (climberState == 8) { // Move to final State
                 climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE8_ANGLE));
                 targetPosDeg = CLIMBER_STATE8_ANGLE;
+                if ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_END_TIME) {
+                    climberState = 9;
+                }
+
+            } else if (climberState == 9) { // Move to End State
+                climberMotor.set(TalonFXControlMode.PercentOutput, 0.0);
             }
 
         }

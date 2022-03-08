@@ -12,7 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static boolean REAL_BOT = true;
-    public static boolean COMP_BOT = false;
+    public static boolean COMP_BOT = true;
 
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
@@ -112,6 +112,8 @@ public final class Constants {
     public static final double CLIMBER_STATE8_ANGLE = 360.0;
     public static final long CLIMBER_LATCH_RELEASE_TIME = 2000;
     public static final long CLIMBER_EXTEND_TIME = 1000;
+    public static final long CLIMBER_LATCH_END_TIME = 2000;
+
 
 
     public static final int SHOOTER_INSIDE_SOLENOID_FOWARD = 11;
