@@ -64,6 +64,8 @@ public class Drivetrain extends SubsystemBase {
         private TalonFX rightFrontSteer;
         private TalonFX leftBackSteer;
         private TalonFX rightBackSteer;
+        boolean firstLoop;
+        double targetY;
 
 
         public Drivetrain(RobotState robotState) {
@@ -233,8 +235,10 @@ public class Drivetrain extends SubsystemBase {
 
         @Override
         public void enabledAction(RobotState robotState, RobotCommander commander) {
+                
                 // if not pressing A
                 if (!commander.getRobotAim()) {
+                        firstLoop = true;
                         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                                         commander.getForwardCommand(),
                                         commander.getStrafeCommand(),
@@ -243,7 +247,23 @@ public class Drivetrain extends SubsystemBase {
                         
                         yOffset = 0;
                         // if pressing A
+                } else if(commander.getAutoAimSetTarget()){
+                        
+                        if(firstLoop){
+                                targetY = robotState.getTyReal();
+                                firstLoop = false;
+                        }
+                        yOffset += commander.getForwardCommand() * Constants.Y_OFFSET; //makes the robot go forwards or backwards(robot centric) while turning around the hub
+                        // if limelight has target 
+                        if (robotState.getDetecting() == 1) {
+                                // auto aim
+                                chassisSpeeds = new ChassisSpeeds(
+                                                (Math.abs(robotState.getTyReal() + yOffset) > targetY) ? (robotState.getTyReal() + yOffset) * Constants.Y_ADJUST_SPEED : 0,
+                                                Constants.STRAFE_SPEED * commander.getStrafeCommand(),
+                                                (Math.abs(robotState.getTxReal()) > Constants.ALLOWED_X_OFFSET) ? robotState.getTxReal() * Constants.X_ADJUST_SPEED : 0);
+                        }
                 } else {
+                       firstLoop = true;
                        yOffset += commander.getForwardCommand() * Constants.Y_OFFSET; //makes the robot go forwards or backwards(robot centric) while turning around the hub
                         // if limelight has target 
                         if (robotState.getDetecting() == 1) {
