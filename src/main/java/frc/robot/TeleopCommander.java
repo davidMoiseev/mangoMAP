@@ -33,16 +33,16 @@ public class TeleopCommander extends RobotCommander{
     }
 
     public double getForwardCommand(){
-        return -modifyAxis(driver.getLeftY()) * MAX_VELOCITY_METERS_PER_SECOND;
-    }
-    public double getStrafeCommand(){
-        return -modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
-    }
-    public double getTurnCommand(){
-        double value = deadband(driver.getRightX(), 0.3, 0.4) * (MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND) * 0.5;
+      return -modifyAxis(driver.getLeftY()) * MAX_VELOCITY_METERS_PER_SECOND;
+  }
+  public double getStrafeCommand(){
+      return -modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
+  }
+  public double getTurnCommand(){
+      double value = deadband(Math.abs(driver.getRightX()) * driver.getRightX(), 0.13, 0.4) * (MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
-        return - (Math.abs(value) * value);
-    }
+      return - value;
+  }
 
     public boolean getRunRightIntake(){
       return operator.getRightBumper();
@@ -102,7 +102,7 @@ public class TeleopCommander extends RobotCommander{
       }
     
       private static double modifyAxis(double value) {
-        boolean deadband = 0.3 > Math.sqrt(Math.pow(driver.getLeftX(), 2) + Math.pow(driver.getLeftY(), 2));
+        boolean deadband = 0.13 > Math.sqrt(Math.pow(driver.getLeftX(), 2) + Math.pow(driver.getLeftY(), 2));
     
         if (deadband) {
           return 0;
@@ -231,5 +231,11 @@ public class TeleopCommander extends RobotCommander{
       @Override
       public boolean getBbuttonHeld() {
         return operator.getBButton();
+      }
+
+      @Override
+      public boolean getAutoAimSetTarget() {
+        // TODO Auto-generated method stub
+        return driver.getBButton();
       }
 }

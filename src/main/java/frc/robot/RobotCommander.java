@@ -30,4 +30,5 @@ public abstract class RobotCommander {
     public abstract boolean getClimberManualControl();
     public abstract boolean getAbuttonHeld();
     public abstract boolean getBbuttonHeld();
+    public abstract boolean getAutoAimSetTarget();
 }

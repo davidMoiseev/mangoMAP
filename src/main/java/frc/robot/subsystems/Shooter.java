@@ -200,16 +200,7 @@ public class Shooter extends SubsystemBase{
     public void inside(Piston tmp){
         Value x = Value.kOff;
 
-        // if(COMP_BOT){
-        //     if (tmp == Piston.EXTEND){
-        //         x = Value.kReverse;
-        //     }
-        //     else if (tmp == Piston.RETRACT) {
-        //         x = Value.kForward;
-        //     } else {
-        //         x = Value.kOff;
-        //     }
-        // } else {
+        if(COMP_BOT){
             if (tmp == Piston.EXTEND){
                 x = Value.kForward;
             }
@@ -218,32 +209,41 @@ public class Shooter extends SubsystemBase{
             } else {
                 x = Value.kOff;
             }
-        // }
+        } else {
+            if (tmp == Piston.EXTEND){
+                x = Value.kReverse;
+            }
+            else if (tmp == Piston.RETRACT) {
+                x = Value.kForward;
+            } else {
+                x = Value.kOff;
+            }
+        }
 
         insidePneu.set(x);
     }
     public void outside(Piston tmp){
         Value x = Value.kOff;
 
-        // if(COMP_BOT){
-        //      if (tmp == Piston.EXTEND) {
-        //         x = Value.kReverse;
-        //     }
-        //     else if (tmp == Piston.RETRACT) {
-        //         x = Value.kForward;
-        //     } else {
-        //         x = Value.kOff;
-        //     }
-        // } else {
+        if(COMP_BOT){
             if (tmp == Piston.EXTEND){
                 x = Value.kForward;
             }
-            else if (tmp == Piston.RETRACT){
+            else if (tmp == Piston.RETRACT) {
                 x = Value.kReverse;
             } else {
                 x = Value.kOff;
             }
-        // }
+        } else {
+            if (tmp == Piston.EXTEND){
+                x = Value.kReverse;
+            }
+            else if (tmp == Piston.RETRACT) {
+                x = Value.kForward;
+            } else {
+                x = Value.kOff;
+            }
+        }
 
         outsidePneu.set(x);
     } 
