@@ -39,9 +39,9 @@ public class TeleopCommander extends RobotCommander{
         return -modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
     }
     public double getTurnCommand(){
-        double value = deadband(driver.getRightX(), 0.3, 0.4) * (MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND) * 0.5;
+        double value = deadband(Math.abs(driver.getRightX()) * driver.getRightX(), 0.1, 0.4) * (MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
-        return - (Math.abs(value) * value);
+        return - value;
     }
 
     public boolean getRunRightIntake(){
@@ -102,7 +102,7 @@ public class TeleopCommander extends RobotCommander{
       }
     
       private static double modifyAxis(double value) {
-        boolean deadband = 0.3 > Math.sqrt(Math.pow(driver.getLeftX(), 2) + Math.pow(driver.getLeftY(), 2));
+        boolean deadband = 0.1 > Math.sqrt(Math.pow(driver.getLeftX(), 2) + Math.pow(driver.getLeftY(), 2));
     
         if (deadband) {
           return 0;
