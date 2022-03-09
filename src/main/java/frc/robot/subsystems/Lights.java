@@ -56,9 +56,7 @@ public class Lights extends SubsystemBase{
 
     @Override
     public void logData() {
-        SmartDashboard.putBoolean("LED_getShooterOn", robotState.getShooterOn());
-        SmartDashboard.putNumber("LED_getTargetShooterSpeed", robotState.getTargetShooterSpeed());
-        SmartDashboard.putNumber("LED_getActualShooterSpeed", robotState.getActualShooterSpeed());
+
     }
 
     public void setLightsDisable() {
