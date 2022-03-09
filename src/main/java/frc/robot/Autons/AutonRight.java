@@ -463,4 +463,13 @@ public class AutonRight extends AutonCommader {
         // TODO Auto-generated method stub
         return 0;
     }
+
+
+
+
+    @Override
+    public boolean getAutoAimSetTarget() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

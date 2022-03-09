@@ -232,4 +232,10 @@ public class TeleopCommander extends RobotCommander{
       public boolean getBbuttonHeld() {
         return operator.getBButton();
       }
+
+      @Override
+      public boolean getAutoAimSetTarget() {
+        // TODO Auto-generated method stub
+        return driver.getBButton();
+      }
 }

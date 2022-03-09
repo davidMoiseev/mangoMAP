@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
     
     drivetrain.zeroActuators();
 
-    if (! autonSelection.equals(autonSelectionPrev)) {
+    // if (! autonSelection.equals(autonSelectionPrev)) {
       if (autonSelection.equals("Left")) {
         selectedAuton = new AutonLeft(robotState);
         SmartDashboard.putString("AutonSelected", selectedAuton.getName());
@@ -96,9 +96,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("AutonSelected", selectedAuton.getName());
       } else {
         SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
-        selectedAuton = new AutonRight(robotState);
+        selectedAuton = new AutonLeft(robotState);
       }
-    }
+    // }
   }
 
   @Override
@@ -108,7 +108,7 @@ public class Robot extends TimedRobot {
     selectedAuton.initializeAuton();
     drivetrain.initializeAuton(selectedAuton);
     drivetrain.zeroActuators();
-    ballSupervisor.zeroSensor();
+    ballSupervisor.zeroActuators();
     pigeon.initializeAuton(selectedAuton);
 
     // drivetrain.setBrakeMode(true);
@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    ((AutonRight)selectedAuton).updateCommand(pigeon, drivetrain);
+    ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
     drivetrain.autonenabledAction(selectedAuton);
     ballSupervisor.enabledAction(robotState, selectedAuton);
   }
@@ -124,7 +124,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     //pigeon.zeroSensor();
-    ballSupervisor.zeroSensor();
+    ballSupervisor.zeroActuators();
     drivetrain.zeroActuators();
     drivetrain.zeroSensor();
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);

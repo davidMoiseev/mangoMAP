@@ -56,14 +56,14 @@ public class BallSupervisor extends SubsystemBase{
     @Override
     public void zeroActuators() {
         // TODO Auto-generated method stub
-        
+        shooter.zeroActuators();
+        ballivator.zeroActuators();
     }
 
     @Override
     public void zeroSensor() {
         // TODO Auto-generated method stub
-        shooter.zeroSensor();
-        ballivator.zeroSensor();
+
     }
 
     @Override

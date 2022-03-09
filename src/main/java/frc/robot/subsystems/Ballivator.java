@@ -43,7 +43,7 @@ public class Ballivator extends SubsystemBase{
         // tmp {right T, left T, start, stick}
         // 
         boolean[] buttons = commander.getBallivator();
-        
+
         if (buttons[4]){
             ON = false;
         }
@@ -152,16 +152,13 @@ public class Ballivator extends SubsystemBase{
     @Override
     public void zeroActuators() {
         // TODO Auto-generated method stub
-        
+        setBallivatorSpeed(0, false, false);
     }
 
     @Override
     public void zeroSensor() {
         // TODO Auto-generated method stub
-        rightBallivatorMotor.set(0);
-        leftBallivatorMotor.set(0);
 
-        
     }
 
     @Override
@@ -171,6 +168,7 @@ public class Ballivator extends SubsystemBase{
     }
     
     private void setBallivatorSpeed(double speed, boolean topOn, boolean btmOn){
+        SmartDashboard.putNumber("Ballivator Running", speed);
         if (btmOn){
             rightBallivatorMotor.set(speed);
         }
