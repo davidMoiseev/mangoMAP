@@ -44,6 +44,8 @@ public class Ballivator extends SubsystemBase{
         // 
         boolean[] buttons = commander.getBallivator();
         
+
+        
         if (buttons[4]){
             ON = false;
         }
@@ -94,6 +96,14 @@ public class Ballivator extends SubsystemBase{
             if(buttons[3]){
                 setBallivatorSpeed(1, true, true);
                 ballivatorSolenoid.set(true);
+            } else if (ON){
+                if (ballSense.get()){
+                        setBallivatorSpeed(1, false, true);
+                    } 
+                    else {
+                        setBallivatorSpeed(1, true, true);
+                    }
+                    ballivatorSolenoid.set(false);
             } else {
                 setBallivatorSpeed(0, false, false);
                 ballivatorSolenoid.set(false);

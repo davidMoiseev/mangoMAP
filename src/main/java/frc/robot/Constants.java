@@ -63,12 +63,12 @@ public final class Constants {
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
     public static final double SHOOTER_SPEED_FENDER = 1100.0; //2200
-    public static final double SHOOTER_SPEED_WALL = 2525.0;
-    public static final double SHOOTER_SPEED_TARMACK = 2000.0; // Taking 100 off
+    public static final double SHOOTER_SPEED_WALL = 2175.0;
+    public static final double SHOOTER_SPEED_TARMACK = 2050.0;
     public static final double SHOOTER_SPEED_AUTO = 1930.0;
-    public static final double SHOOTER_SPEED_PROTECTED = 2800.0;
-    public static final double SHOOTER_GAIN_P = 0.1; // 0.0005
-    public static final double SHOOTER_GAIN_I = 0.0003;  // 0.00005
+    public static final double SHOOTER_SPEED_PROTECTED = 2425.0;
+    public static final double SHOOTER_GAIN_P = 0.09; // 0.0005
+    public static final double SHOOTER_GAIN_I = 0.0001;  // 0.00005
     public static final double SHOOTER_GAIN_D = 0.0003; // 0.000012
     public static final double SHOOTER_FF = 0.05289;
 
@@ -105,9 +105,9 @@ public final class Constants {
     public static final double CLIMBER_ANGLE_HYSTERESIS = 3.0;
     public static final double PACKAGE_ANGLE = -120.0;
     public static final double CLIMBER_STATE3_ANGLE = -4.0;
-    public static final double CLIMBER_STATE4_ANGLE = 155.0;
+    public static final double CLIMBER_STATE4_ANGLE = 149.0;
     public static final double CLIMBER_STATE5_ANGLE = 115.0;
-    public static final double CLIMBER_STATE6_ANGLE = 333.0;
+    public static final double CLIMBER_STATE6_ANGLE = 329.0;
     public static final double CLIMBER_STATE7_ANGLE = 290.0;
     public static final double CLIMBER_STATE8_ANGLE = 360.0;
     public static final long CLIMBER_LATCH_RELEASE_TIME = 2000;

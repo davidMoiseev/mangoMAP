@@ -247,6 +247,15 @@ public class Climber extends SubsystemBase{
         HotLogger.Log("actualPosTicks", climberMotor.getSelectedSensorPosition());
         HotLogger.Log("actualPosDeg", actualPosDeg);
         SmartDashboard.putBoolean("manualControlFlag", manualControlFlag);
+        if (climberExtend.get() == Value.kForward){
+            SmartDashboard.putString("Climber Direction", "kforward");
+        }
+        else if (climberExtend.get() == Value.kReverse){
+            SmartDashboard.putString("Climber Direction", "kreverse");
+        }
+        else if (climberExtend.get() == Value.kOff){
+            SmartDashboard.putString("Climber Direction", "koff");
+        }
 
     }
 
