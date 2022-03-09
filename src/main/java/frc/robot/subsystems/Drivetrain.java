@@ -253,6 +253,7 @@ public class Drivetrain extends SubsystemBase {
                                 targetY = robotState.getTyReal();
                                 firstLoop = false;
                         }
+                        SmartDashboard.putNumber("Target of Y", targetY);
                         yOffset += commander.getForwardCommand() * Constants.Y_OFFSET; //makes the robot go forwards or backwards(robot centric) while turning around the hub
                         // if limelight has target 
                         if (robotState.getDetecting() == 1) {
