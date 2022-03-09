@@ -39,7 +39,7 @@ public class TeleopCommander extends RobotCommander{
         return -modifyAxis(driver.getLeftX()) * MAX_VELOCITY_METERS_PER_SECOND;
     }
     public double getTurnCommand(){
-        double value = deadband(Math.abs(driver.getRightX()) * driver.getRightX(), 0.1, 0.4) * (MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
+        double value = deadband(Math.abs(driver.getRightX()) * driver.getRightX(), 0.13, 0.4) * (MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND);
 
         return - value;
     }
@@ -102,7 +102,7 @@ public class TeleopCommander extends RobotCommander{
       }
     
       private static double modifyAxis(double value) {
-        boolean deadband = 0.1 > Math.sqrt(Math.pow(driver.getLeftX(), 2) + Math.pow(driver.getLeftY(), 2));
+        boolean deadband = 0.13 > Math.sqrt(Math.pow(driver.getLeftX(), 2) + Math.pow(driver.getLeftY(), 2));
     
         if (deadband) {
           return 0;
