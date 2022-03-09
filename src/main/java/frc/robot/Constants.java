@@ -12,7 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static boolean REAL_BOT = true;
-    public static boolean COMP_BOT = true;
+    public static boolean COMP_BOT = false;
 
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
@@ -134,4 +134,22 @@ public final class Constants {
     public static final double STRAFE_SPEED = 0.5;
 
     public static final double Y_OFFSET = 0.06;
+
+    public static final int LED_AUTON_R = 200;
+    public static final int LED_AUTON_G = 0;
+    public static final int LED_AUTON_B = 200;
+
+    public static final int LED_DISABLE_R = 255;
+    public static final int LED_DISABLE_G = 0;
+    public static final int LED_DISABLE_B = 0;
+
+    public static final int LED_TELEOP_R = 0;
+    public static final int LED_TELEOP_G = 0;
+    public static final int LED_TELEOP_B = 255;
+
+    public static final int LED_SHOOT_R = 0;
+    public static final int LED_SHOOT_G = 255;
+    public static final int LED_SHOOT_B = 0;
+
+    public static final double LED_SHOOTER_SPEED_THRESH = 250.0;
 }
