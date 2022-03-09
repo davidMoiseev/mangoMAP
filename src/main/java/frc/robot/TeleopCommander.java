@@ -73,7 +73,7 @@ public class TeleopCommander extends RobotCommander{
     @Override
     public double getClimberMotor() {
       if (robotState.getClimberExtended() == true) {
-        return deadband(operator.getLeftY(), 0.25, 0.9);
+        return deadband(operator.getLeftY(), 0.2, 0.9);
       } else {
         return 0.0;
       }
@@ -81,7 +81,7 @@ public class TeleopCommander extends RobotCommander{
 
     @Override
     public boolean getClimberRelease() {
-      if (operator.getXButton() && robotState.getClimberExtended() == true) {
+      if (operator.getPOV() > 70 && operator.getPOV() < 110 && robotState.getClimberExtended() == true) {
         return true;
       }
       else{
@@ -135,10 +135,10 @@ public class TeleopCommander extends RobotCommander{
         } else if (operator.getAButtonPressed()) {
           this.hoodPosition = Shooter.Shot.FENDER;
           this.shooterOn = true;
-        } else if (operator.getXButtonPressed()) {
+        } else if (operator.getBButtonPressed()) {
           this.hoodPosition=  Shooter.Shot.WALL;
           this.shooterOn = true;
-        } else if (operator.getBButtonPressed()) {
+        } else if (operator.getXButtonPressed()) {
           this.hoodPosition = Shooter.Shot.TARMACK;
           this.shooterOn = true;
         } else if (operator.getYButtonPressed()) {
@@ -216,7 +216,7 @@ public class TeleopCommander extends RobotCommander{
 
       @Override
       public boolean getClimberManualControl() {
-        if ((robotState.getClimberExtended() == true) && (Math.abs(operator.getLeftY()) > 0.2)) {
+        if ((robotState.getClimberExtended() == true) && (operator.getBackButton() == true)) {
           return true;
         } else {
           return false;

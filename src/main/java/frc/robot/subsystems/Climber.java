@@ -36,7 +36,6 @@ public class Climber extends SubsystemBase{
             6:  Progress to 4th Bar
             7:  Unload/Release 3rd Bar
             8:  Move to final State
-            9:  Process End
             */
 
     public Climber(RobotState robotState, PneumaticHub hub) {
@@ -56,8 +55,8 @@ public class Climber extends SubsystemBase{
 		climberMotor.config_kI(0, CLIMBER_I, 30);
 		climberMotor.config_kD(0, CLIMBER_D, 30);
         climberMotor.configNeutralDeadband(0.001, 30);
-        climberMotor.setSensorPhase((COMP_BOT) ? false : true);
-		climberMotor.setInverted((COMP_BOT) ? false : true);
+        climberMotor.setSensorPhase(false);
+		climberMotor.setInverted(false);
         climberMotor.configMotionCruiseVelocity(CLIMBER_CRUISE_VELOCITY, 30);
         climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 30);
 		climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
@@ -105,7 +104,7 @@ public class Climber extends SubsystemBase{
             climberMotor.set(TalonFXControlMode.PercentOutput, commander.getClimberMotor());
             climberRelease.set(commander.getClimberRelease());
             manualControlFlag = true;
-        } else if (robotState.getClimberExtended()) {
+        } else {
             manualControlFlag = false;
             if (climberState == 1) {  // Climber Retracted
                 if (robotState.getClimberExtended() == true) {
@@ -184,7 +183,6 @@ public class Climber extends SubsystemBase{
                 if ((unlatchTrigger == true) && ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_RELEASE_TIME)) {
                     climberState = 8;
                     unlatchTrigger = false;
-                    latchTimer = System.currentTimeMillis();
                     climberRelease.set(false);
                 }
                 if ((commander.getBbuttonHeld() == true)) {
@@ -194,12 +192,6 @@ public class Climber extends SubsystemBase{
             } else if (climberState == 8) { // Move to final State
                 climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE8_ANGLE));
                 targetPosDeg = CLIMBER_STATE8_ANGLE;
-                if ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_END_TIME) {
-                    climberState = 9;
-                }
-
-            } else if (climberState == 9) { // Move to End State
-                climberMotor.set(TalonFXControlMode.PercentOutput, 0.0);
             }
 
         }
@@ -247,15 +239,6 @@ public class Climber extends SubsystemBase{
         HotLogger.Log("actualPosTicks", climberMotor.getSelectedSensorPosition());
         HotLogger.Log("actualPosDeg", actualPosDeg);
         SmartDashboard.putBoolean("manualControlFlag", manualControlFlag);
-        if (climberExtend.get() == Value.kForward){
-            SmartDashboard.putString("Climber Direction", "kforward");
-        }
-        else if (climberExtend.get() == Value.kReverse){
-            SmartDashboard.putString("Climber Direction", "kreverse");
-        }
-        else if (climberExtend.get() == Value.kOff){
-            SmartDashboard.putString("Climber Direction", "koff");
-        }
 
     }
 

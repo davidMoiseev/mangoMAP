@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase{
 
         if (commander.getHoodPosition() == Shot.FENDER){
             inside(Piston.EXTEND);
-            outside(Piston.RETRACT);
+            outside(Piston.EXTEND);
             targetRPM = SHOOTER_SPEED_FENDER;
             disableShooter = false;
             hoodPosition = Shot.FENDER;
@@ -93,9 +93,9 @@ public class Shooter extends SubsystemBase{
             hoodPosition = Shot.AUTO;
         }
         else if (commander.getHoodPosition() == Shot.WALL){
-            inside(Piston.RETRACT);
-            outside(Piston.EXTEND);
-            targetRPM = SHOOTER_SPEED_WALL;
+            inside(Piston.EXTEND);
+            outside(Piston.RETRACT);
+            targetRPM = SHOOTER_SPEED_AUTO;
             disableShooter = false;
             hoodPosition = Shot.WALL;
         }
