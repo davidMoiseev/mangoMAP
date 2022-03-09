@@ -9,6 +9,10 @@ public class RobotState {
     public double detecting;
     private boolean shooterReady;
     private boolean climberExtended;
+    private double actualShooterSpeed;
+    private double targetShooterSpeed;
+    private boolean shooterOn;
+
 
     public RobotState() {
        rotation2d = new Rotation2d();
@@ -76,5 +80,30 @@ public class RobotState {
         } else {
             return false;
         }
+    }
+
+
+    public void setActualShooterSpeed(double speed) {
+        this.actualShooterSpeed = speed;
+    }
+
+    public double getActualShooterSpeed() {
+        return this.actualShooterSpeed;
+    }
+
+    public void setTargetShooterSpeed(double speed) {
+        this.targetShooterSpeed = speed;
+    }
+
+    public double getTargetShooterSpeed() {
+        return this.targetShooterSpeed;
+    }
+
+    public void setShooterOn(boolean shootOn) {
+        this.shooterOn = shootOn;
+    }
+
+    public boolean getShooterOn() {
+        return this.shooterOn;
     }
 }

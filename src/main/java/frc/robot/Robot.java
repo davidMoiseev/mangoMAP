@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autons.AutonLeft;
 import frc.robot.Autons.AutonRight;
 import frc.robot.sensors.Limelight;
+import frc.robot.subsystems.Lights;
 import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
   private AutonCommader selectedAuton;
   private String autonSelection;
   private Object autonSelectionPrev;
+  private Lights lights;
 
   @Override
   public void robotInit() {
@@ -53,6 +55,7 @@ public class Robot extends TimedRobot {
     ballSupervisor = new BallSupervisor(robotState, hub);
     climber = new Climber(robotState, hub);
     limelight = new Limelight(robotState);
+    lights = new Lights(robotState);
     
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
@@ -71,10 +74,12 @@ public class Robot extends TimedRobot {
     drivetrain.logData();
     ballSupervisor.logData();
     climber.logData();
+    lights.logData();
   }
 
   @Override
   public void disabledInit() {
+    lights.setLightsDisable();
     drivetrain.zeroActuators();
     hub.disableCompressor();
     // drivetrain.setBrakeMode(false);
@@ -82,6 +87,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    lights.setLightsDisable();
     drivetrain.disabledAction(robotState);
     SmartDashboard.getString("AutonSelection(LeftOrRight)", autonSelection);
     
@@ -104,12 +110,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
-
     selectedAuton.initializeAuton();
     drivetrain.initializeAuton(selectedAuton);
     drivetrain.zeroActuators();
     ballSupervisor.zeroSensor();
     pigeon.initializeAuton(selectedAuton);
+    lights.setLightsAuton();
 
     // drivetrain.setBrakeMode(true);
   }
@@ -119,6 +125,7 @@ public class Robot extends TimedRobot {
     ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
     drivetrain.autonenabledAction(selectedAuton);
     ballSupervisor.enabledAction(robotState, selectedAuton);
+    lights.setLightsAuton();
   }
 
   @Override
@@ -128,6 +135,7 @@ public class Robot extends TimedRobot {
     drivetrain.zeroActuators();
     drivetrain.zeroSensor();
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
+    lights.setLightsTeleop();
   }
 
   @Override
@@ -137,5 +145,6 @@ public class Robot extends TimedRobot {
     ballSupervisor.enabledAction(robotState, teleopCommander);
     climber.enabledAction(robotState, teleopCommander);
     SmartDashboard.putBoolean("Button A", driver.getAButton());
+    lights.setLightsTeleop();
   }
 }

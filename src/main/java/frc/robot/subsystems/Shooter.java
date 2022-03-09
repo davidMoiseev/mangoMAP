@@ -124,7 +124,7 @@ public class Shooter extends SubsystemBase{
             targetRPM = 0;
             disableShooter = true;
         }
-
+        robotState.setShooterOn(!disableShooter);
         if(targetRPM == 0){
             leftShooterMotor.set(TalonFXControlMode.PercentOutput, 0);
         } else {
@@ -161,10 +161,12 @@ public class Shooter extends SubsystemBase{
                 shooterLatch = false;
             }
 
-           SmartDashboard.putNumber("targetRPM", targetRPM);
-           SmartDashboard.putNumber("RPM", RPM);
-           SmartDashboard.putBoolean("shooterReady", robotState.isShooterReady());
-           SmartDashboard.putNumber("shooterLatchTimer",shooterLatchTimer);
+            robotState.setActualShooterSpeed(RPM);
+            robotState.setTargetShooterSpeed(targetRPM);
+            SmartDashboard.putNumber("targetRPM", targetRPM);
+            SmartDashboard.putNumber("RPM", RPM);
+            SmartDashboard.putBoolean("shooterReady", robotState.isShooterReady());
+            SmartDashboard.putNumber("shooterLatchTimer",shooterLatchTimer);
     }
 
     @Override
