@@ -135,10 +135,10 @@ public class TeleopCommander extends RobotCommander{
         } else if (operator.getAButtonPressed()) {
           this.hoodPosition = Shooter.Shot.FENDER;
           this.shooterOn = true;
-        } else if (operator.getBButtonPressed()) {
+        } else if (operator.getXButtonPressed()) {
           this.hoodPosition=  Shooter.Shot.WALL;
           this.shooterOn = true;
-        } else if (operator.getXButtonPressed()) {
+        } else if (operator.getBButtonPressed()) {
           this.hoodPosition = Shooter.Shot.TARMACK;
           this.shooterOn = true;
         } else if (operator.getYButtonPressed()) {
