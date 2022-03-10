@@ -237,7 +237,7 @@ public class Drivetrain extends SubsystemBase {
         public void enabledAction(RobotState robotState, RobotCommander commander) {
                 
                 // if not pressing A
-                if (!commander.getRobotAim()) {
+                if (!commander.getRobotAim() && !commander.getAutoAimSetTarget()) {
                         firstLoop = true;
                         chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                                         commander.getForwardCommand(),
@@ -249,19 +249,24 @@ public class Drivetrain extends SubsystemBase {
                         // if pressing A
                 } else if(commander.getAutoAimSetTarget()){
                         
-                        if(firstLoop){
-                                targetY = robotState.getTyReal();
-                                firstLoop = false;
-                        }
-                        SmartDashboard.putNumber("Target of Y", targetY);
-                        yOffset += commander.getForwardCommand() * Constants.Y_OFFSET; //makes the robot go forwards or backwards(robot centric) while turning around the hub
+                        // if(firstLoop){
+                        //         targetY = robotState.getTyReal();
+                        //         firstLoop = false;
+                        // }
+                        // SmartDashboard.putNumber("Target of Y", targetY);
+                        // yOffset += commander.getForwardCommand() * Constants.Y_OFFSET; //makes the robot go forwards or backwards(robot centric) while turning around the hub
                         // if limelight has target 
                         if (robotState.getDetecting() == 1) {
                                 // auto aim
                                 chassisSpeeds = new ChassisSpeeds(
-                                                (Math.abs(robotState.getTyReal() + yOffset) > targetY) ? (robotState.getTyReal() + yOffset) * Constants.Y_ADJUST_SPEED : 0,
-                                                Constants.STRAFE_SPEED * commander.getStrafeCommand(),
+                                                commander.getForwardCommand(),
+                                                commander.getStrafeCommand(),
                                                 (Math.abs(robotState.getTxReal()) > Constants.ALLOWED_X_OFFSET) ? robotState.getTxReal() * Constants.X_ADJUST_SPEED : 0);
+                        } else {
+                                chassisSpeeds = new ChassisSpeeds(
+                                        0,
+                                        0,
+                                        0);
                         }
                 } else {
                        firstLoop = true;
@@ -273,6 +278,11 @@ public class Drivetrain extends SubsystemBase {
                                                 (Math.abs(robotState.getTyReal() + yOffset) > Constants.ALLOWED_Y_OFFSET) ? (robotState.getTyReal() + yOffset) * Constants.Y_ADJUST_SPEED : 0,
                                                 Constants.STRAFE_SPEED * commander.getStrafeCommand(),
                                                 (Math.abs(robotState.getTxReal()) > Constants.ALLOWED_X_OFFSET) ? robotState.getTxReal() * Constants.X_ADJUST_SPEED : 0);
+                        } else {
+                                chassisSpeeds = new ChassisSpeeds(
+                                        0,
+                                        0,
+                                        0);
                         }
                 }
                 setSwerveModuleStates(chassisSpeeds);
