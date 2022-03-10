@@ -236,6 +236,6 @@ public class TeleopCommander extends RobotCommander{
       @Override
       public boolean getAutoAimSetTarget() {
         // TODO Auto-generated method stub
-        return driver.getBButton();
+        return driver.getBButton() || driver.getLeftTriggerAxis() > .5;
       }
 }

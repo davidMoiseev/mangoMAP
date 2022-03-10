@@ -388,7 +388,7 @@ public class AutonRight extends AutonCommader {
         if(autoState == AutoState.finalShot){
             autonInProgress = true;
             driveRequested = false;
-            hoodPosition = Shot.TARMACK;
+            hoodPosition = Shot.AUTO;
             autoAim = false;
             shoot = true;
             
