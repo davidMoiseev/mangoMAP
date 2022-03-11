@@ -235,15 +235,15 @@ public class AutonRight extends AutonCommader {
         if (autoState == AutoState.shootInitialBall) {
             autonInProgress = true;
             driveRequested = false;
-            hoodPosition = Shot.AUTO;
+            hoodPosition = Shot.AUTO2;
             shoot = true;
             autoAim = false;
             
-            if(timer.get() > .5) { // .5
+            if(timer.get() > 1) { // .5
                 timer.reset();
                 timer.start();
                 drivetrain.initializeAuton(this);
-                autoState = AutoState.driveToWall;        
+                autoState = AutoState.driveToWall;
             }
         }
         if (autoState == AutoState.driveToWall) {
