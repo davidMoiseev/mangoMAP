@@ -30,6 +30,7 @@ import frc.robot.AutonCommader;
 import frc.robot.Constants;
 import frc.robot.RobotCommander;
 import frc.robot.RobotState;
+import frc.robot.sensors.Limelight;
 
 import static frc.robot.Constants.*;
 
@@ -285,6 +286,13 @@ public class Drivetrain extends SubsystemBase {
                                         0);
                         }
                 }
+
+                if(robotState.getTxReal() <= Constants.ALLOWED_X_OFFSET + .1){
+                        robotState.setIsAimed(true);
+                } else {
+                        robotState.setIsAimed(false);
+                }
+
                 setSwerveModuleStates(chassisSpeeds);
         }
 

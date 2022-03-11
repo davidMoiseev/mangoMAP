@@ -66,7 +66,7 @@ public final class Constants {
     public static final double SHOOTER_SPEED_WALL = 2100.0;
     public static final double SHOOTER_SPEED_TARMACK = 1975.0;
     public static final double SHOOTER_SPEED_AUTO = 1825; // 1930
-    public static final double SHOOTER_SPEED_AUTO2 = 1875; // 1875      1975
+    public static final double SHOOTER_SPEED_AUTO2 = 1975; // 1875      1975
     public static final double SHOOTER_SPEED_PROTECTED = 2350.0;
     public static final double SHOOTER_GAIN_P = 0.09; // 0.0005
     public static final double SHOOTER_GAIN_I = 0.0001;  // 0.00005
@@ -141,16 +141,20 @@ public final class Constants {
     public static final int LED_AUTON_B = 200;
 
     public static final int LED_DISABLE_R = 255;
-    public static final int LED_DISABLE_G = 0;
+    public static final int LED_DISABLE_G = 100;
     public static final int LED_DISABLE_B = 0;
 
-    public static final int LED_TELEOP_R = 0;
+    public static final int LED_TELEOP_R = 255;
     public static final int LED_TELEOP_G = 0;
-    public static final int LED_TELEOP_B = 255;
+    public static final int LED_TELEOP_B = 0;
+
+    public static final int LED_AIMED_R = 0;
+    public static final int LED_AIMED_G = 255;
+    public static final int LED_AIMED_B = 0;
 
     public static final int LED_SHOOT_R = 0;
-    public static final int LED_SHOOT_G = 255;
-    public static final int LED_SHOOT_B = 0;
+    public static final int LED_SHOOT_G = 0;
+    public static final int LED_SHOOT_B = 255;
 
     public static final double LED_SHOOTER_SPEED_THRESH = 250.0;
 }

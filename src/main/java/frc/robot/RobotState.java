@@ -12,6 +12,7 @@ public class RobotState {
     private double actualShooterSpeed;
     private double targetShooterSpeed;
     private boolean shooterOn;
+    private boolean aimed;
 
 
     public RobotState() {
@@ -82,6 +83,14 @@ public class RobotState {
         }
     }
 
+
+    public void setIsAimed(boolean aimed){
+        this.aimed = aimed;
+    }
+
+    public boolean getIsAimed(){
+        return aimed;
+    }
 
     public void setActualShooterSpeed(double speed) {
         this.actualShooterSpeed = speed;
