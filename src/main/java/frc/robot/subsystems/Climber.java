@@ -68,9 +68,6 @@ public class Climber extends SubsystemBase{
 
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
-
-        climberRelease.set(commander.getClimberRelease());
-
         if (COMP_BOT) {
             if (commander.getClimberExtend()) {
                 robotState.setClimberExtended(true);
@@ -105,6 +102,7 @@ public class Climber extends SubsystemBase{
 
         if (commander.getClimberManualControl() == true) {
             climberMotor.set(TalonFXControlMode.PercentOutput, commander.getClimberMotor());
+            climberRelease.set(commander.getClimberRelease());
             manualControlFlag = true;
         } else if (robotState.getClimberExtended()) {
             manualControlFlag = false;
