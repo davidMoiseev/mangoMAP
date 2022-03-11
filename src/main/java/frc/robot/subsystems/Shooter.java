@@ -93,11 +93,11 @@ public class Shooter extends SubsystemBase{
             hoodPosition = Shot.AUTO;
         }
         else if(commander.getHoodPosition() == Shot.AUTO2){
-            inside(Piston.EXTEND);
-            outside(Piston.RETRACT);
+            inside(Piston.EXTEND); // Extend
+            outside(Piston.RETRACT); // Retract
             targetRPM = SHOOTER_SPEED_AUTO2;
             disableShooter = false;
-            hoodPosition = Shot.AUTO;
+            hoodPosition = Shot.AUTO2;
         }
         else if (commander.getHoodPosition() == Shot.WALL){
             inside(Piston.RETRACT);
