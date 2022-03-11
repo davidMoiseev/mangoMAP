@@ -15,7 +15,7 @@ public class Lights extends SubsystemBase{
      public Lights(RobotState robotState){
        this.robotState = robotState;
        m_led = new AddressableLED(0);
-       m_LedBuffer = new AddressableLEDBuffer(24);
+       m_LedBuffer = new AddressableLEDBuffer(26);
        m_led.setLength(m_LedBuffer.getLength());
        for (int i = 0; i < m_LedBuffer.getLength(); i++) { 
            m_LedBuffer.setRGB(i, 0, 0, 0); 
@@ -79,11 +79,11 @@ public class Lights extends SubsystemBase{
             for (int i = 0; i < m_LedBuffer.getLength(); i++) { 
                 m_LedBuffer.setRGB(i, LED_SHOOT_R, LED_SHOOT_G, LED_SHOOT_B); 
             }
-            if (robotState.getIsAimed()){
-                for (int i = 0; i < m_LedBuffer.getLength(); i++) { 
-                    m_LedBuffer.setRGB(i, LED_AIMED_R, LED_AIMED_G, LED_AIMED_B); 
-                }
-            }
+            // if (robotState.getIsAimed()){
+            //     for (int i = 0; i < m_LedBuffer.getLength(); i++) { 
+            //         m_LedBuffer.setRGB(i, LED_AIMED_R, LED_AIMED_G, LED_AIMED_B); 
+            //     }
+            // }
         } else {
             for (int i = 0; i < m_LedBuffer.getLength(); i++) { 
                 m_LedBuffer.setRGB(i, LED_TELEOP_R, LED_TELEOP_G, LED_TELEOP_B); 
