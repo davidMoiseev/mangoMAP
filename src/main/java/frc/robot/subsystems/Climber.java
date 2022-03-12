@@ -68,7 +68,6 @@ public class Climber extends SubsystemBase{
 
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
-
         if (COMP_BOT) {
             if (commander.getClimberExtend()) {
                 robotState.setClimberExtended(true);

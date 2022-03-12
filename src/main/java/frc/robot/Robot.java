@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 
-    autonSelection = "LEFT";
+    autonSelection = "RIGHT";
   }
 
   @Override
@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("AutonSelected", selectedAuton.getName());
       } else {
         SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
-        selectedAuton = new AutonLeft(robotState);
+        selectedAuton = new AutonRight(robotState);
       }
     // }
   }
@@ -122,7 +122,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
+    ((AutonRight)selectedAuton).updateCommand(pigeon, drivetrain);
     drivetrain.autonenabledAction(selectedAuton);
     ballSupervisor.enabledAction(robotState, selectedAuton);
     lights.setLightsAuton();
