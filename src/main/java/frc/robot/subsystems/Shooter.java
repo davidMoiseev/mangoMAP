@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase{
         FENDER,
         WALL,
         TARMACK,
-        PROTECTED, AUTO, AUTO2
+        PROTECTED, AUTO, AUTO2, BLUEAUTO2
      , CLIMB}
 
     double pGain = 0.00026;
@@ -98,6 +98,13 @@ public class Shooter extends SubsystemBase{
             targetRPM = SHOOTER_SPEED_AUTO2;
             disableShooter = false;
             hoodPosition = Shot.AUTO2;
+        }
+        else if(commander.getHoodPosition() == Shot.BLUEAUTO2){
+            inside(Piston.RETRACT); // Extend
+            outside(Piston.RETRACT); // Retract
+            targetRPM = SHOOTER_SPEED_BLUEAUTO2;
+            disableShooter = false;
+            hoodPosition = Shot.BLUEAUTO2;
         }
         else if (commander.getHoodPosition() == Shot.WALL){
             inside(Piston.RETRACT);

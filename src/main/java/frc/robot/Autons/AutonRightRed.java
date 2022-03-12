@@ -28,9 +28,9 @@ import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter.Shot;
 
-public class AutonRight extends AutonCommader {
+public class AutonRightRed extends AutonCommader {
 
-    public static final String name = "RIGHT";
+    public static final String name = "RIGHT_RED";
 
     enum AutoState {
         prepareToShootInitialBall,
@@ -76,7 +76,7 @@ public class AutonRight extends AutonCommader {
 
     private boolean autoAim;
 
-    public AutonRight(RobotState robotState) {
+    public AutonRightRed(RobotState robotState) {
         super(robotState);
         autoState = AutoState.prepareToShootInitialBall;
         timer = new Timer();
