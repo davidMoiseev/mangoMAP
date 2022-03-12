@@ -236,7 +236,7 @@ public class AutonLeft extends AutonCommader {
         if (autoState == AutoState.shootInitialBall) {
             autonInProgress = true;
             driveRequested = false;
-            hoodPosition = Shot.AUTO;
+            hoodPosition = Shot.AUTO2;
             shoot = true;
             autoAim = false;
             
@@ -279,7 +279,7 @@ public class AutonLeft extends AutonCommader {
             driveRequested = true;
             deployRightIntake = false;
             deployLeftIntake = false;
-            hoodPosition = Shot.AUTO;
+            hoodPosition = Shot.AUTO2;
             autoAim = false;
 
             SmartDashboard.putNumber("LastTargetX", lastDesiredState.poseMeters.getTranslation().getX());
