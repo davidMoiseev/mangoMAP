@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 
-    autonSelection = "RIGHT_BLUE"; // RIGHT_RED, RIGHT_BLUE, LEFT
+    autonSelection = "RIGHT_RED"; // RIGHT_RED, RIGHT_BLUE, LEFT
   }
 
   @Override
@@ -97,14 +97,14 @@ public class Robot extends TimedRobot {
     // RIGHT_RED, RIGHT_BLUE, LEFT
     if (autonSelection == "RIGHT_RED") {
       selectedAuton = new AutonRightRed(robotState);
-      SmartDashboard.putString("AutonSelected", selectedAuton.getName());
+      // SmartDashboard.putString("AutonSelected", selectedAuton.getName());
     } else if (autonSelection.equals("RIGHT_BLUE")) {
       selectedAuton = new AutonRightBlue(robotState);
-      SmartDashboard.putString("AutonSelected", selectedAuton.getName());
+      // SmartDashboard.putString("AutonSelected", selectedAuton.getName());
     } else if (autonSelection == "LEFT") {
       selectedAuton = new AutonLeft(robotState);
     } else {
-      SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
+      // SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
       selectedAuton = new AutonRightBlue(robotState);
     }
   }

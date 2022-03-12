@@ -102,7 +102,7 @@ public class Shooter extends SubsystemBase{
         else if(commander.getHoodPosition() == Shot.BLUEAUTO2){
             inside(Piston.RETRACT); // Extend
             outside(Piston.RETRACT); // Retract
-            targetRPM = SHOOTER_SPEED_BLUEAUTO2;
+            targetRPM = SHOOTER_SPEED_BLUEAUTO2; // Or tarmack????
             disableShooter = false;
             hoodPosition = Shot.BLUEAUTO2;
         }
