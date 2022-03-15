@@ -146,6 +146,8 @@ public class TeleopCommander extends RobotCommander{
           this.shooterOn = true;
         } else if (operator.getBackButtonPressed()){
           hoodPosition = Shot.NEUTRAL;
+        } else if (((driver.getPOV() < 20 || driver.getPOV() > 340) && (driver.getPOV() != -1))){
+          hoodPosition = Shot.BLUEAUTO2;
         }
         return this.hoodPosition;
       }

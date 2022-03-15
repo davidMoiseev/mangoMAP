@@ -28,18 +28,17 @@ import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter.Shot;
 
-public class AutonLeft extends AutonCommader {
+public class AutonRightBlue extends AutonCommader {
 
-    public static final String name = "LEFT";
+    public static final String name = "RIGHT_BLUE";
 
     enum AutoState {
         prepareToShootInitialBall,
         shootInitialBall,
-        driveToBall,
+        driveToWall,
         pickUpBall,
-        autoComplete, 
-        returnToStart, 
-        finalShot
+        pathToSecondBall_1,
+        autoComplete, pathToSecondBall_2, pauseAtWall, pauseAtBall2, returnToStart, finalShot
     }
 
     private AutoState autoState; 
@@ -77,7 +76,7 @@ public class AutonLeft extends AutonCommader {
 
     private boolean autoAim;
 
-    public AutonLeft(RobotState robotState) {
+    public AutonRightBlue(RobotState robotState) {
         super(robotState);
         autoState = AutoState.prepareToShootInitialBall;
         timer = new Timer();
@@ -205,7 +204,7 @@ public class AutonLeft extends AutonCommader {
 
     @Override
     public void initializeAuton() {
-        lastDesiredState = new State(0.0, 0.0, 0.0, new Pose2d(0, 0,new Rotation2d(Math.toRadians(315))), 
+        lastDesiredState = new State(0.0, 0.0, 0.0, new Pose2d(10.2,5.93,new Rotation2d(Math.toRadians(42))), 
         1000);
 
         startState = lastDesiredState;
@@ -240,36 +239,124 @@ public class AutonLeft extends AutonCommader {
             shoot = true;
             autoAim = false;
             
-            if(timer.get() > .5) { // .5
+            if(timer.get() > 1) { // .5
                 timer.reset();
                 timer.start();
                 drivetrain.initializeAuton(this);
-                autoState = AutoState.driveToBall;        
+                autoState = AutoState.driveToWall;
             }
         }
-
-        if (autoState == AutoState.driveToBall){
+        if (autoState == AutoState.driveToWall) {
             autonInProgress = true;
             driveRequested = true;
             deployRightIntake = true;
             deployLeftIntake = false;
             hoodPosition = Shot.NEUTRAL;
             autoAim = false;
-            shoot = false;
-            desiredState = new State(timer.get(), .6/2*timer.get(), .6/2, new Pose2d(lastDesiredState.poseMeters.getX()-2/2*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()+1.1/2*timer.get(),
+            desiredState = new State(timer.get(), .6/1*timer.get(), .6/1, new Pose2d(lastDesiredState.poseMeters.getX()+.95/2*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()-1.8/2*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
             
-            setTargetTheta(Rotation2d.fromDegrees(275));
+            setTargetTheta(Rotation2d.fromDegrees(0));
             
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
             SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
 
-            if (timer.get() > 2) {
+            if (timer.get() > 2.2) {
                 lastDesiredState = desiredState;
+                autoState = AutoState.pauseAtWall;
+                timer.reset();
+                timer.start();
+            }                  
+        }       
+        if (autoState == AutoState.pauseAtWall) {
+            autonInProgress = true;
+            driveRequested = true;
+            deployRightIntake = true;
+            deployLeftIntake = false;
+            hoodPosition = Shot.NEUTRAL;
+            desiredState = lastDesiredState;
+            setTargetTheta(Rotation2d.fromDegrees(0));
+            autoAim = false;
+            
+            SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
+            SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
+            SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
+
+            if (timer.get() > 1) {
+                autoState = AutoState.pathToSecondBall_1;
+                lastDesiredState = desiredState;
+                timer.reset();
+                timer.start();
+            }                  
+        }
+        if (autoState == AutoState.pathToSecondBall_1) {
+            autonInProgress = true;
+            driveRequested = true;
+            deployRightIntake = false;
+            deployLeftIntake = true;
+            hoodPosition = Shot.NEUTRAL;
+            autoAim = false;
+
+            desiredState = new State(timer.get(), .1/1*timer.get(), .1/1, new Pose2d(lastDesiredState.poseMeters.getX()-1/1*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()+.08/1*timer.get(),
+                                                                    lastDesiredState.poseMeters.getRotation()), 
+                                                                    1000);
+            setTargetTheta(Rotation2d.fromDegrees(0));
+
+            SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
+            SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
+            SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
+            if (timer.get() > 1) {
+                autoState = AutoState.pathToSecondBall_2;
+                lastDesiredState = desiredState;
+                timer.reset();
+                timer.start();
+            }
+        }       
+        if (autoState == AutoState.pathToSecondBall_2) {
+            autonInProgress = true;
+            driveRequested = true;
+            deployRightIntake = false;
+            deployLeftIntake = true;
+            autoAim = false;
+            hoodPosition = Shot.NEUTRAL;
+
+            desiredState = new State(timer.get(), .075/1.25*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX()-1.4/1.25*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()+1.4/1.25*timer.get(),
+                                                                    lastDesiredState.poseMeters.getRotation()), 
+                                                                    1000);
+            setTargetTheta(Rotation2d.fromDegrees(60));
+
+            SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
+            SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
+            SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
+            if (timer.get() > 1.5) {
+                autoState = AutoState.pauseAtBall2;
+                lastDesiredState = desiredState;
+                timer.reset();
+                timer.start();
+            }
+        }      
+        if (autoState == AutoState.pauseAtBall2) {
+            autonInProgress = true;
+            driveRequested = true;
+            deployRightIntake = false;
+            deployLeftIntake = true;
+            hoodPosition = Shot.NEUTRAL;
+            desiredState = lastDesiredState;
+            setTargetTheta(Rotation2d.fromDegrees(60));
+            autoAim = false;
+            
+            SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
+            SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
+            SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
+
+            if (timer.get() > 1) {
                 autoState = AutoState.returnToStart;
+                lastDesiredState = desiredState;
                 timer.reset();
                 timer.start();
             }                  
@@ -279,18 +366,14 @@ public class AutonLeft extends AutonCommader {
             driveRequested = true;
             deployRightIntake = false;
             deployLeftIntake = false;
-            hoodPosition = Shot.AUTO2;
+            hoodPosition = Shot.NEUTRAL;
             autoAim = false;
 
-            SmartDashboard.putNumber("LastTargetX", lastDesiredState.poseMeters.getTranslation().getX());
-            SmartDashboard.putNumber("LastTargetY", lastDesiredState.poseMeters.getTranslation().getY());
-            SmartDashboard.putNumber("LastTargetTheta", lastDesiredState.poseMeters.getRotation().getDegrees());
-
             desiredState = new State(timer.get(), .075/1.5*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX() + (startState.poseMeters.getX() - lastDesiredState.poseMeters.getX())/1.5*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY() + (startState.poseMeters.getY() - lastDesiredState.poseMeters.getY())/1.5*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY() + (startState.poseMeters.getY() - lastDesiredState.poseMeters.getY())/3*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
-            setTargetTheta(Rotation2d.fromDegrees(315));
+            setTargetTheta(Rotation2d.fromDegrees(42));
 
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
@@ -305,6 +388,7 @@ public class AutonLeft extends AutonCommader {
         if(autoState == AutoState.finalShot){
             autonInProgress = true;
             driveRequested = false;
+            hoodPosition = Shot.BLUEAUTO2;
             autoAim = false;
             shoot = true;
             
@@ -322,12 +406,11 @@ public class AutonLeft extends AutonCommader {
             driveRequested = false;
             hoodPosition = Shot.NEUTRAL;
         }
-       
         SmartDashboard.putString("AutoState", ""+autoState);
 
         SmartDashboard.putNumber("Start Pose X", startState.poseMeters.getX());
         SmartDashboard.putNumber("Start Pose Y", startState.poseMeters.getY());
-        
+
     }
 
 
