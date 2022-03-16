@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autons.AutonLeft;
+import frc.robot.Autons.AutonRight5Ball;
+import frc.robot.Autons.AutonRight5Ballold;
 import frc.robot.Autons.AutonRightBlue;
 import frc.robot.Autons.AutonRightRed;
 import frc.robot.sensors.Limelight;
@@ -61,7 +63,7 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 
-    autonSelection = "RIGHT_RED"; // RIGHT_RED, RIGHT_BLUE, LEFT
+    autonSelection = "RIGHT_5"; // RIGHT_RED, RIGHT_BLUE, LEFT, RIGHT_5
   }
 
   @Override
@@ -103,6 +105,8 @@ public class Robot extends TimedRobot {
       // SmartDashboard.putString("AutonSelected", selectedAuton.getName());
     } else if (autonSelection == "LEFT") {
       selectedAuton = new AutonLeft(robotState);
+    } else if (autonSelection == "RIGHT_5"){
+      selectedAuton = new AutonRight5Ball(robotState);
     } else {
       // SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
       selectedAuton = new AutonRightBlue(robotState);
@@ -130,6 +134,8 @@ public class Robot extends TimedRobot {
       ((AutonRightBlue)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == "LEFT") {
       ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
+    } else if (autonSelection == "RIGHT_5"){
+      ((AutonRight5Ball)selectedAuton).updateCommand(pigeon, drivetrain);
     } else {
       ((AutonRightBlue)selectedAuton).updateCommand(pigeon, drivetrain);
     }
