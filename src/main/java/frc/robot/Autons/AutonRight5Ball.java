@@ -38,7 +38,7 @@ public class AutonRight5Ball extends AutonCommader {
         driveToWall,
         pickUpBall,
         pathToSecondBall_1,
-        autoComplete, pathToSecondBall_2, pauseAtWall, pauseAtBall2, driveToHuman, finalShot, pauseAtHuman, driveToFinal
+        autoComplete, pathToSecondBall_2, pauseAtWall, pauseAtBall2, driveToHuman, finalShot, pauseAtHuman, driveToFinal, backIntoHuman
     }
 
     private AutoState autoState; 
@@ -253,7 +253,7 @@ public class AutonRight5Ball extends AutonCommader {
             autonInProgress = true;
             autoAim = false;
             driveRequested = false;
-            hoodPosition = Shot.NEUTRAL;
+            hoodPosition = Shot.WALL;
             pigeon.initializeAuton(this);
             drivetrain.initializeAuton(this);
             autoState = AutoState.driveToWall;
@@ -265,10 +265,10 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = true;
             deployRightIntake = true;
             deployLeftIntake = false;
-            hoodPosition = Shot.TARMACK;
+            hoodPosition = Shot.WALL;
             autoAim = false;
-            desiredState = new State(timer.get(), .6/1*timer.get(), .6/1, new Pose2d(lastDesiredState.poseMeters.getX()/1*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()-1.15/1*timer.get(),
+            desiredState = new State(timer.get(), .6/1.5*timer.get(), .6/1.5, new Pose2d(lastDesiredState.poseMeters.getX()/1.5*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()-1.15/1.5*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
             
@@ -278,7 +278,7 @@ public class AutonRight5Ball extends AutonCommader {
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
             SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
 
-            if (timer.get() > 1) {
+            if (timer.get() > 1.5) {
                 lastDesiredState = desiredState;
                 autoState = AutoState.pauseAtWall;
                 timer.reset();
@@ -290,7 +290,7 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = true;
             deployRightIntake = true;
             deployLeftIntake = false;
-            hoodPosition = Shot.NEUTRAL;
+            hoodPosition = Shot.WALL;
             desiredState = lastDesiredState;
             setTargetTheta(Rotation2d.fromDegrees(0));
             autoAim = false;
@@ -311,14 +311,14 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = true;
             deployRightIntake = false;
             deployLeftIntake = true;
-            hoodPosition = Shot.TARMACK;
+            hoodPosition = Shot.WALL;
             autoAim = false;
 
-            desiredState = new State(timer.get(), .1/1*timer.get(), .1/1, new Pose2d(lastDesiredState.poseMeters.getX()-1/1*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()+.08/1*timer.get(),
+            desiredState = new State(timer.get(), .1/1*timer.get(), .1/1, new Pose2d(lastDesiredState.poseMeters.getX()-1.5/1*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()+.16/1*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
-            setTargetTheta(Rotation2d.fromDegrees(0));
+            setTargetTheta(Rotation2d.fromDegrees(40));
 
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
@@ -336,14 +336,15 @@ public class AutonRight5Ball extends AutonCommader {
             deployRightIntake = false;
             deployLeftIntake = true;
             autoAim = false;
-            hoodPosition = Shot.TARMACK;
+            hoodPosition = Shot.WALL;
+            shoot = true;
 
-            desiredState = new State(timer.get(), .075/1.25*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX()-1.4/1.25*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()+1.4/1.25*timer.get(),
+            desiredState = new State(timer.get(), .075/1*timer.get(),  .075/1, new Pose2d(lastDesiredState.poseMeters.getX()-.75/1*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()+.75/1*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
 
-            setTargetTheta(Rotation2d.fromDegrees(60));
+            setTargetTheta(Rotation2d.fromDegrees(35));
 
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
@@ -360,17 +361,17 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = true;
             deployRightIntake = false;
             deployLeftIntake = true;
-            hoodPosition = Shot.TARMACK;
+            hoodPosition = Shot.WALL;
             shoot = true;
             desiredState = lastDesiredState;
-            setTargetTheta(Rotation2d.fromDegrees(60));
+            setTargetTheta(Rotation2d.fromDegrees(35));
             autoAim = false;
             
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
             SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
 
-            if (timer.get() > 2) {
+            if (timer.get() > 3) {
                 autoState = AutoState.driveToHuman;
                 lastDesiredState = desiredState;
                 timer.reset();
@@ -385,8 +386,8 @@ public class AutonRight5Ball extends AutonCommader {
             hoodPosition = Shot.NEUTRAL;
             autoAim = false;
 
-            desiredState = new State(timer.get(), .075/3*timer.get(),  .075/3, new Pose2d(lastDesiredState.poseMeters.getX()-3.85/3*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()-.6/3*timer.get(),
+            desiredState = new State(timer.get(), .075/1.5*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX()-3.5/1.5*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()/1.5*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
             setTargetTheta(Rotation2d.fromDegrees(315));
@@ -394,12 +395,36 @@ public class AutonRight5Ball extends AutonCommader {
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
             SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
-            if (timer.get() > 3) {
-                autoState = AutoState.pauseAtHuman;
+            if (timer.get() > 1.5) {
+                autoState = AutoState.backIntoHuman;
                 lastDesiredState = desiredState;
                 timer.reset();
                 timer.start();
             }              
+        }
+        if(autoState == AutoState.backIntoHuman){
+            autonInProgress = true;
+            driveRequested = true;
+            deployRightIntake = true;
+            deployLeftIntake = false;
+            hoodPosition = Shot.NEUTRAL;
+            autoAim = false;
+
+            desiredState = new State(timer.get(), .075/.5*timer.get(),  .075/.5, new Pose2d(lastDesiredState.poseMeters.getX()-.7/.5*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()-.7/.5*timer.get(),
+                                                                    lastDesiredState.poseMeters.getRotation()), 
+                                                                    1000);
+            setTargetTheta(Rotation2d.fromDegrees(315));
+
+            SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
+            SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
+            SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
+            if (timer.get() > .5) {
+                autoState = AutoState.pauseAtHuman;
+                lastDesiredState = desiredState;
+                timer.reset();
+                timer.start();
+            }    
         }
         if (autoState == AutoState.pauseAtHuman) {
             autonInProgress = true;
@@ -416,8 +441,8 @@ public class AutonRight5Ball extends AutonCommader {
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
             SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
 
-            if (timer.get() > 2) {
-                autoState = AutoState.driveToFinal;
+            if (timer.get() > 3) {
+                autoState = AutoState.autoComplete;
                 lastDesiredState = desiredState;
                 timer.reset();
                 timer.start();
