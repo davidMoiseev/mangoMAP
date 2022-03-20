@@ -12,10 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.*;
 
-import java.io.ObjectOutputStream.PutField;
 import java.util.Random;
-
-import org.ejml.FancyPrint;
 
 public class Lights extends SubsystemBase{
     AddressableLED m_led;
@@ -27,7 +24,6 @@ public class Lights extends SubsystemBase{
 	private int red;
 	private int green;
 	private int blue;
-	private int disableCycles;
 
      public Lights(RobotState robotState){
        this.robotState = robotState;
