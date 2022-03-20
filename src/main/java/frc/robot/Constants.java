@@ -142,20 +142,26 @@ public final class Constants {
     public static final int LED_AUTON_B = 200;
 
     public static final int LED_DISABLE_R = 255;
-    public static final int LED_DISABLE_G = 100;
+    public static final int LED_DISABLE_G = 75;
     public static final int LED_DISABLE_B = 0;
 
-    public static final int LED_TELEOP_R = 255;
+    public static final int LED_TELEOP_R = 0;
     public static final int LED_TELEOP_G = 0;
-    public static final int LED_TELEOP_B = 0;
+    public static final int LED_TELEOP_B = 255;
 
     public static final int LED_AIMED_R = 0;
     public static final int LED_AIMED_G = 255;
     public static final int LED_AIMED_B = 0;
 
     public static final int LED_SHOOT_R = 0;
-    public static final int LED_SHOOT_G = 0;
-    public static final int LED_SHOOT_B = 255;
+    public static final int LED_SHOOT_G = 255;
+    public static final int LED_SHOOT_B = 0;
 
-    public static final double LED_SHOOTER_SPEED_THRESH = 250.0;
+    public static final int LED_DETECT_R = 255;
+    public static final int LED_DETECT_G = 0;
+    public static final int LED_DETECT_B = 175;
+
+    public static final double LED_SHOOTER_SPEED_THRESH = 50.0;
+
+    public static final boolean FANCY_DISABLE = true;
 }

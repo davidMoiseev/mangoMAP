@@ -117,6 +117,7 @@ public class Robot extends TimedRobot {
     drivetrain.zeroActuators();
     ballSupervisor.zeroSensor();
     pigeon.initializeAuton(selectedAuton);
+    lights.setLightsAutonInt();
     lights.setLightsAuton();
 
     // drivetrain.setBrakeMode(true);
