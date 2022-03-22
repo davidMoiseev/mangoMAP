@@ -12,7 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static boolean REAL_BOT = true;
-    public static boolean COMP_BOT = false;
+    public static boolean COMP_BOT = true;
 
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
