@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   private Limelight limelight;
   XboxController driver = new XboxController(0);
   private AutonCommader selectedAuton;
-  private String autonSelection;
+  private double autonSelection;
   private Object autonSelectionPrev;
   private Lights lights;
 
@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 
-    autonSelection = "RIGHT_5"; // RIGHT_RED, RIGHT_BLUE, LEFT, RIGHT_5
+    autonSelection = 0; // RIGHT_RED, RIGHT_BLUE, LEFT, RIGHT_5
   }
 
   @Override
@@ -92,29 +92,33 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
     lights.setLightsDisable();
     drivetrain.disabledAction(robotState);
-    SmartDashboard.getString("AutonSelection(LeftOrRight)", autonSelection);
+    // SmartDashboard.getString("AutonSelection(LeftOrRight)", autonSelection);
     
     drivetrain.zeroActuators();
+  }
+
+  @Override
+  public void autonomousInit() {
+
+    autonSelection = SmartDashboard.getNumber("autonSelection", 0);
 
     // RIGHT_RED, RIGHT_BLUE, LEFT
-    if (autonSelection == "RIGHT_RED") {
+    if (autonSelection == 0) {
       selectedAuton = new AutonRightRed(robotState);
       // SmartDashboard.putString("AutonSelected", selectedAuton.getName());
-    } else if (autonSelection.equals("RIGHT_BLUE")) {
+    } else if (autonSelection == 1) {
       selectedAuton = new AutonRightBlue(robotState);
       // SmartDashboard.putString("AutonSelected", selectedAuton.getName());
-    } else if (autonSelection == "LEFT") {
+    } else if (autonSelection == 2) {
       selectedAuton = new AutonLeft(robotState);
-    } else if (autonSelection == "RIGHT_5"){
+    } else if (autonSelection == 3){
       selectedAuton = new AutonRight5Ball(robotState);
     } else {
       // SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
       selectedAuton = new AutonRightBlue(robotState);
     }
-  }
 
-  @Override
-  public void autonomousInit() {
+
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
     selectedAuton.initializeAuton();
     drivetrain.initializeAuton(selectedAuton);
@@ -129,13 +133,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
-    if (autonSelection == "RIGHT_RED") {
+    if (autonSelection == 0) {
       ((AutonRightRed)selectedAuton).updateCommand(pigeon, drivetrain);
-    } else if (autonSelection.equals("RIGHT_BLUE")) {
+    } else if (autonSelection == 1) {
       ((AutonRightBlue)selectedAuton).updateCommand(pigeon, drivetrain);
-    } else if (autonSelection == "LEFT") {
+    } else if (autonSelection == 2) {
       ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
-    } else if (autonSelection == "RIGHT_5"){
+    } else if (autonSelection == 3){
       ((AutonRight5Ball)selectedAuton).updateCommand(pigeon, drivetrain);
     } else {
       ((AutonRightBlue)selectedAuton).updateCommand(pigeon, drivetrain);
