@@ -28,7 +28,7 @@ public class Lights extends SubsystemBase{
      public Lights(RobotState robotState){
        this.robotState = robotState;
        m_led = new AddressableLED(0);
-       m_LedBuffer = new AddressableLEDBuffer(24);
+       m_LedBuffer = new AddressableLEDBuffer(26);
        m_led.setLength(m_LedBuffer.getLength());
        for (int i = 0; i < m_LedBuffer.getLength(); i++) {
            m_LedBuffer.setRGB(i, 0, 0, 0);
@@ -103,7 +103,7 @@ public class Lights extends SubsystemBase{
 			int redDev = redPM.nextInt(upperboundR);
 	
 			Random randLight = new Random();
-			int maxLight = 24;//number of addressable leds
+			int maxLight = 26;//number of addressable leds
 			int lightDev = randLight.nextInt(maxLight);
 
 			m_LedBuffer.setRGB(lightDev, (255 - (redDev * 4)), (25 + (greenDev * 4)), 0);
@@ -122,46 +122,56 @@ public class Lights extends SubsystemBase{
 		Alliance team = DriverStation.getAlliance();
 		autonCycles++;
 
+		boolean runFancyDisable = SmartDashboard.getBoolean("fancyDisable", true);
+
+		if (runFancyDisable) {
 			if (team == Alliance.Blue) {
-					red = 0;
-					green = 0;
-					blue = 255;
-				} else if (team == Alliance.Red) {
-					red = 255;
-					green = 0;
-					blue = 0;
+				red = 0;
+				green = 0;
+				blue = 255;
+			} else if (team == Alliance.Red) {
+				red = 255;
+				green = 0;
+				blue = 0;
+			}
+			if (autonCycles > 46) {
+				if (team == Alliance.Red) {
+					green = 50;
 				}
-				if (autonCycles > 46) {
-					if (team == Alliance.Red) {
-						green = 50;
-					}
-					if (team == Alliance.Blue) {
-						green = 200;
-					}
+				if (team == Alliance.Blue) {
+					green = 200;
 				}
-				if (autonCycles > 91) {
-					autonCycles = 0;
-				}
-			
+			}
+			if (autonCycles > 91) {
+				autonCycles = 0;
+			}
 		
-		if (autonJ < 0) {
-			autonJ = 46;
-		}
-		if (autonI > 46) {
-			autonI = 0;
-		}
+	
+	if (autonJ < 0) {
+		autonJ = 50;
+	}
+	if (autonI > 50) {
+		autonI = 0;
+	}
 
-		m_LedBuffer.setRGB((autonJ/2), red, green, blue);
+	m_LedBuffer.setRGB((autonJ/2), red, green, blue);
+	m_led.setData(m_LedBuffer);
+	m_LedBuffer.setRGB((autonI/2), red, green, blue);
+	m_led.setData(m_LedBuffer);
+	autonI++;
+	autonJ--;
+
+	SmartDashboard.putNumber("red", red);
+	SmartDashboard.putNumber("green", green);
+	SmartDashboard.putNumber("blue", blue);
+	SmartDashboard.putNumber("autonCycles", autonCycles);
+		} else {
+			for (int i = 0; i < m_LedBuffer.getLength(); i++) {
+				m_LedBuffer.setRGB(i, LED_AUTON_R, LED_AUTON_G, LED_AUTON_B);
+		}
 		m_led.setData(m_LedBuffer);
-    	m_LedBuffer.setRGB((autonI/2), red, green, blue);
-        m_led.setData(m_LedBuffer);
-		autonI++;
-		autonJ--;
+		}
 
-		SmartDashboard.putNumber("red", red);
-		SmartDashboard.putNumber("green", green);
-		SmartDashboard.putNumber("blue", blue);
-		SmartDashboard.putNumber("autonCycles", autonCycles);
     }
 
     public void setLightsTeleop() {
