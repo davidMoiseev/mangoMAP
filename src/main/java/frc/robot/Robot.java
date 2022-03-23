@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autons.AutonLeft;
+import frc.robot.Autons.AutonLeft4Ball;
 import frc.robot.Autons.AutonRight5Ball;
 import frc.robot.Autons.AutonRight5Ballold;
 import frc.robot.Autons.AutonRightBlue;
@@ -113,6 +114,8 @@ public class Robot extends TimedRobot {
       selectedAuton = new AutonLeft(robotState);
     } else if (autonSelection == 3){
       selectedAuton = new AutonRight5Ball(robotState);
+    } else if (autonSelection == 4){
+      selectedAuton = new AutonLeft4Ball(robotState);
     } else {
       // SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
       selectedAuton = new AutonRightBlue(robotState);
@@ -141,6 +144,8 @@ public class Robot extends TimedRobot {
       ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 3){
       ((AutonRight5Ball)selectedAuton).updateCommand(pigeon, drivetrain);
+    } else if (autonSelection == 4){
+      ((AutonLeft4Ball)selectedAuton).updateCommand(pigeon, drivetrain);
     } else {
       ((AutonRightBlue)selectedAuton).updateCommand(pigeon, drivetrain);
     }
