@@ -43,22 +43,22 @@ public final class Constants {
     public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = REAL_BOT ? 1 : 1;
     public static final int FRONT_LEFT_MODULE_STEER_MOTOR = REAL_BOT ? 2 : 3;
     public static final int FRONT_LEFT_MODULE_STEER_ENCODER = REAL_BOT ? 16 : 13;
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(197.666015625) : -Math.toRadians(219.55078125) : -Math.toRadians(21.97265625);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(198.017578125) : -Math.toRadians(219.55078125) : -Math.toRadians(21.97265625);
 
     public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = REAL_BOT ? 3 : 5;
     public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = REAL_BOT ? 4 : 7;
     public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = REAL_BOT ? 17 : 17;
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(137.109375) : -Math.toRadians(181.93359375) : -Math.toRadians(58.71093750000001);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(137.63671875) : -Math.toRadians(181.93359375) : -Math.toRadians(58.71093750000001);
 
     public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = REAL_BOT ? 5 : 2;
     public static final int BACK_LEFT_MODULE_STEER_MOTOR = REAL_BOT ? 6 : 4;
     public static final int BACK_LEFT_MODULE_STEER_ENCODER = REAL_BOT ? 18 : 14;
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(137.724609375) : -Math.toRadians(325.634765625) : -Math.toRadians(309.27886962890625);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(127.705078125) : -Math.toRadians(325.634765625) : -Math.toRadians(309.27886962890625);
 
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = REAL_BOT ? 7 : 6;
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = REAL_BOT ? 8 : 8;
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = REAL_BOT ? 19 : 18;
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(172.001953125) : -Math.toRadians(348.92578125) : -Math.toRadians(212.2890625);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(172.265625) : -Math.toRadians(348.92578125) : -Math.toRadians(212.2890625);
 
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;

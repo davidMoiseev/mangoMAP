@@ -306,8 +306,11 @@ public class Drivetrain extends SubsystemBase {
                 poseExstimator.update(robotState.getRotation2d(), states);
 
                 SmartDashboard.putNumber("Robot State Theta", robotState.getRotation2d().getDegrees());
+                HotLogger.Log("Robot State Theta", robotState.getRotation2d().getDegrees());
                 SmartDashboard.putNumber("poseX", poseExstimator.getEstimatedPosition().getX());
+                HotLogger.Log("poseX", poseExstimator.getEstimatedPosition().getX());
                 SmartDashboard.putNumber("poseY", poseExstimator.getEstimatedPosition().getY());
+                HotLogger.Log("poseY", poseExstimator.getEstimatedPosition().getY());
                 SmartDashboard.putNumber("poseTheta", poseExstimator.getEstimatedPosition().getRotation().getDegrees());
         }
 

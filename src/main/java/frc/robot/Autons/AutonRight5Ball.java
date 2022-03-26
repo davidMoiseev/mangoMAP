@@ -7,6 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.revrobotics.SparkMaxRelativeEncoder;
 
+import org.hotutilites.hotlogger.HotLogger;
+
 import edu.wpi.first.hal.HAL.SimPeriodicAfterCallback;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -38,7 +40,8 @@ public class AutonRight5Ball extends AutonCommader {
         driveToWall,
         pickUpBall,
         pathToSecondBall_1,
-        autoComplete, pathToSecondBall_2, pauseAtWall, pauseAtBall2, driveToHuman, finalShot, pauseAtHuman, driveToFinal, backIntoHuman
+        autoComplete, pathToSecondBall_2, pauseAtWall, pauseAtBall2, driveToHuman, finalShot, pauseAtHuman, driveToFinal, backIntoHuman,
+        resetDrivetrain, startTimer
     }
 
     private AutoState autoState; 
@@ -78,7 +81,7 @@ public class AutonRight5Ball extends AutonCommader {
 
     public AutonRight5Ball(RobotState robotState) {
         super(robotState);
-        autoState = AutoState.prepareToShootInitialBall;
+        autoState = AutoState.startTimer;
         timer = new Timer();
 
         trajectoryStartToFirstBall = readTrajectoryFile(AutonRightConstants.trajectoryJSON_FileName_ToWall);
@@ -249,16 +252,53 @@ public class AutonRight5Ball extends AutonCommader {
         //         autoState = AutoState.driveToWall;
         //     }
         // }
-        if (autoState == AutoState.prepareToShootInitialBall) {
-            autonInProgress = true;
-            autoAim = false;
-            driveRequested = false;
-            hoodPosition = Shot.WALL;
-            pigeon.initializeAuton(this);
-            drivetrain.initializeAuton(this);
-            autoState = AutoState.driveToWall;
+        // if (autoState == AutoState.prepareToShootInitialBall) {
+        //     autonInProgress = true;
+        //     autoAim = false;
+        //     driveRequested = false;
+        //     hoodPosition = Shot.WALL;
+        //     pigeon.initializeAuton(this);
+        //     autoState = AutoState.resetDrivetrain;
+        // }
+        // if(autoState == AutoState.resetDrivetrain){
+        //     autonInProgress = true;
+        //     autoAim = false;
+        //     driveRequested = false;
+        //     hoodPosition = Shot.WALL;
+        //     drivetrain.initializeAuton(this);
+        //     autoState = AutoState.driveToWall;
+        //     timer.reset();
+        //     timer.start();
+        // }\
+        if(autoState == AutoState.startTimer){
+            autoState = AutoState.prepareToShootInitialBall;
             timer.reset();
             timer.start();
+        }
+        if (autoState == AutoState.prepareToShootInitialBall) {
+            autonInProgress = true;
+            hoodPosition = Shot.WALL;
+            pigeon.initializeAuton(this);
+            autoAim = false;
+            if(timer.get() > .25) {
+                autoState = AutoState.shootInitialBall;
+                timer.reset();
+                timer.start();
+            }
+        }
+        if (autoState == AutoState.shootInitialBall) {
+            autonInProgress = true;
+            driveRequested = false;
+            hoodPosition = Shot.WALL;
+            // shoot = true;
+            autoAim = false;
+            
+            if(timer.get() > .25) { // .5
+                timer.reset();
+                timer.start();
+                drivetrain.initializeAuton(this);
+                autoState = AutoState.driveToWall;
+            }
         }
         if (autoState == AutoState.driveToWall) {
             autonInProgress = true;
@@ -495,12 +535,17 @@ public class AutonRight5Ball extends AutonCommader {
             hoodPosition = Shot.NEUTRAL;
         }
         SmartDashboard.putString("AutoState", ""+autoState);
+        HotLogger.Log("AutoState", ""+autoState);
 
-
-
+        // log();
     }
 
 
+    // public void log(){
+    //     HotLogger.Log("TargetX", desiredState.poseMeters.getTranslation().getX());
+    //     HotLogger.Log("TargetY", desiredState.poseMeters.getTranslation().getY());
+    //     HotLogger.Log("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
+    // }
 
 
     @Override
