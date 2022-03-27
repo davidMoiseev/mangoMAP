@@ -13,12 +13,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autons.AutonLeft;
 import frc.robot.Autons.AutonLeft4Ball;
 import frc.robot.Autons.AutonLeftPlusBlue;
+import frc.robot.Autons.AutonPost2Ball;
 import frc.robot.Autons.AutonRight5Ball;
 import frc.robot.Autons.AutonRight5Ballold;
 import frc.robot.Autons.AutonRightBlue;
 import frc.robot.Autons.AutonRightRed;
 import frc.robot.sensors.Limelight;
 import frc.robot.subsystems.Lights;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
@@ -42,6 +44,9 @@ public class Robot extends TimedRobot {
   private double autonSelection;
   private Object autonSelectionPrev;
   private Lights lights;
+  private AutonPost2Ball post2Ball;
+
+  public Timer timer;
 
   @Override
   public void robotInit() {
@@ -62,7 +67,11 @@ public class Robot extends TimedRobot {
     climber = new Climber(robotState, hub);
     limelight = new Limelight(robotState);
     lights = new Lights(robotState);
+
+    timer = new Timer();
     
+    post2Ball = new AutonPost2Ball(robotState);
+
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 
@@ -114,7 +123,7 @@ public class Robot extends TimedRobot {
       // SmartDashboard.putString("AutonSelected", selectedAuton.getName());
     } else if (autonSelection == 2) {
       // selectedAuton = new AutonLeft(robotState);
-      selectedAuton = new AutonLeftPlusBlue(robotState);
+      selectedAuton = new AutonLeft(robotState);
     } else if (autonSelection == 3){
       selectedAuton = new AutonRight5Ball(robotState);
     } else if (autonSelection == 4){
@@ -144,7 +153,7 @@ public class Robot extends TimedRobot {
       ((AutonRightBlue)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 2) {
       // ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
-      ((AutonLeftPlusBlue)selectedAuton).updateCommand(pigeon, drivetrain);
+      ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 3){
       ((AutonRight5Ball)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 4){
@@ -159,6 +168,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    timer.reset();
+    timer.start();
     //pigeon.zeroSensor();
     ballSupervisor.zeroSensor();
     drivetrain.zeroActuators();

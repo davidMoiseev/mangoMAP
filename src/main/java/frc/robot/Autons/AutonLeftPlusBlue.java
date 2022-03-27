@@ -424,13 +424,13 @@ public class AutonLeftPlusBlue extends AutonCommader {
             autonInProgress = true;
             driveRequested = true;
             deployRightIntake = false;
-            deployLeftIntake = true;
+            deployLeftIntake = false;
             hoodPosition = Shot.FENDER;
             autoAim = false;
             shoot = false;
 
             desiredState = new State(timer.get(), .6/1*timer.get(), .6/1, new Pose2d(lastDesiredState.poseMeters.getX()+.08/1*timer.get(),
-            lastDesiredState.poseMeters.getY()+.5/1*timer.get(),
+            lastDesiredState.poseMeters.getY()+.7/1*timer.get(),
             lastDesiredState.poseMeters.getRotation()), 
             1000);
 
@@ -445,7 +445,7 @@ public class AutonLeftPlusBlue extends AutonCommader {
         }
         if (autoState == AutoState.autoComplete) {
             deployRightIntake = false;
-            deployLeftIntake = true;
+            deployLeftIntake = false;
             autoAim = false;
             autonInProgress = false;
             driveRequested = false;
