@@ -100,7 +100,6 @@ public class Lights extends SubsystemBase{
 		m_led.setData(m_LedBuffer);	
 	}
 
-
     public void setLightsAuton() {
 
 		for (int i = 0; i < m_LedBuffer.getLength(); i++) {
