@@ -18,12 +18,8 @@ public class Lights extends SubsystemBase{
     AddressableLED m_led;
     AddressableLEDBuffer m_LedBuffer;
     private RobotState robotState;
-	private int autonI;
-	private int autonJ;
 	private int autonCycles;
-	private int red;
-	private int green;
-	private int blue;
+	private Alliance team;
 
      public Lights(RobotState robotState){
        this.robotState = robotState;
@@ -74,7 +70,7 @@ public class Lights extends SubsystemBase{
     }
 
     public void setLightsDisable() {
-
+		autonCycles = 0;
 		boolean runFancyDisable = SmartDashboard.getBoolean("fancyDisable", true);
 
 		if (runFancyDisable) {
@@ -112,66 +108,25 @@ public class Lights extends SubsystemBase{
 		m_led.setData(m_LedBuffer);	
 	}
 
-	public void setLightsAutonInt() {
-		autonI = 0;
-		autonJ = 0;
-		autonCycles = 0;
-	}
 
     public void setLightsAuton() {
-		Alliance team = DriverStation.getAlliance();
-		autonCycles++;
 
-		boolean runFancyDisable = SmartDashboard.getBoolean("fancyDisable", true);
-
-		if (runFancyDisable) {
-			if (team == Alliance.Blue) {
-				red = 0;
-				green = 0;
-				blue = 255;
-			} else if (team == Alliance.Red) {
-				red = 255;
-				green = 0;
-				blue = 0;
-			}
-			if (autonCycles > 46) {
-				if (team == Alliance.Red) {
-					green = 50;
-				}
-				if (team == Alliance.Blue) {
-					green = 200;
-				}
-			}
-			if (autonCycles > 91) {
-				autonCycles = 0;
-			}
+		if (autonCycles == 0) {
+			team = DriverStation.getAlliance();
+			autonCycles = 1;
+		}
 		
-	
-	if (autonJ < 0) {
-		autonJ = 50;
-	}
-	if (autonI > 50) {
-		autonI = 0;
-	}
-
-	m_LedBuffer.setRGB((autonJ/2), red, green, blue);
-	m_led.setData(m_LedBuffer);
-	m_LedBuffer.setRGB((autonI/2), red, green, blue);
-	m_led.setData(m_LedBuffer);
-	autonI++;
-	autonJ--;
-
-	SmartDashboard.putNumber("red", red);
-	SmartDashboard.putNumber("green", green);
-	SmartDashboard.putNumber("blue", blue);
-	SmartDashboard.putNumber("autonCycles", autonCycles);
-		} else {
+		if (team == Alliance.Blue) {
 			for (int i = 0; i < m_LedBuffer.getLength(); i++) {
-				m_LedBuffer.setRGB(i, LED_AUTON_R, LED_AUTON_G, LED_AUTON_B);
+				m_LedBuffer.setRGB(i, 0, 150, 255);
+			}
+			m_led.setData(m_LedBuffer);
+		} else if (team == Alliance.Red) {
+			for (int i = 0; i < m_LedBuffer.getLength(); i++) {
+				m_LedBuffer.setRGB(i, 255, 100, 0);
+			}
+			m_led.setData(m_LedBuffer);
 		}
-		m_led.setData(m_LedBuffer);
-		}
-
     }
 
     public void setLightsTeleop() {
@@ -220,7 +175,7 @@ public class Lights extends SubsystemBase{
 			m_led.setData(m_LedBuffer);
 		
 		}  else if (shooterActive == false)  {
-		 	for (int i = 0; i < m_LedBuffer.getLength(); i++) { // if shooter isnt on, then turn to blue teleop lights
+		 	for (int i = 0; i < m_LedBuffer.getLength(); i++) { // if shooter isnt on, then turn to teleop lights
 		 		m_LedBuffer.setRGB(i, LED_TELEOP_R, LED_TELEOP_G, LED_TELEOP_B);
 		 	}
 		 	m_led.setData(m_LedBuffer);
