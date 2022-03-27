@@ -28,7 +28,7 @@ import frc.robot.sensors.Pigeon;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter.Shot;
 
-public class AutonTest extends AutonCommader {
+public class AutonPost2Ball extends AutonCommader {
 
     public static final String name = "LEFT";
 
@@ -74,10 +74,9 @@ public class AutonTest extends AutonCommader {
 
     private boolean deployLeftIntake = false;
 
-
     private boolean autoAim;
 
-    public AutonTest(RobotState robotState) {
+    public AutonPost2Ball(RobotState robotState) {
         super(robotState);
         autoState = AutoState.prepareToShootInitialBall;
         timer = new Timer();
