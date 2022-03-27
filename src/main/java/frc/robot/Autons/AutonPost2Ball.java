@@ -39,7 +39,8 @@ public class AutonPost2Ball extends AutonCommader {
         pickUpBall,
         autoComplete, 
         returnToStart, 
-        finalShot
+        finalShot,
+        startTimer
     }
 
     private AutoState autoState; 
@@ -78,7 +79,7 @@ public class AutonPost2Ball extends AutonCommader {
 
     public AutonPost2Ball(RobotState robotState) {
         super(robotState);
-        autoState = AutoState.prepareToShootInitialBall;
+        autoState = AutoState.startTimer;
         timer = new Timer();
 
         trajectoryStartToFirstBall = readTrajectoryFile(AutonRightConstants.trajectoryJSON_FileName_ToWall);
@@ -221,12 +222,17 @@ public class AutonPost2Ball extends AutonCommader {
     }
 
     public void updateCommand(Pigeon pigeon, Drivetrain drivetrain) {
+        if(autoState == AutoState.startTimer){
+            autoState = AutoState.prepareToShootInitialBall;
+            timer.reset();
+            timer.start();
+        }
         if (autoState == AutoState.prepareToShootInitialBall) {
             autonInProgress = true;
-            hoodPosition = Shot.AUTO;
+            hoodPosition = Shot.WALL;
             pigeon.initializeAuton(this);
             autoAim = false;
-            if(robotState.isShooterReady()) {
+            if(timer.get() > .25) {
                 autoState = AutoState.shootInitialBall;
                 timer.reset();
                 timer.start();
@@ -235,83 +241,42 @@ public class AutonPost2Ball extends AutonCommader {
         if (autoState == AutoState.shootInitialBall) {
             autonInProgress = true;
             driveRequested = false;
-            hoodPosition = Shot.AUTO2;
-            shoot = true;
+            hoodPosition = Shot.WALL;
+            // shoot = true;
             autoAim = false;
             
-            if(timer.get() > .5) { // .5
+            if(timer.get() > .25) { // .5
                 timer.reset();
                 timer.start();
                 drivetrain.initializeAuton(this);
-                autoState = AutoState.driveToBall;        
+                autoState = AutoState.driveToBall;
             }
         }
-
         if (autoState == AutoState.driveToBall){
             autonInProgress = true;
             driveRequested = true;
-            deployRightIntake = true;
-            deployLeftIntake = false;
-            hoodPosition = Shot.NEUTRAL;
+            deployRightIntake = false;
+            deployLeftIntake = true;
+            hoodPosition = Shot.WALL;
             autoAim = false;
             shoot = false;
-            desiredState = new State(timer.get(), .6/2*timer.get(), .6/2, new Pose2d(lastDesiredState.poseMeters.getX()-2/2*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()+1.1/2*timer.get(),
+            desiredState = new State(timer.get(), .6/1*timer.get(), .6/1, new Pose2d(lastDesiredState.poseMeters.getX()+1/1*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()+.08/1*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
             
-            setTargetTheta(Rotation2d.fromDegrees(275));
+            setTargetTheta(Rotation2d.fromDegrees(270));
             
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
             SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
 
-            if (timer.get() > 2) {
+            if (timer.get() > 1) {
                 lastDesiredState = desiredState;
-                autoState = AutoState.returnToStart;
+                autoState = AutoState.autoComplete;
                 timer.reset();
                 timer.start();
             }                  
-        }
-        if (autoState == AutoState.returnToStart) {
-            autonInProgress = true;
-            driveRequested = true;
-            deployRightIntake = false;
-            deployLeftIntake = false;
-            hoodPosition = Shot.AUTO2;
-            autoAim = false;
-
-            SmartDashboard.putNumber("LastTargetX", lastDesiredState.poseMeters.getTranslation().getX());
-            SmartDashboard.putNumber("LastTargetY", lastDesiredState.poseMeters.getTranslation().getY());
-            SmartDashboard.putNumber("LastTargetTheta", lastDesiredState.poseMeters.getRotation().getDegrees());
-
-            desiredState = new State(timer.get(), .075/1.5*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX() + (startState.poseMeters.getX() - lastDesiredState.poseMeters.getX())/1.5*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY() + (startState.poseMeters.getY() - lastDesiredState.poseMeters.getY())/1.5*timer.get(),
-                                                                    lastDesiredState.poseMeters.getRotation()), 
-                                                                    1000);
-            setTargetTheta(Rotation2d.fromDegrees(315));
-
-            SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
-            SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
-            SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
-            if (timer.get() > 1.5) {
-                autoState = AutoState.finalShot;
-                lastDesiredState = desiredState;
-                timer.reset();
-                timer.start();
-            }              
-        }
-        if(autoState == AutoState.finalShot){
-            autonInProgress = true;
-            driveRequested = false;
-            autoAim = false;
-            shoot = true;
-            
-            if(timer.get() > 3) {
-                timer.reset();
-                timer.start();
-                autoState = AutoState.autoComplete;        
-            }
         }
         if (autoState == AutoState.autoComplete) {
             deployRightIntake = false;
