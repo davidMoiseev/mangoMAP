@@ -380,7 +380,7 @@ public class AutonRight5Ball extends AutonCommader {
             shoot = true;
 
             desiredState = new State(timer.get(), .075/1*timer.get(),  .075/1, new Pose2d(lastDesiredState.poseMeters.getX()-.75/1*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()+.65/1*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()+.7/1*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
 
@@ -450,7 +450,7 @@ public class AutonRight5Ball extends AutonCommader {
             hoodPosition = Shot.WALL;
             autoAim = false;
 
-            desiredState = new State(timer.get(), .075/.5*timer.get(),  .075/.5, new Pose2d(lastDesiredState.poseMeters.getX()-.55/.5*timer.get(),
+            desiredState = new State(timer.get(), .075/.5*timer.get(),  .075/.5, new Pose2d(lastDesiredState.poseMeters.getX()-.5/.5*timer.get(),
                                                                     lastDesiredState.poseMeters.getY()-.2/.5*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);

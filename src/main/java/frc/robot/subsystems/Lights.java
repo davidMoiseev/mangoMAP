@@ -108,12 +108,11 @@ public class Lights extends SubsystemBase{
 		m_led.setData(m_LedBuffer);	
 	}
 
-
     public void setLightsAuton() {
 
-		if (autonCycles == 0) {
+		if (autonCycles < 10) {
 			team = DriverStation.getAlliance();
-			autonCycles = 1;
+			autonCycles++;
 		}
 		
 		if (team == Alliance.Blue) {
