@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autons.AutonLeft;
 import frc.robot.Autons.AutonLeft4Ball;
+import frc.robot.Autons.AutonLeftPlusBlue;
 import frc.robot.Autons.AutonRight5Ball;
 import frc.robot.Autons.AutonRight5Ballold;
 import frc.robot.Autons.AutonRightBlue;
@@ -40,7 +41,7 @@ public class Robot extends TimedRobot {
   private AutonCommader selectedAuton;
   private double autonSelection;
   private Object autonSelectionPrev;
-  private Lights lights;
+  // private Lights lights;
 
   @Override
   public void robotInit() {
@@ -60,7 +61,7 @@ public class Robot extends TimedRobot {
     ballSupervisor = new BallSupervisor(robotState, hub);
     climber = new Climber(robotState, hub);
     limelight = new Limelight(robotState);
-    lights = new Lights(robotState);
+    // lights = new Lights(robotState);
     
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
@@ -79,12 +80,12 @@ public class Robot extends TimedRobot {
     drivetrain.logData();
     ballSupervisor.logData();
     climber.logData();
-    lights.logData();
+    // lights.logData();
   }
 
   @Override
   public void disabledInit() {
-    lights.setLightsDisable();
+    // lights.setLightsDisable();
     drivetrain.zeroActuators();
     hub.disableCompressor();
     // drivetrain.setBrakeMode(false);
@@ -92,7 +93,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    lights.setLightsDisable();
+    // lights.setLightsDisable();
     drivetrain.disabledAction(robotState);
     // SmartDashboard.getString("AutonSelection(LeftOrRight)", autonSelection);
     
@@ -112,7 +113,8 @@ public class Robot extends TimedRobot {
       selectedAuton = new AutonRightBlue(robotState);
       // SmartDashboard.putString("AutonSelected", selectedAuton.getName());
     } else if (autonSelection == 2) {
-      selectedAuton = new AutonLeft(robotState);
+      // selectedAuton = new AutonLeft(robotState);
+      selectedAuton = new AutonLeftPlusBlue(robotState);
     } else if (autonSelection == 3){
       selectedAuton = new AutonRight5Ball(robotState);
     } else if (autonSelection == 4){
@@ -129,7 +131,7 @@ public class Robot extends TimedRobot {
     drivetrain.zeroActuators();
     ballSupervisor.zeroSensor();
     pigeon.initializeAuton(selectedAuton);
-    lights.setLightsAuton();
+    // lights.setLightsAuton();
 
     // drivetrain.setBrakeMode(true);
   }
@@ -141,7 +143,8 @@ public class Robot extends TimedRobot {
     } else if (autonSelection == 1) {
       ((AutonRightBlue)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 2) {
-      ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
+      // ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
+      ((AutonLeftPlusBlue)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 3){
       ((AutonRight5Ball)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 4){
@@ -151,7 +154,7 @@ public class Robot extends TimedRobot {
     }
     drivetrain.autonenabledAction(selectedAuton);
     ballSupervisor.enabledAction(robotState, selectedAuton);
-    lights.setLightsAuton();
+    // lights.setLightsAuton();
   }
 
   @Override
@@ -161,7 +164,7 @@ public class Robot extends TimedRobot {
     drivetrain.zeroActuators();
     drivetrain.zeroSensor();
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
-    lights.setLightsTeleop();
+    // lights.setLightsTeleop();
   }
 
   @Override
@@ -171,7 +174,7 @@ public class Robot extends TimedRobot {
     ballSupervisor.enabledAction(robotState, teleopCommander);
     climber.enabledAction(robotState, teleopCommander);
     SmartDashboard.putBoolean("Button A", driver.getAButton());
-    lights.setLightsTeleop();
+    // lights.setLightsTeleop();
   }
 
 }
