@@ -71,16 +71,8 @@ public class Lights extends SubsystemBase{
 
     public void setLightsDisable() {
 		autonCycles = 0;
-		boolean runFancyDisable = SmartDashboard.getBoolean("fancyDisable", true);
 
-		if (runFancyDisable) {
-			fancyDisable();
-		} else {
-			for (int i = 0; i < m_LedBuffer.getLength(); i++) {
-            	m_LedBuffer.setRGB(i, LED_DISABLE_R, LED_DISABLE_G, LED_DISABLE_B);
-			}
-			m_led.setData(m_LedBuffer);	
-		}
+		fancyDisable();
     }
 
 	private void fancyDisable() {
@@ -111,22 +103,10 @@ public class Lights extends SubsystemBase{
 
     public void setLightsAuton() {
 
-		if (autonCycles == 0) {
-			team = DriverStation.getAlliance();
-			autonCycles = 1;
+		for (int i = 0; i < m_LedBuffer.getLength(); i++) {
+			m_LedBuffer.setRGB(i, LED_AUTON_R, LED_AUTON_G, LED_AUTON_B);
 		}
-		
-		if (team == Alliance.Blue) {
-			for (int i = 0; i < m_LedBuffer.getLength(); i++) {
-				m_LedBuffer.setRGB(i, 0, 150, 255);
-			}
-			m_led.setData(m_LedBuffer);
-		} else if (team == Alliance.Red) {
-			for (int i = 0; i < m_LedBuffer.getLength(); i++) {
-				m_LedBuffer.setRGB(i, 255, 100, 0);
-			}
-			m_led.setData(m_LedBuffer);
-		}
+		m_led.setData(m_LedBuffer);
     }
 
     public void setLightsTeleop() {
