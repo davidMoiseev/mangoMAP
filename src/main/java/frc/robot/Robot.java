@@ -48,8 +48,9 @@ public class Robot extends TimedRobot {
         "Right Front Absolute", "Right Front Assumed",
         "Left Rear Absolute", "Left Rear Assumed",
         "Right Rear Absolute", "Right Rear Assumed", "ClimberCmd",
-        "LeftIntakeCmd", "RightIntakeCmd", "LeftShooterSpeed", "RightShooterSpeed", "TargetSpeed",
-        "climberState", "actualPosTicks", "actualPosDeg", "targetPosDeg", "targetPosTicks");
+        "LeftIntakeCmd", "RightIntakeCmd", "LeftShooterSpeed", "RightShooterSpeed", "targetRPM",
+        "climberState", "actualPosTicks", "actualPosDeg", "targetPosDeg", "targetPosTicks",
+        "shooterError", "hoodPosition", "TargetX", "TargetY", "TargetTheta", "Robot State Theta", "poseX", "poseY");
 
     robotState = new RobotState();
     hub = new PneumaticHub(PNEUMATIC_HUB);
@@ -173,4 +174,5 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Button A", driver.getAButton());
     lights.setLightsTeleop();
   }
+
 }

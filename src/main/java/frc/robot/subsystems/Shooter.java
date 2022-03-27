@@ -38,6 +38,7 @@ public class Shooter extends SubsystemBase{
     double FF = 0;
     double targetVelocity_UnitsPer100ms;
     double RPM;
+    double shooterError = 0;
     private double shooterLatchTimer;
     private boolean shooterLatch;
     private int shooterSpeedTolerance = 9000;
@@ -181,6 +182,8 @@ public class Shooter extends SubsystemBase{
             SmartDashboard.putNumber("RPM", RPM);
             SmartDashboard.putBoolean("shooterReady", robotState.isShooterReady());
             SmartDashboard.putNumber("shooterLatchTimer",shooterLatchTimer);
+            shooterError = leftShooterMotor.getClosedLoopError();
+
     }
 
     @Override
@@ -205,6 +208,7 @@ public class Shooter extends SubsystemBase{
         SmartDashboard.putNumber("TargetRPM", targetRPM); 
         HotLogger.Log("hoodPosition", ""+hoodPosition);
         SmartDashboard.putString("hoodPosition", ""+hoodPosition); 
+        HotLogger.Log("shooterError", shooterError);
     }
 
     enum Piston {
