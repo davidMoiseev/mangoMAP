@@ -95,28 +95,26 @@ public final class Constants {
     public static final int CLIMBER_EXTEND_REV_SOLENOID = 6;
     public static final int CLIMBER_RELEASE_SOLENOID = 8;
     public static final double MINIMUM_PRESSURE = 90.0;
-    public static final double MAXIMUM_PRESSURE = 110.0;
+    public static final double MAXIMUM_PRESSURE = 115.0;
     public static final double CLIMBER_P = 0.2;
     public static final double CLIMBER_I = 0.01;
     public static final double CLIMBER_D = 0.0;
     public static final double CLIMBER_F = 0.2;
     public static final double CLIMBER_IZONE = 0.0;
-    public static final double CLIMBER_CRUISE_VELOCITY = 15000; // 19000.0 / 1.5
-    public static final double CLIMBER_CRUISE_ACCELERATION = 15000; // 15000.0 / 1.5
+    public static final double CLIMBER_CRUISE_VELOCITY = 19000.0 / 1.5; // 19000.0
+    public static final double CLIMBER_CRUISE_ACCELERATION = 15000.0 / 1.5; // 15000.0
     public static final double CLIMBER_TICKS_PER_DEGREE = (347.222/360.0) * 2048;  // 1975.307
     public static final double CLIMBER_ANGLE_HYSTERESIS = 3.0;
     public static final double PACKAGE_ANGLE = -120.0;
-    public static final double CLIMBER_STATE3_ANGLE = -4.0;
-    public static final double CLIMBER_STATE4_ANGLE = 149.0;
-    public static final double CLIMBER_STATE5_ANGLE = 108.0; // 115.0
-    public static final double CLIMBER_STATE6_ANGLE = 344.0; // 329.0
-    public static final double CLIMBER_STATE7_ANGLE = 287.0; // 290
+    public static final double CLIMBER_STATE3_ANGLE = 10.13;
+    public static final double CLIMBER_STATE4_ANGLE = 148.0;
+    public static final double CLIMBER_STATE5_ANGLE = 112.0;
+    public static final double CLIMBER_STATE6_ANGLE = 330.0;
+    public static final double CLIMBER_STATE7_ANGLE = 290.0;
     public static final double CLIMBER_STATE8_ANGLE = 360.0;
     public static final long CLIMBER_LATCH_RELEASE_TIME = 500;
     public static final long CLIMBER_EXTEND_TIME = 1000;
     public static final long CLIMBER_LATCH_END_TIME = 2000;
-
-
 
     public static final int SHOOTER_INSIDE_SOLENOID_FOWARD = 11;
     public static final int SHOOTER_INSIDE_SOLENOID_REVERSE = 4;

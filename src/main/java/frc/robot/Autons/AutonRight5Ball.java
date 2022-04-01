@@ -517,7 +517,9 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = false;
             hoodPosition = Shot.PROTECTED;
             autoAim = false;
-            shoot = true;
+            if(timer.get() > .25){
+                shoot = true;
+            }
             
             if(timer.get() > 3) {
                 timer.reset();

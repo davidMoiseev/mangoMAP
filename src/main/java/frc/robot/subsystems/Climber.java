@@ -143,10 +143,7 @@ public class Climber extends SubsystemBase{
                     climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE4_ANGLE));
                     targetPosDeg = CLIMBER_STATE4_ANGLE;
                 }
-                else {
-                    climberMotor.set(TalonFXControlMode.PercentOutput, 0);
-                }
-                
+
             } else if (climberState == 5) { // Unload/Release 2nd Bar
                 if ((commander.getBbuttonHeld() == false) &&
                     (unlatchTrigger == false) &&
@@ -164,7 +161,7 @@ public class Climber extends SubsystemBase{
                     climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE5_ANGLE));
                     targetPosDeg = CLIMBER_STATE5_ANGLE;
                 }
-                
+
             } else if (climberState == 6) { // Progress to 4th Bar
                 if ((commander.getAbuttonHeld() == false) && 
                     (ticksToDegrees(climberMotor.getSelectedSensorPosition()) > (CLIMBER_STATE6_ANGLE - CLIMBER_ANGLE_HYSTERESIS))) {
@@ -174,10 +171,6 @@ public class Climber extends SubsystemBase{
                     climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE6_ANGLE));
                     targetPosDeg = CLIMBER_STATE6_ANGLE;
                 }
-                else {
-                    climberMotor.set(TalonFXControlMode.PercentOutput, 0);
-                }
-            
                 
             } else if (climberState == 7) { // Unload/Release 3rd Bar
                 if ((commander.getBbuttonHeld() == false) && 
@@ -197,7 +190,6 @@ public class Climber extends SubsystemBase{
                     climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE7_ANGLE));
                     targetPosDeg = CLIMBER_STATE7_ANGLE;
                 }
-                
             } else if (climberState == 8) { // Move to final State
                 climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE8_ANGLE));
                 targetPosDeg = CLIMBER_STATE8_ANGLE;
