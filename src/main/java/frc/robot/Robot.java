@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.util.RootNameLookup;
 import org.hotutilites.hotlogger.HotLogger;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -56,7 +57,7 @@ public class Robot extends TimedRobot {
         "Right Rear Absolute", "Right Rear Assumed", "ClimberCmd",
         "LeftIntakeCmd", "RightIntakeCmd", "LeftShooterSpeed", "RightShooterSpeed", "targetRPM",
         "climberState", "actualPosTicks", "actualPosDeg", "targetPosDeg", "targetPosTicks",
-        "shooterError", "hoodPosition", "TargetX", "TargetY", "TargetTheta", "Robot State Theta", "poseX", "poseY");
+        "shooterError", "hoodPosition", "TargetX", "TargetY", "TargetTheta", "Robot State Theta", "poseX", "poseY", "Compressor Cur");
 
     robotState = new RobotState();
     hub = new PneumaticHub(PNEUMATIC_HUB);
@@ -75,6 +76,11 @@ public class Robot extends TimedRobot {
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 
+    // PortForwarder.add(5800, "limelight.local", 5800);
+    // PortForwarder.add(5801, "limelight.local", 5801);
+    // PortForwarder.add(5805, "limelight.local", 5805);
+
+
     autonSelection = 0; // RIGHT_RED, RIGHT_BLUE, LEFT, RIGHT_5
   }
 
@@ -90,6 +96,8 @@ public class Robot extends TimedRobot {
     ballSupervisor.logData();
     climber.logData();
     lights.logData();
+
+    HotLogger.Log("Compressor Cur", hub.getCompressorCurrent());
   }
 
   @Override
@@ -123,7 +131,7 @@ public class Robot extends TimedRobot {
       // SmartDashboard.putString("AutonSelected", selectedAuton.getName());
     } else if (autonSelection == 2) {
       // selectedAuton = new AutonLeft(robotState);
-      selectedAuton = new AutonLeft(robotState);
+      selectedAuton = new AutonLeftPlusBlue(robotState);
     } else if (autonSelection == 3){
       selectedAuton = new AutonRight5Ball(robotState);
     } else if (autonSelection == 4){
@@ -132,7 +140,6 @@ public class Robot extends TimedRobot {
       // SmartDashboard.putString("AutonSelected", "ERROR no autonomous file selected ERROR");
       selectedAuton = new AutonRightBlue(robotState);
     }
-
 
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
     selectedAuton.initializeAuton();
@@ -153,7 +160,7 @@ public class Robot extends TimedRobot {
       ((AutonRightBlue)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 2) {
       // ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
-      ((AutonLeft)selectedAuton).updateCommand(pigeon, drivetrain);
+      ((AutonLeftPlusBlue)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 3){
       ((AutonRight5Ball)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 4){

@@ -372,7 +372,7 @@ public class AutonLeftPlusBlue extends AutonCommader {
             driveRequested = true;
             deployRightIntake = false;
             deployLeftIntake = true;
-            hoodPosition = Shot.FENDER;
+            hoodPosition = Shot.CHAOS;
             autoAim = false;
             shoot = false;
 
@@ -390,13 +390,13 @@ public class AutonLeftPlusBlue extends AutonCommader {
             driveRequested = true;
             deployRightIntake = false;
             deployLeftIntake = false;
-            hoodPosition = Shot.FENDER;
+            hoodPosition = Shot.CHAOS;
             autoAim = false;
             shoot = false;
 
-            setTargetTheta(Rotation2d.fromDegrees(200));
+            setTargetTheta(Rotation2d.fromDegrees(185));
 
-            if(timer.get() > 1.5) {
+            if(timer.get() > 2.5) {
                 timer.reset();
                 timer.start();
                 autoState = AutoState.shootBlue;        
@@ -407,11 +407,11 @@ public class AutonLeftPlusBlue extends AutonCommader {
             driveRequested = true;
             deployRightIntake = false;
             deployLeftIntake = false;
-            hoodPosition = Shot.FENDER;
+            hoodPosition = Shot.CHAOS;
             autoAim = false;
             shoot = true;
 
-            setTargetTheta(Rotation2d.fromDegrees(200));
+            setTargetTheta(Rotation2d.fromDegrees(185));
 
             if (timer.get() > 1) {
                 lastDesiredState = desiredState;

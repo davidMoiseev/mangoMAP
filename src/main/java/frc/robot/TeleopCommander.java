@@ -218,7 +218,7 @@ public class TeleopCommander extends RobotCommander{
 
       @Override
       public boolean getClimberManualControl() {
-        if ((robotState.getClimberExtended() == true) && operator.getBackButton()) {
+        if ((robotState.getClimberExtended() == true) && operator.getRightTriggerAxis() > .75) {
           return true;
         } else {
           return false;
