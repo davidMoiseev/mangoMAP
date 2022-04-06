@@ -13,6 +13,8 @@ public class RobotState {
     private double targetShooterSpeed;
     private boolean shooterOn;
     private boolean aimed;
+    private boolean ballivatorTop;
+    private boolean ballivatorBottom;
 
 
     public RobotState() {
@@ -114,5 +116,21 @@ public class RobotState {
 
     public boolean getShooterOn() {
         return this.shooterOn;
+    }
+
+    public void setBallivatorTop(boolean sensor){
+        this.ballivatorTop = sensor;
+    }
+
+    public boolean getBallivatorTop(){
+        return ballivatorTop;
+    }
+
+    public void setBallivatorBottom(boolean sensor){
+        this.ballivatorBottom = sensor;
+    }
+
+    public boolean ballivatorBottom(){
+        return ballivatorBottom;
     }
 }
