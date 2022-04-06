@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import org.hotutilites.hotlogger.HotLogger;
+
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -18,17 +20,20 @@ public class Ballivator extends SubsystemBase{
     RobotState robotState;
     CANSparkMax leftBallivatorMotor;
     CANSparkMax rightBallivatorMotor;
-    DigitalInput ballSense;
+    DigitalInput ballSenseTop;
+    DigitalInput ballSenseBottom;
     boolean ON;
     private Solenoid ballivatorSolenoid;
     Shooter shooter;
     Intake intake;
+    int numBalls = 0;
 
     public Ballivator(RobotState robotState, PneumaticHub hub, Shooter shooter, Intake intake){
         this.robotState = robotState;
         leftBallivatorMotor = new CANSparkMax(LEFT_BALLIVATOR_MOTOR, MotorType.kBrushless);
         rightBallivatorMotor = new CANSparkMax(RIGHT_BALLIVATOR_MOTOR, MotorType.kBrushless);
-        ballSense = new DigitalInput(BALLIVATOR_SENSOR);
+        ballSenseTop = new DigitalInput(BALLIVATOR_SENSOR_TOP);
+        ballSenseBottom = new DigitalInput(BALLIVATOR_SENSOR_BOTTOM);
         ON = false;
         ballivatorSolenoid = hub.makeSolenoid(BALLIVATOR_SOLENOID);
         this.shooter = shooter;
@@ -55,7 +60,7 @@ public class Ballivator extends SubsystemBase{
         } 
                 
         if (ON) {
-            if (ballSense.get()){
+            if (ballSenseTop.get()){
                 setBallivatorSpeed(1, false, true);
             } else {
                 setBallivatorSpeed(1, true, true);
@@ -63,7 +68,7 @@ public class Ballivator extends SubsystemBase{
         }
 
         if (buttons[2] == true) {
-            if (ballSense.get()){
+            if (ballSenseTop.get()){
                 if (buttons[0]){
                     setBallivatorSpeed(1, true, false);
                 }
@@ -97,7 +102,7 @@ public class Ballivator extends SubsystemBase{
                 setBallivatorSpeed(1, true, true);
                 ballivatorSolenoid.set(true);
             } else if (ON){
-                if (ballSense.get()){
+                if (ballSenseTop.get()){
                         setBallivatorSpeed(1, false, true);
                     } 
                     else {
@@ -143,8 +148,19 @@ public class Ballivator extends SubsystemBase{
             // }        
         }
 
+
+        if (ballSenseTop.get() && ballSenseBottom.get()) {
+            numBalls = 2;
+        } else if (!ballSenseTop.get() && !ballSenseBottom.get()) {
+            numBalls = 0;
+        } else {
+            numBalls = 1;
+        }
+
         SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
-        SmartDashboard.putBoolean("Ballivator Sensei: ", ballSense.get());
+        SmartDashboard.putBoolean("Ballivator Top", ballSenseTop.get());
+        SmartDashboard.putBoolean("Ballivator Bottom", ballSenseBottom.get());
+        SmartDashboard.putNumber("NumBalls", numBalls);
     }
 
     @Override
@@ -155,8 +171,8 @@ public class Ballivator extends SubsystemBase{
 
     @Override
     public void updateState() {
-        // TODO Auto-generated method stub
-        
+        robotState.setBallivatorTop(ballSenseTop.get());
+        robotState.setBallivatorBottom(ballSenseBottom.get());
     }
 
     @Override
@@ -177,6 +193,9 @@ public class Ballivator extends SubsystemBase{
     @Override
     public void logData() {
         // TODO Auto-generated method stub
+        HotLogger.Log("BallivatorTop", ballSenseTop.get());
+        HotLogger.Log("BallivatorBottom", ballSenseBottom.get());
+        HotLogger.Log("NumBalls",numBalls);
         
     }
     
