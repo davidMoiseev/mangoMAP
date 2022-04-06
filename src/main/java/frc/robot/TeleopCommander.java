@@ -240,4 +240,6 @@ public class TeleopCommander extends RobotCommander{
         // TODO Auto-generated method stub
         return driver.getBButton() || driver.getLeftTriggerAxis() > .5;
       }
+
+      // public boolean 
 }
