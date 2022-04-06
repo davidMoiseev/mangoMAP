@@ -241,5 +241,7 @@ public class TeleopCommander extends RobotCommander{
         return driver.getBButton() || driver.getLeftTriggerAxis() > .5;
       }
 
-      // public boolean 
+      public boolean getAutoIntakeDeploy(){
+        return operator.getLeftTriggerAxis() > .5;
+      }
 }
