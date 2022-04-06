@@ -42,13 +42,13 @@ public class Intake extends SubsystemBase {
         if(COMP_BOT){
             if(commander.getAutoIntakeDeploy()){
 
-                driveDir = Math.toDegrees(Math.atan2(commander.getStrafeCommand(), commander.getForwardCommand()));
-                driveDir = driveDir >= 0 ? driveDir : 360 + driveDir;
+                driveDir = -Math.toDegrees(Math.atan2(commander.getStrafeCommand(), commander.getForwardCommand()));
                 theta = Rotation2d.fromDegrees(robotState.getTheta()).getDegrees();
+                theta = theta > 180 ? 180 - theta : theta;
 
-                double finalAnlge = driveDir + theta;
+                double finalAnlge = theta - driveDir;
 
-                if(finalAnlge >= 0 && finalAnlge <= 180){
+                if(finalAnlge > 0){
                     runRightIntake = false;
                     rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
                     rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
@@ -64,7 +64,7 @@ public class Intake extends SubsystemBase {
                     runRightIntake = true;
                     rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
                     rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
-                }
+                } 
             } else {
                 if (commander.getRunLeftIntake()) {
                     runLeftIntake = true;
@@ -75,7 +75,6 @@ public class Intake extends SubsystemBase {
                     leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
                     leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
                 } 
-
 
                 if (commander.getRunRightIntake()) {
                     runRightIntake = true;
