@@ -353,4 +353,13 @@ public class AutonPost2Ball extends AutonCommader {
         // TODO Auto-generated method stub
         return false;
     }
+
+
+
+
+    @Override
+    public boolean getAutoIntakeDeploy() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

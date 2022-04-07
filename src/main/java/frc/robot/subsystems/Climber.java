@@ -237,6 +237,8 @@ public class Climber extends SubsystemBase{
         SmartDashboard.putNumber("targetPosDeg", targetPosDeg);
         SmartDashboard.putNumber("targetPosTicks", targetPosTicks);
         SmartDashboard.putNumber("ClimberSpeed", (climberMotor.getSelectedSensorVelocity()/100.0));
+        HotLogger.Log("ClimberSpeed", (climberMotor.getSelectedSensorVelocity()));
+        HotLogger.Log("ClimberCurrent", climberMotor.getStatorCurrent());
         SmartDashboard.putNumber("actualPosTicks", climberMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("actualPosDeg", actualPosDeg);
         SmartDashboard.putNumber("climberState", climberState);

@@ -57,8 +57,9 @@ public class Robot extends TimedRobot {
         "Right Rear Absolute", "Right Rear Assumed", "ClimberCmd",
         "LeftIntakeCmd", "RightIntakeCmd", "LeftShooterSpeed", "RightShooterSpeed", "targetRPM",
         "climberState", "actualPosTicks", "actualPosDeg", "targetPosDeg", "targetPosTicks",
-        "shooterError", "hoodPosition", "TargetX", "TargetY", "TargetTheta", "Robot State Theta", "poseX", "poseY", "Compressor Cur",
+        "shooterError", "hoodPosition", "TargetX", "TargetY", "TargetTheta", "Robot State Theta", "poseX", "poseY", "Compressor Cur", "ClimberSpeed", "ClimberCurrent");
         "BallivatorTop", "BallivatorBottom", "NumBalls");
+
 
     robotState = new RobotState();
     hub = new PneumaticHub(PNEUMATIC_HUB);

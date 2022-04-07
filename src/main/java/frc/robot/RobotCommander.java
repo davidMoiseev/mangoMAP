@@ -31,4 +31,5 @@ public abstract class RobotCommander {
     public abstract boolean getAbuttonHeld();
     public abstract boolean getBbuttonHeld();
     public abstract boolean getAutoAimSetTarget();
+    public abstract boolean getAutoIntakeDeploy();
 }

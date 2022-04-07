@@ -6,10 +6,17 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import frc.robot.RobotCommander;
 import frc.robot.RobotState;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.hotutilites.hotlogger.HotLogger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.*;
+
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 
 public class Intake extends SubsystemBase {
     RobotState robotState;
@@ -19,6 +26,15 @@ public class Intake extends SubsystemBase {
     DoubleSolenoid leftIntakeSolenoid;
     boolean runLeftIntake;
     boolean runRightIntake;
+
+    double driveDir;
+    double theta;
+
+    private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+        new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+        new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
+        new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
+        new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
     public Intake(RobotState robotState, PneumaticHub hub){
         this.robotState = robotState;
@@ -34,32 +50,68 @@ public class Intake extends SubsystemBase {
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
         if(COMP_BOT){
+            if(commander.getAutoIntakeDeploy()){
+                ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    commander.getForwardCommand(), commander.getStrafeCommand(),
+                    0, Rotation2d.fromDegrees(robotState.getTheta()));
 
-            runLeftIntake = true;
-            if (commander.getRunLeftIntake()) {
-                runLeftIntake = true;
-                leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-                leftIntakeMotor.set(ControlMode.PercentOutput, .85);
-            } else {
-                runLeftIntake = false;
-                leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
-            } 
+                if(chassisSpeeds.vyMetersPerSecond > .05){
+                    runRightIntake = false;
+                    rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                    rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                    
+                    intakeState = true;
+                    
+                    runLeftIntake = true;
+                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+                } else if (chassisSpeeds.vyMetersPerSecond < -.05){
+                    runLeftIntake = false;
+                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
 
+                    intakeState = true;
 
-            if (commander.getRunRightIntake()) {
-                runRightIntake = true;
-                rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-                rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+                    runRightIntake = true;
+                    rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                    rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+                } else {
+                    runLeftIntake = false;
+                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+
+                    intakeState = false;
+
+                    runRightIntake = false;
+                    rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                    rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                }
+
             } else {
-                runRightIntake = false;
-                rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
-            }
-            if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
-                intakeState = true;
-            } else {
-                intakeState = false;
+                if (commander.getRunLeftIntake()) {
+                    runLeftIntake = true;
+                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+                } else {
+                    runLeftIntake = false;
+                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                } 
+
+                if (commander.getRunRightIntake()) {
+                    runRightIntake = true;
+                    rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
+                    rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+                } else {
+                    runRightIntake = false;
+                    rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                    rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                }
+                if (commander.getRunLeftIntake() || commander.getRunRightIntake()) {
+                    intakeState = true;
+                } else {
+                    intakeState = false;
+                }
             }
         } else {
             if (commander.getRunLeftIntake()) {
