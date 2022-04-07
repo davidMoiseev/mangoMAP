@@ -7,6 +7,8 @@ import frc.robot.subsystems.Shooter.Shot;
 
 import static frc.robot.Constants.*;
 
+import org.hotutilites.hotlogger.HotLogger;
+
 public class TeleopCommander extends RobotCommander{
 
     private static XboxController driver;
@@ -82,9 +84,11 @@ public class TeleopCommander extends RobotCommander{
     @Override
     public boolean getClimberRelease() {
       if (operator.getXButton() && robotState.getClimberExtended() == true) {
+        HotLogger.Log("ClimberReleased", true);
         return true;
       }
       else{
+        HotLogger.Log("ClimberReleased", false);
         return false;
       }
     }

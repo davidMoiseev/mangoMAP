@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
@@ -25,9 +26,15 @@ public class Climber extends SubsystemBase{
     public double actualPosTicks;
     public double actualPosDeg;
     public boolean manualControlFlag = false;
+    private double climberSpeed;
     long latchTimer;
     boolean unlatchTrigger = false;
-    public int climberState = 1;
+
+    double rampVal = 0;
+
+    double timer = 0;
+
+    //public int climberState = 1;
       /*    1:  Climber Retracted
             2:  Climber Extended
             3:  Moving Arm to vertical
@@ -38,6 +45,27 @@ public class Climber extends SubsystemBase{
             8:  Move to final State
             9:  Process End
             */
+
+    enum climbState {
+        preClimb,
+        latchPosition,
+        climbToMid,
+        rampToApproachSpeed,
+        ApproachSpeedWithVelocityDetection,
+        prepareToRelease,
+        release,
+        zero,
+        climbToTraversal,        
+        rampToApproachSpeed2,
+        ApproachSpeedWithVelocityDetection2,
+        prepareToReleaseFromTraversal,
+        releaseFromTraversal,
+        finalMove,
+        waitForRelease1,
+        waitForRelease2
+    }
+    
+    public climbState climberState=climbState.preClimb;
 
     public Climber(RobotState robotState, PneumaticHub hub) {
         this.robotState = robotState;
@@ -105,107 +133,258 @@ public class Climber extends SubsystemBase{
             climberRelease.set(commander.getClimberRelease());
             manualControlFlag = true;
         } else if (robotState.getClimberExtended()) {
-            manualControlFlag = false;
-            if (climberState == 1) {  // Climber Retracted
-                if (robotState.getClimberExtended() == true) {
-                    climberState = 2;
-                    latchTimer = System.currentTimeMillis();
-                    unlatchTrigger = true;
-                    targetPosDeg = PACKAGE_ANGLE;
-                }
-            } else if (climberState == 2) { // Climber Extended
-                if (robotState.getClimberExtended() == false) {
-                    climberState = 1;
-                    unlatchTrigger = false;
-                } else if ((System.currentTimeMillis() - latchTimer) > CLIMBER_EXTEND_TIME){
-                    unlatchTrigger = false;
-                    climberState = 3;
-                }
-                climberRelease.set(commander.getClimberRelease());
-                targetPosDeg = PACKAGE_ANGLE;
+        //     manualControlFlag = false;
+        //     if (climberState == 1) {  // Climber Retracted
+        //         if (robotState.getClimberExtended() == true) {
+        //             climberState = 2;
+        //             latchTimer = System.currentTimeMillis();
+        //             unlatchTrigger = true;
+        //             targetPosDeg = PACKAGE_ANGLE;
+        //         }
+        //     } else if (climberState == 2) { // Climber Extended
+        //         if (robotState.getClimberExtended() == false) {
+        //             climberState = 1;
+        //             unlatchTrigger = false;
+        //         } else if ((System.currentTimeMillis() - latchTimer) > CLIMBER_EXTEND_TIME){
+        //             unlatchTrigger = false;
+        //             climberState = 3;
+        //         }
+        //         climberRelease.set(commander.getClimberRelease());
+        //         targetPosDeg = PACKAGE_ANGLE;
 
-            } else if (climberState == 3) { // Moving Arm to vertical
-                if ((commander.getBbuttonHeld() == false) && 
-                    (ticksToDegrees(climberMotor.getSelectedSensorPosition()) > (CLIMBER_STATE3_ANGLE - CLIMBER_ANGLE_HYSTERESIS))) {
-                        climberState = 4;
-                }
-                if ((commander.getBbuttonHeld() == true)) {
-                    climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE3_ANGLE));
-                    targetPosDeg = CLIMBER_STATE3_ANGLE;
-                }   
+        //     } else if (climberState == 3) { // Moving Arm to vertical
+        //         if ((commander.getBbuttonHeld() == false) && 
+        //             (ticksToDegrees(climberMotor.getSelectedSensorPosition()) > (CLIMBER_STATE3_ANGLE - CLIMBER_ANGLE_HYSTERESIS))) {
+        //                 climberState = 4;
+        //         }
+        //         if ((commander.getBbuttonHeld() == true)) {
+        //             climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE3_ANGLE));
+        //             targetPosDeg = CLIMBER_STATE3_ANGLE;
+        //         }   
 
-            } else if (climberState == 4) { // Progress to 3rd Bar
-                if ((commander.getAbuttonHeld() == false) && 
-                    (ticksToDegrees(climberMotor.getSelectedSensorPosition()) > (CLIMBER_STATE4_ANGLE - CLIMBER_ANGLE_HYSTERESIS))) {
-                        climberState = 5;
-                }
-                if ((commander.getAbuttonHeld() == true)) {
-                    climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE4_ANGLE));
-                    targetPosDeg = CLIMBER_STATE4_ANGLE;
-                }
+        //     } else if (climberState == 4) { // Progress to 3rd Bar
+        //         if ((commander.getAbuttonHeld() == false) && 
+        //             (ticksToDegrees(climberMotor.getSelectedSensorPosition()) > (CLIMBER_STATE4_ANGLE - CLIMBER_ANGLE_HYSTERESIS))) {
+        //                 climberState = 5;
+        //         }
+        //         if ((commander.getAbuttonHeld() == true)) {
+        //             climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE4_ANGLE));
+        //             targetPosDeg = CLIMBER_STATE4_ANGLE;
+        //         }
 
-            } else if (climberState == 5) { // Unload/Release 2nd Bar
-                if ((commander.getBbuttonHeld() == false) &&
-                    (unlatchTrigger == false) &&
-                    (ticksToDegrees(climberMotor.getSelectedSensorPosition()) < (CLIMBER_STATE5_ANGLE + CLIMBER_ANGLE_HYSTERESIS))) {
-                        latchTimer = System.currentTimeMillis();
-                        climberRelease.set(true);
-                        unlatchTrigger = true;
-                }
-                if ((unlatchTrigger == true) && ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_RELEASE_TIME)) {
-                    climberState = 6;
-                    unlatchTrigger = false;
-                    climberRelease.set(false);
-                }
-                if ((commander.getBbuttonHeld() == true)) {
-                    climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE5_ANGLE));
-                    targetPosDeg = CLIMBER_STATE5_ANGLE;
-                }
+        //     } else if (climberState == 5) { // Unload/Release 2nd Bar
+        //         if ((commander.getBbuttonHeld() == false) &&
+        //             (unlatchTrigger == false) &&
+        //             (ticksToDegrees(climberMotor.getSelectedSensorPosition()) < (CLIMBER_STATE5_ANGLE + CLIMBER_ANGLE_HYSTERESIS))) {
+        //                 latchTimer = System.currentTimeMillis();
+        //                 climberRelease.set(true);
+        //                 unlatchTrigger = true;
+        //         }
+        //         if ((unlatchTrigger == true) && ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_RELEASE_TIME)) {
+        //             climberState = 6;
+        //             unlatchTrigger = false;
+        //             climberRelease.set(false);
+        //         }
+        //         if ((commander.getBbuttonHeld() == true)) {
+        //             climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE5_ANGLE));
+        //             targetPosDeg = CLIMBER_STATE5_ANGLE;
+        //         }
 
-            } else if (climberState == 6) { // Progress to 4th Bar
-                if ((commander.getAbuttonHeld() == false) && 
-                    (ticksToDegrees(climberMotor.getSelectedSensorPosition()) > (CLIMBER_STATE6_ANGLE - CLIMBER_ANGLE_HYSTERESIS))) {
-                        climberState = 7;
-                }
-                if ((commander.getAbuttonHeld() == true)) {
-                    climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE6_ANGLE));
-                    targetPosDeg = CLIMBER_STATE6_ANGLE;
-                }
+        //     } else if (climberState == 6) { // Progress to 4th Bar
+        //         if ((commander.getAbuttonHeld() == false) && 
+        //             (ticksToDegrees(climberMotor.getSelectedSensorPosition()) > (CLIMBER_STATE6_ANGLE - CLIMBER_ANGLE_HYSTERESIS))) {
+        //                 climberState = 7;
+        //         }
+        //         if ((commander.getAbuttonHeld() == true)) {
+        //             climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE6_ANGLE));
+        //             targetPosDeg = CLIMBER_STATE6_ANGLE;
+        //         }
                 
-            } else if (climberState == 7) { // Unload/Release 3rd Bar
-                if ((commander.getBbuttonHeld() == false) && 
-                    (unlatchTrigger == false) &&
-                    (ticksToDegrees(climberMotor.getSelectedSensorPosition()) < (CLIMBER_STATE7_ANGLE + CLIMBER_ANGLE_HYSTERESIS))) {
-                        latchTimer = System.currentTimeMillis();
-                        climberRelease.set(true);
-                        unlatchTrigger = true;
+        //     } else if (climberState == 7) { // Unload/Release 3rd Bar
+        //         if ((commander.getBbuttonHeld() == false) && 
+        //             (unlatchTrigger == false) &&
+        //             (ticksToDegrees(climberMotor.getSelectedSensorPosition()) < (CLIMBER_STATE7_ANGLE + CLIMBER_ANGLE_HYSTERESIS))) {
+        //                 latchTimer = System.currentTimeMillis();
+        //                 climberRelease.set(true);
+        //                 unlatchTrigger = true;
+        //         }
+        //         if ((unlatchTrigger == true) && ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_RELEASE_TIME)) {
+        //             climberState = 8;
+        //             unlatchTrigger = false;
+        //             latchTimer = System.currentTimeMillis();
+        //             climberRelease.set(false);
+        //         }
+        //         if ((commander.getBbuttonHeld() == true)) {
+        //             climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE7_ANGLE));
+        //             targetPosDeg = CLIMBER_STATE7_ANGLE;
+        //         }
+        //     } else if (climberState == 8) { // Move to final State
+        //         climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE8_ANGLE));
+        //         targetPosDeg = CLIMBER_STATE8_ANGLE;
+        //         if ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_END_TIME) {
+        //             climberState = 9;
+        //         }
+
+        //     } else if (climberState == 9) { // Move to End State
+        //         climberMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+        //     }
+            if (climberState==climbState.preClimb) {
+                if(commander.getAbuttonHeld()){
+                    climberState = climbState.latchPosition;
                 }
-                if ((unlatchTrigger == true) && ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_RELEASE_TIME)) {
-                    climberState = 8;
-                    unlatchTrigger = false;
-                    latchTimer = System.currentTimeMillis();
+            }
+            if (climberState==climbState.latchPosition) {
+                climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE3_ANGLE));
+                targetPosDeg = CLIMBER_STATE3_ANGLE;
+
+                if(commander.getBbuttonHeld()){
+                    climberState = climbState.climbToMid;
+                }
+            }
+
+            if (climberState==climbState.climbToMid) {
+                climberMotor.set(ControlMode.PercentOutput, 1);
+                if(actualPosDeg > 110){
+                    climberState = climbState.rampToApproachSpeed;
+                    rampVal = 0.75;
+                }
+            }
+
+            if (climberState==climbState.rampToApproachSpeed) {
+                climberMotor.set(ControlMode.PercentOutput, rampVal);
+                if(rampVal > .6){
+                    rampVal -= .05;
+                }
+                if(actualPosDeg > 130){
+                    climberState = climbState.ApproachSpeedWithVelocityDetection;
+                    timer = 0;
+                }
+            }
+
+            if (climberState==climbState.ApproachSpeedWithVelocityDetection) {
+                climberMotor.set(ControlMode.PercentOutput, .6);
+                if(actualPosDeg < 150){
+                    if(Math.abs(robotState.getPitchSpeed() - climberSpeed) < 10){
+                        timer++;
+                        if(timer >= 10){
+                            climberState = climbState.prepareToRelease;
+                        }
+                    } else {
+                        timer = 0;
+                    }
+                } else {
+                    climberState = climbState.prepareToRelease;
+                }
+            }
+
+            // if(climberState == climbState.waitForFirstRelease){
+            //     climberMotor.set(ControlMode.PercentOutput, 0);
+            //     if(commander.getAbuttonHeld()){
+            //         climberState = climbState.prepareToRelease;
+            //     }
+            // }
+
+            if (climberState==climbState.prepareToRelease) {
+                climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE5_ANGLE));
+                targetPosDeg = CLIMBER_STATE5_ANGLE;
+                if(commander.getBbuttonHeld()){
+                    climberState = climbState.release;
+                }
+            }
+
+            if (climberState==climbState.release) {
+                climberRelease.set(true);
+                climberState = climbState.waitForRelease1;
+                timer = 0;
+            }
+
+            if(climberState == climbState.waitForRelease1){
+                if(timer > 25){
                     climberRelease.set(false);
+
+                    if (commander.getAbuttonHeld()){
+                        climberState = climbState.climbToTraversal;
+                    }
                 }
-                if ((commander.getBbuttonHeld() == true)) {
-                    climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE7_ANGLE));
-                    targetPosDeg = CLIMBER_STATE7_ANGLE;
+                timer++;
+            }
+
+            if (climberState==climbState.climbToTraversal) {
+                climberMotor.set(ControlMode.PercentOutput, 1);
+
+
+                if(actualPosDeg > 290){
+                    climberState = climbState.rampToApproachSpeed2;
+                    rampVal = 0.75;
                 }
-            } else if (climberState == 8) { // Move to final State
+            }
+
+            if (climberState==climbState.rampToApproachSpeed2) {
+                climberMotor.set(ControlMode.PercentOutput, rampVal);
+                if(rampVal > .6){
+                    rampVal -= .05;
+                }
+                if(actualPosDeg > 310){
+                    climberState = climbState.ApproachSpeedWithVelocityDetection2;
+                    timer = 0;
+                }
+            }
+
+            if (climberState==climbState.ApproachSpeedWithVelocityDetection2) {
+                climberMotor.set(ControlMode.PercentOutput, .6);
+                if(actualPosDeg < 335){
+                    if(Math.abs(robotState.getPitchSpeed() - climberSpeed) < 10){
+                        timer++;
+                        if(timer >= 10){
+                            climberState = climbState.prepareToReleaseFromTraversal;
+                        }
+                    } else {
+                        timer = 0;
+                    }
+                } else {
+                    climberState = climbState.prepareToReleaseFromTraversal;
+                }
+            }
+
+            if (climberState==climbState.prepareToReleaseFromTraversal) {
+                climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE7_ANGLE));
+                targetPosDeg = CLIMBER_STATE7_ANGLE;
+                if(commander.getBbuttonHeld()){
+                    climberState = climbState.releaseFromTraversal;
+                }
+            }
+
+            if (climberState==climbState.releaseFromTraversal) {
+                climberRelease.set(true);
+                climberState = climbState.waitForRelease2;
+                timer = 0;
+            }
+
+            if(climberState == climbState.waitForRelease2){
+                if(timer > 25){
+                    climberRelease.set(false);
+
+                    if (commander.getAbuttonHeld()){
+                        climberState = climbState.finalMove;
+                    }
+                }
+                timer++;
+            }
+
+            if (climberState==climbState.finalMove) {
                 climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE8_ANGLE));
                 targetPosDeg = CLIMBER_STATE8_ANGLE;
-                if ((System.currentTimeMillis() - latchTimer) > CLIMBER_LATCH_END_TIME) {
-                    climberState = 9;
-                }
+            }
 
-            } else if (climberState == 9) { // Move to End State
-                climberMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+            if(climberState == climbState.zero){
+                climberMotor.set(ControlMode.PercentOutput, 0);
             }
 
         }
         targetPosTicks = degreeToTicks(targetPosDeg);
         actualPosTicks = climberMotor.getSelectedSensorPosition();
+        climberSpeed = ticksToDegrees(climberMotor.getSelectedSensorVelocity() * 10);
         actualPosDeg = ticksToDegrees(actualPosTicks);
-
     }
 
     @Override
@@ -237,12 +416,12 @@ public class Climber extends SubsystemBase{
         SmartDashboard.putNumber("targetPosDeg", targetPosDeg);
         SmartDashboard.putNumber("targetPosTicks", targetPosTicks);
         SmartDashboard.putNumber("ClimberSpeed", (climberMotor.getSelectedSensorVelocity()/100.0));
-        HotLogger.Log("ClimberSpeed", (climberMotor.getSelectedSensorVelocity()));
+        HotLogger.Log("ClimberSpeed", climberSpeed);
         HotLogger.Log("ClimberCurrent", climberMotor.getStatorCurrent());
         SmartDashboard.putNumber("actualPosTicks", climberMotor.getSelectedSensorPosition());
         SmartDashboard.putNumber("actualPosDeg", actualPosDeg);
-        SmartDashboard.putNumber("climberState", climberState);
-        HotLogger.Log("climberState", climberState);
+        SmartDashboard.putString("climberState", climberState.toString());
+        HotLogger.Log("climberState", climberState.toString());
         HotLogger.Log("targetPosDeg", targetPosDeg);
         HotLogger.Log("targetPosTicks", targetPosTicks);
         HotLogger.Log("actualPosTicks", climberMotor.getSelectedSensorPosition());

@@ -13,12 +13,30 @@ public class RobotState {
     private double targetShooterSpeed;
     private boolean shooterOn;
     private boolean aimed;
+    private double pitchSpeed;
+    private double pitch;
     private boolean ballivatorTop;
     private boolean ballivatorBottom;
 
 
     public RobotState() {
        rotation2d = new Rotation2d();
+    }
+
+    public void setPitchSpeed(double pitchSpeed){
+        this.pitchSpeed = pitchSpeed;
+    }
+
+    public double getPitchSpeed(){
+        return pitchSpeed;
+    }
+
+    public void setPitch(double pitch){
+        this.pitch = pitch;
+    }
+
+    public double getPitch(){
+        return pitch;
     }
 
     public boolean isShooterReady() {
