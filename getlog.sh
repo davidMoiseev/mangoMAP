@@ -18,5 +18,12 @@ fi
 
 address="admin@10.$first.$last.2"
 
-scp admin@172.22.11.2:/home/lvuser/logs/* ./Logs/
+if [ ! -d Logs ]; then
+    mkdir Logs
+fi
+
+# Over USB 
+#scp admin@172.22.11.2:/home/lvuser/logs/* ./Logs/
+# Over Ethernet/WIFI
+scp $address:/home/lvuser/logs/* ./Logs/
 read -p "Press any key to continue..." -n1 -s

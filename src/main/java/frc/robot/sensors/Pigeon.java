@@ -21,6 +21,11 @@ public class Pigeon extends SensorBase{
 
     private Pigeon2 pigeon;
 
+    private double pitch;
+    private double roll;
+
+    public double[] xyz = new double[3];
+
     public Pigeon(RobotState robotState) {
         this.robotState = robotState;
 
@@ -31,6 +36,14 @@ public class Pigeon extends SensorBase{
     public void updateState() {
         theta = pigeon.getYaw();
         robotState.setRotation2d(theta);
+
+        pitch = pigeon.getPitch();
+        roll = pigeon.getRoll();
+        
+        pigeon.getRawGyro(xyz);
+
+        robotState.setPitchSpeed(-xyz[0]);
+        robotState.setPitch(pitch);
     }
 
     @Override
@@ -44,10 +57,19 @@ public class Pigeon extends SensorBase{
         SmartDashboard.putNumber("Theta", theta);
 
         HotLogger.Log("Theta", theta);
+
+        HotLogger.Log("X Pigeon", -xyz[0]);
+        HotLogger.Log("Y Pigeon", xyz[1]);
+        HotLogger.Log("Z Pigeon", xyz[2]);
+
+        HotLogger.Log("Pitch", pitch);
+        HotLogger.Log("Roll", roll);
     }
 
     public void initializeAuton(AutonCommader selectedAuton) {
         pigeon.setYaw(selectedAuton.getInitialPose().getRotation().getDegrees());
+
+        // pigeon.getRawGyro(xyz_dps)
 
         SmartDashboard.putNumber("InitializedPigeon", selectedAuton.getInitialPose().getRotation().getDegrees());
     }
