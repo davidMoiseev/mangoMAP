@@ -79,7 +79,8 @@ public final class Constants {
 
     public static final int RIGHT_BALLIVATOR_MOTOR = 11;
     public static final int LEFT_BALLIVATOR_MOTOR = 12;
-    public static final int BALLIVATOR_SENSOR = 0;
+    public static final int BALLIVATOR_SENSOR_TOP = 0;
+    public static final int BALLIVATOR_SENSOR_BOTTOM = 1;
     public static final int BALLIVATOR_SOLENOID = 0;
     public static final int TELE_SHOOTER_OK_SPEED_TOLERANCE = 9000;
     public static final double TELE_SHOOTER_OK_TIME_OVER_SPEED_TOLERANCE = 0;
