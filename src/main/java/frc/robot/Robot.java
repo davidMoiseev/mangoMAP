@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     teleopCommander = new TeleopCommander(robotState);
     pigeon = new Pigeon(robotState);
     drivetrain = new Drivetrain(robotState);
-    ballSupervisor = new BallSupervisor(robotState, hub);
+    ballSupervisor = new BallSupervisor(robotState, hub, drivetrain);
     climber = new Climber(robotState, hub);
     limelight = new Limelight(robotState);
     lights = new Lights(robotState);

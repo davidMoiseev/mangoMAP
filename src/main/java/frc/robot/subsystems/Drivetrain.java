@@ -355,4 +355,21 @@ public class Drivetrain extends SubsystemBase {
                 //         rightBackSteer.setNeutralMode(NeutralMode.Coast);
                 // }
         }
+
+        public int leftToRight(){
+                int lrc = 0;
+                double xVector = chassisSpeeds.vxMetersPerSecond;
+
+                if (xVector > 0.15){
+                        lrc = 1;
+                }
+                else if (xVector < -0.15){
+                        lrc = 2;
+                }
+                else {
+                        lrc = 0;
+                }
+
+                return lrc;
+        }
 }

@@ -20,6 +20,7 @@ import javax.rmi.ssl.SslRMIClientSocketFactory;
 
 public class Intake extends SubsystemBase {
     RobotState robotState;
+    Drivetrain drivetrain;
     TalonFX rightIntakeMotor;
     TalonFX leftIntakeMotor;
     DoubleSolenoid rightIntakeSolenoid;
@@ -36,13 +37,15 @@ public class Intake extends SubsystemBase {
         new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
         new Translation2d(-DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
-    public Intake(RobotState robotState, PneumaticHub hub){
+    public Intake(RobotState robotState, PneumaticHub hub, Drivetrain m_drivetrain){
         this.robotState = robotState;
 
         rightIntakeMotor = new TalonFX(RIGHT_INTAKE_MOTOR);
         leftIntakeMotor = new TalonFX(LEFT_INTAKE_MOTOR);
         rightIntakeSolenoid = hub.makeDoubleSolenoid(RIGHT_INTAKE_FWD_SOLENOID, RIGHT_INTAKE_REV_SOLENOID);
         leftIntakeSolenoid = hub.makeDoubleSolenoid(LEFT_INTAKE_FWD_SOLENOID, LEFT_INTAKE_REV_SOLENOID);
+
+        drivetrain = m_drivetrain;
     }
     
     boolean intakeState = false;
