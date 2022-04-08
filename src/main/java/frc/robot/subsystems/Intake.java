@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import org.hotutilites.hotlogger.HotLogger;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import static frc.robot.Constants.*;
 
 import javax.rmi.ssl.SslRMIClientSocketFactory;
@@ -44,6 +45,8 @@ public class Intake extends SubsystemBase {
         leftIntakeMotor = new TalonFX(LEFT_INTAKE_MOTOR);
         rightIntakeSolenoid = hub.makeDoubleSolenoid(RIGHT_INTAKE_FWD_SOLENOID, RIGHT_INTAKE_REV_SOLENOID);
         leftIntakeSolenoid = hub.makeDoubleSolenoid(LEFT_INTAKE_FWD_SOLENOID, LEFT_INTAKE_REV_SOLENOID);
+        rightIntakeMotor.setNeutralMode((NeutralMode.Coast));
+        leftIntakeMotor.setNeutralMode((NeutralMode.Coast));
 
         drivetrain = m_drivetrain;
     }
@@ -67,7 +70,7 @@ public class Intake extends SubsystemBase {
                     
                     runLeftIntake = true;
                     leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-                    leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, INTAKE_POWER);
                 } else if (chassisSpeeds.vyMetersPerSecond < -.05){
                     runLeftIntake = false;
                     leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
@@ -77,7 +80,7 @@ public class Intake extends SubsystemBase {
 
                     runRightIntake = true;
                     rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-                    rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+                    rightIntakeMotor.set(ControlMode.PercentOutput, (-1 * INTAKE_POWER));
                 } else {
                     runLeftIntake = false;
                     leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
@@ -94,7 +97,7 @@ public class Intake extends SubsystemBase {
                 if (commander.getRunLeftIntake()) {
                     runLeftIntake = true;
                     leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-                    leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+                    leftIntakeMotor.set(ControlMode.PercentOutput, INTAKE_POWER);
                 } else {
                     runLeftIntake = false;
                     leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
@@ -104,7 +107,7 @@ public class Intake extends SubsystemBase {
                 if (commander.getRunRightIntake()) {
                     runRightIntake = true;
                     rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
-                    rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+                    rightIntakeMotor.set(ControlMode.PercentOutput, (-1 * INTAKE_POWER));
                 } else {
                     runRightIntake = false;
                     rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
@@ -120,7 +123,7 @@ public class Intake extends SubsystemBase {
             if (commander.getRunLeftIntake()) {
                 runLeftIntake = true;
                 leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                leftIntakeMotor.set(ControlMode.PercentOutput, .85);
+                leftIntakeMotor.set(ControlMode.PercentOutput, INTAKE_POWER);
             } else {
                 runLeftIntake = false;
                 leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -130,7 +133,7 @@ public class Intake extends SubsystemBase {
             if (commander.getRunRightIntake()) {
                 runRightIntake = true;
                 rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                rightIntakeMotor.set(ControlMode.PercentOutput, -.85);
+                rightIntakeMotor.set(ControlMode.PercentOutput, (-1 * INTAKE_POWER));
             } else {
                 runRightIntake = false;
                 rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);

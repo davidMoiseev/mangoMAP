@@ -162,5 +162,7 @@ public final class Constants {
 
     public static final double LED_SHOOTER_SPEED_THRESH = 50.0;
 
+    public static final double INTAKE_POWER = 0.65;
+
     public static final boolean FANCY_DISABLE = true;
 }
