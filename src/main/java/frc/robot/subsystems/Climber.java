@@ -265,7 +265,7 @@ public class Climber extends SubsystemBase{
 
             if (climberState==climbState.ApproachSpeedWithVelocityDetection) {
                 climberMotor.set(ControlMode.PercentOutput, .6);
-                if(actualPosDeg < 150){
+                if(actualPosDeg < 153){
                     if(Math.abs(robotState.getPitchSpeed() - climberSpeed) < 10){
                         timer++;
                         if(timer >= 10){
