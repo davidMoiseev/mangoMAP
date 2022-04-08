@@ -132,7 +132,7 @@ public class Climber extends SubsystemBase{
             climberMotor.set(TalonFXControlMode.PercentOutput, commander.getClimberMotor());
             climberRelease.set(commander.getClimberRelease());
             manualControlFlag = true;
-        } else if (robotState.getClimberExtended()) {
+        } else if (robotState.getClimberExtended() && manualControlFlag == false) {
         //     manualControlFlag = false;
         //     if (climberState == 1) {  // Climber Retracted
         //         if (robotState.getClimberExtended() == true) {
@@ -229,7 +229,7 @@ public class Climber extends SubsystemBase{
         //         climberMotor.set(TalonFXControlMode.PercentOutput, 0.0);
         //     }
             if (climberState==climbState.preClimb) {
-                if(commander.getAbuttonHeld()){
+                if(commander.getAbuttonHeld() || commander.getYButtonHeld()){
                     climberState = climbState.latchPosition;
                 }
             }
@@ -237,8 +237,10 @@ public class Climber extends SubsystemBase{
                 climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE3_ANGLE));
                 targetPosDeg = CLIMBER_STATE3_ANGLE;
 
-                if(commander.getBbuttonHeld()){
-                    climberState = climbState.climbToMid;
+                if(actualPosDeg > CLIMBER_STATE3_ANGLE){
+                    if(commander.getBbuttonHeld() || commander.getYButtonHeld()){
+                        climberState = climbState.climbToMid;
+                    }
                 }
             }
 
@@ -285,10 +287,19 @@ public class Climber extends SubsystemBase{
             // }
 
             if (climberState==climbState.prepareToRelease) {
-                climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE5_ANGLE));
-                targetPosDeg = CLIMBER_STATE5_ANGLE;
-                if(commander.getBbuttonHeld()){
-                    climberState = climbState.release;
+                // climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE5_ANGLE));
+                // targetPosDeg = CLIMBER_STATE5_ANGLE;
+                // if(commander.getAbuttonHeld()){
+                //     climberState = climbState.release;
+                // }
+
+                if(actualPosDeg > CLIMBER_STATE5_ANGLE){
+                    climberMotor.set(ControlMode.PercentOutput, -.5);
+                } else {
+                    climberMotor.set(ControlMode.PercentOutput, 0);
+                    if(commander.getAbuttonHeld() || commander.getYButtonHeld()){
+                        climberState = climbState.release;
+                    }
                 }
             }
 
@@ -302,7 +313,7 @@ public class Climber extends SubsystemBase{
                 if(timer > 25){
                     climberRelease.set(false);
 
-                    if (commander.getAbuttonHeld()){
+                    if (commander.getBbuttonHeld() || commander.getYButtonHeld()){
                         climberState = climbState.climbToTraversal;
                     }
                 }
@@ -311,7 +322,6 @@ public class Climber extends SubsystemBase{
 
             if (climberState==climbState.climbToTraversal) {
                 climberMotor.set(ControlMode.PercentOutput, 1);
-
 
                 if(actualPosDeg > 290){
                     climberState = climbState.rampToApproachSpeed2;
@@ -332,7 +342,7 @@ public class Climber extends SubsystemBase{
 
             if (climberState==climbState.ApproachSpeedWithVelocityDetection2) {
                 climberMotor.set(ControlMode.PercentOutput, .6);
-                if(actualPosDeg < 335){
+                if(actualPosDeg < 332){
                     if(Math.abs(robotState.getPitchSpeed() - climberSpeed) < 10){
                         timer++;
                         if(timer >= 10){
@@ -347,10 +357,19 @@ public class Climber extends SubsystemBase{
             }
 
             if (climberState==climbState.prepareToReleaseFromTraversal) {
-                climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE7_ANGLE));
-                targetPosDeg = CLIMBER_STATE7_ANGLE;
-                if(commander.getBbuttonHeld()){
-                    climberState = climbState.releaseFromTraversal;
+                // climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE7_ANGLE));
+                // targetPosDeg = CLIMBER_STATE7_ANGLE;
+                // if(commander.getAbuttonHeld()){
+                //     climberState = climbState.releaseFromTraversal;
+                // }
+
+                if(actualPosDeg > CLIMBER_STATE7_ANGLE){
+                    climberMotor.set(ControlMode.PercentOutput, -.5);
+                } else {
+                    climberMotor.set(ControlMode.PercentOutput, 0);
+                    if(commander.getAbuttonHeld() || commander.getYButtonHeld()){
+                        climberState = climbState.releaseFromTraversal;
+                    }
                 }
             }
 
@@ -364,7 +383,7 @@ public class Climber extends SubsystemBase{
                 if(timer > 25){
                     climberRelease.set(false);
 
-                    if (commander.getAbuttonHeld()){
+                    if (commander.getBbuttonHeld() || commander.getYButtonHeld()){
                         climberState = climbState.finalMove;
                     }
                 }
@@ -374,12 +393,17 @@ public class Climber extends SubsystemBase{
             if (climberState==climbState.finalMove) {
                 climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE8_ANGLE));
                 targetPosDeg = CLIMBER_STATE8_ANGLE;
+                if (ticksToDegrees(climberMotor.getSelectedSensorPosition()) > CLIMBER_STATE8_ANGLE - 5){
+                    climberState = climbState.zero;
+                }
             }
 
             if(climberState == climbState.zero){
                 climberMotor.set(ControlMode.PercentOutput, 0);
             }
 
+        } else if (manualControlFlag){
+            climberMotor.set(ControlMode.PercentOutput, 0);
         }
         targetPosTicks = degreeToTicks(targetPosDeg);
         actualPosTicks = climberMotor.getSelectedSensorPosition();
