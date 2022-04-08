@@ -229,7 +229,7 @@ public class Climber extends SubsystemBase{
         //         climberMotor.set(TalonFXControlMode.PercentOutput, 0.0);
         //     }
             if (climberState==climbState.preClimb) {
-                if(commander.getAbuttonHeld()){
+                if(commander.getAbuttonHeld() || commander.getYButtonHeld()){
                     climberState = climbState.latchPosition;
                 }
             }
@@ -237,8 +237,10 @@ public class Climber extends SubsystemBase{
                 climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE3_ANGLE));
                 targetPosDeg = CLIMBER_STATE3_ANGLE;
 
-                if(commander.getBbuttonHeld()){
-                    climberState = climbState.climbToMid;
+                if(actualPosDeg > CLIMBER_STATE3_ANGLE){
+                    if(commander.getBbuttonHeld() || commander.getYButtonHeld()){
+                        climberState = climbState.climbToMid;
+                    }
                 }
             }
 
@@ -295,7 +297,7 @@ public class Climber extends SubsystemBase{
                     climberMotor.set(ControlMode.PercentOutput, -.5);
                 } else {
                     climberMotor.set(ControlMode.PercentOutput, 0);
-                    if(commander.getAbuttonHeld()){
+                    if(commander.getAbuttonHeld() || commander.getYButtonHeld()){
                         climberState = climbState.release;
                     }
                 }
@@ -311,7 +313,7 @@ public class Climber extends SubsystemBase{
                 if(timer > 25){
                     climberRelease.set(false);
 
-                    if (commander.getBbuttonHeld()){
+                    if (commander.getBbuttonHeld() || commander.getYButtonHeld()){
                         climberState = climbState.climbToTraversal;
                     }
                 }
@@ -320,7 +322,6 @@ public class Climber extends SubsystemBase{
 
             if (climberState==climbState.climbToTraversal) {
                 climberMotor.set(ControlMode.PercentOutput, 1);
-
 
                 if(actualPosDeg > 290){
                     climberState = climbState.rampToApproachSpeed2;
@@ -366,7 +367,7 @@ public class Climber extends SubsystemBase{
                     climberMotor.set(ControlMode.PercentOutput, -.5);
                 } else {
                     climberMotor.set(ControlMode.PercentOutput, 0);
-                    if(commander.getAbuttonHeld()){
+                    if(commander.getAbuttonHeld() || commander.getYButtonHeld()){
                         climberState = climbState.releaseFromTraversal;
                     }
                 }
@@ -382,7 +383,7 @@ public class Climber extends SubsystemBase{
                 if(timer > 25){
                     climberRelease.set(false);
 
-                    if (commander.getBbuttonHeld()){
+                    if (commander.getBbuttonHeld() || commander.getYButtonHeld()){
                         climberState = climbState.finalMove;
                     }
                 }

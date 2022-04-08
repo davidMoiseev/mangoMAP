@@ -615,4 +615,13 @@ public class AutonRight5Ball extends AutonCommader {
         // TODO Auto-generated method stub
         return false;
     }
+
+
+
+
+    @Override
+    public boolean getYButtonHeld() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }
