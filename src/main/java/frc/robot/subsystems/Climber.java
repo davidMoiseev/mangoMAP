@@ -96,36 +96,46 @@ public class Climber extends SubsystemBase{
 
     @Override
     public void enabledAction(RobotState robotState, RobotCommander commander) {
-        if (COMP_BOT) {
-            if (commander.getClimberExtend()) {
-                robotState.setClimberExtended(true);
-                climberExtend.set(DoubleSolenoid.Value.kForward);
-            }
-            
-            if (commander.getClimberRetract()) {
-                robotState.setClimberExtended(false);
-                climberExtend.set(DoubleSolenoid.Value.kReverse);
-            }
-        } else {
-            if (commander.getClimberExtend()) {
-                robotState.setClimberExtended(true);
-                climberExtend.set(DoubleSolenoid.Value.kReverse);
-            }
+        climberMotor.setNeutralMode(NeutralMode.Brake);
 
-            if (commander.getClimberRetract()) {
-                robotState.setClimberExtended(false);
-                climberExtend.set(DoubleSolenoid.Value.kForward);
-            }
-        }
+        // if (COMP_BOT) {
+        //     if (commander.getClimberExtend()) {
+        //         robotState.setClimberExtended(true);
+        //         climberExtend.set(DoubleSolenoid.Value.kForward);
+        //     }
+            
+        //     if (commander.getClimberRetract()) {
+        //         robotState.setClimberExtended(false);
+        //         climberExtend.set(DoubleSolenoid.Value.kReverse);
+        //     }
+        // } else {
+        //     if (commander.getClimberExtend()) {
+        //         robotState.setClimberExtended(true);
+        //         climberExtend.set(DoubleSolenoid.Value.kReverse);
+        //     }
+
+        //     if (commander.getClimberRetract()) {
+        //         robotState.setClimberExtended(false);
+        //         climberExtend.set(DoubleSolenoid.Value.kForward);
+        //     }
+        // }
 
         if (commander.getClimberExtend()) {
             robotState.setClimberExtended(true);
-            climberExtend.set(DoubleSolenoid.Value.kReverse);
         }
         
         if (commander.getClimberRetract()) {
             robotState.setClimberExtended(false);
-            climberExtend.set(DoubleSolenoid.Value.kForward);
+            climberExtend.set(DoubleSolenoid.Value.kReverse);
+        }
+
+        if(robotState.getClimberExtended()){
+            climberMotor.set(ControlMode.PercentOutput, .5);
+
+            if(actualPosDeg > -60){
+                climberMotor.set(ControlMode.PercentOutput, 0);
+                climberExtend.set(DoubleSolenoid.Value.kForward);
+            }
         }
 
         if (commander.getClimberManualControl() == true) {
@@ -237,7 +247,7 @@ public class Climber extends SubsystemBase{
                 climberMotor.set(TalonFXControlMode.MotionMagic, degreeToTicks(CLIMBER_STATE3_ANGLE));
                 targetPosDeg = CLIMBER_STATE3_ANGLE;
 
-                if(actualPosDeg > CLIMBER_STATE3_ANGLE){
+                if(actualPosDeg >= CLIMBER_STATE3_ANGLE - .5){
                     if(commander.getBbuttonHeld() || commander.getYButtonHeld()){
                         climberState = climbState.climbToMid;
                     }
@@ -414,6 +424,7 @@ public class Climber extends SubsystemBase{
     @Override
     public void disabledAction(RobotState robotState) {
         climberMotor.set(TalonFXControlMode.PercentOutput, 0.0);
+        climberMotor.setNeutralMode(NeutralMode.Coast);
     }
 
     @Override

@@ -400,13 +400,18 @@ public class AutonRight5Ball extends AutonCommader {
             autonInProgress = true;
             driveRequested = true;
             deployRightIntake = false;
-            deployLeftIntake = true;
             hoodPosition = Shot.WALL;
             shoot = true;
             desiredState = lastDesiredState;
             setTargetTheta(Rotation2d.fromDegrees(35));
             autoAim = false;
             
+            if(timer.get() < 1){
+                deployLeftIntake = true;
+            } else {
+                deployLeftIntake = false;
+            }
+
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
             SmartDashboard.putNumber("TargetY", desiredState.poseMeters.getTranslation().getY());
             SmartDashboard.putNumber("TargetTheta", desiredState.poseMeters.getRotation().getDegrees());
@@ -491,7 +496,7 @@ public class AutonRight5Ball extends AutonCommader {
         if (autoState == AutoState.driveToFinal) {
             autonInProgress = true;
             driveRequested = true;
-            deployRightIntake = true;
+            deployRightIntake = false;
             deployLeftIntake = false;
             hoodPosition = Shot.PROTECTED;
             autoAim = false;

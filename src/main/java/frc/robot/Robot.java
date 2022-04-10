@@ -77,7 +77,6 @@ public class Robot extends TimedRobot {
     post2Ball = new AutonPost2Ball(robotState);
 
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
 
     // PortForwarder.add(5800, "limelight.local", 5800);
     // PortForwarder.add(5801, "limelight.local", 5801);
@@ -113,6 +112,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+
+    climber.disabledAction(robotState);
+    
     lights.setLightsDisable();
     drivetrain.disabledAction(robotState);
     // SmartDashboard.getString("AutonSelection(LeftOrRight)", autonSelection);
@@ -122,7 +125,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-
     autonSelection = SmartDashboard.getNumber("autonSelection", 0);
 
     // RIGHT_RED, RIGHT_BLUE, LEFT
@@ -157,6 +159,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousPeriodic() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+
     if (autonSelection == 0) {
       ((AutonRightRed)selectedAuton).updateCommand(pigeon, drivetrain);
     } else if (autonSelection == 1) {
@@ -190,6 +194,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
+
     pigeon.enabledAction(teleopCommander);
     drivetrain.enabledAction(robotState, teleopCommander);
     ballSupervisor.enabledAction(robotState, teleopCommander);

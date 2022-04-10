@@ -41,6 +41,7 @@ public class Limelight extends SensorBase{
 
     @Override
     public void updateState() {
+        // NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
         txReal = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         tyReal = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         Detecting = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
@@ -50,6 +51,10 @@ public class Limelight extends SensorBase{
         robotState.setDetecting(Detecting);
         robotState.setTyReal(tyReal);
         robotState.setTxReal(txReal);
+    }
+
+    public void turnOff(){
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
     }
 
     @Override

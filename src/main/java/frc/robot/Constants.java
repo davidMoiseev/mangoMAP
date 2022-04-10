@@ -106,7 +106,7 @@ public final class Constants {
     public static final double CLIMBER_CRUISE_ACCELERATION = 15000.0; // 15000.0
     public static final double CLIMBER_TICKS_PER_DEGREE = (347.222/360.0) * 2048;  // 1975.307
     public static final double CLIMBER_ANGLE_HYSTERESIS = 3.0;
-    public static final double PACKAGE_ANGLE = -120.0;
+    public static final double PACKAGE_ANGLE = -112.0;
     public static final double CLIMBER_STATE3_ANGLE = 10.13;
     public static final double CLIMBER_STATE4_ANGLE = 148.0;
     public static final double CLIMBER_STATE5_ANGLE = 112.0;
@@ -160,7 +160,9 @@ public final class Constants {
     public static final int LED_DETECT_G = 0;
     public static final int LED_DETECT_B = 175;
 
-    public static final double LED_SHOOTER_SPEED_THRESH = 50.0;
+    public static final double LED_SHOOTER_SPEED_THRESH = 75.0;
+
+    public static final double INTAKE_POWER = 0.9;
 
     public static final boolean FANCY_DISABLE = true;
 }

@@ -158,8 +158,8 @@ public class Ballivator extends SubsystemBase{
         }
 
         SmartDashboard.putBoolean("Gate Solenoid", ballivatorSolenoid.get());
-        SmartDashboard.putBoolean("Ballivator Top", ballSenseTop.get());
-        SmartDashboard.putBoolean("Ballivator Bottom", ballSenseBottom.get());
+        SmartDashboard.putBoolean("BallivatorTop", ballSenseTop.get());
+        SmartDashboard.putBoolean("BallivatorBottom", ballSenseBottom.get());
         SmartDashboard.putNumber("NumBalls", numBalls);
     }
 
