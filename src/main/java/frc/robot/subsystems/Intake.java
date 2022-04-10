@@ -32,6 +32,11 @@ public class Intake extends SubsystemBase {
     double driveDir;
     double theta;
 
+    int timerRight = 0;
+    int timerLeft = 0;
+    int timerNoMove = 0;
+
+
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0),
         new Translation2d(DRIVETRAIN_TRACKWIDTH_METERS / 2.0, -DRIVETRAIN_WHEELBASE_METERS / 2.0),
@@ -49,6 +54,7 @@ public class Intake extends SubsystemBase {
         leftIntakeMotor.setNeutralMode((NeutralMode.Coast));
 
         drivetrain = m_drivetrain;
+
     }
     
     boolean intakeState = false;
@@ -62,36 +68,57 @@ public class Intake extends SubsystemBase {
                     0, Rotation2d.fromDegrees(robotState.getTheta()));
 
                 if(chassisSpeeds.vyMetersPerSecond > .05){
-                    runRightIntake = false;
-                    rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                    rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
-                    
+                    timerLeft = 0;
+                    timerNoMove = 0;
+
+                    if(timerRight > 8){
+                        runRightIntake = false;
+                        rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                        rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                    }
+
                     intakeState = true;
                     
                     runLeftIntake = true;
                     leftIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
                     leftIntakeMotor.set(ControlMode.PercentOutput, INTAKE_POWER);
+
+                    timerRight++;
+
                 } else if (chassisSpeeds.vyMetersPerSecond < -.05){
-                    runLeftIntake = false;
-                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                    leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                    timerRight = 0;
+                    timerNoMove = 0;
+
+                    if(timerLeft > 8){
+                        runLeftIntake = false;
+                        leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                        leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                    }
 
                     intakeState = true;
 
                     runRightIntake = true;
                     rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
                     rightIntakeMotor.set(ControlMode.PercentOutput, (-1 * INTAKE_POWER));
+
+                    timerLeft++;
                 } else {
-                    
-                    runLeftIntake = false;
-                    leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                    leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                    timerRight = 0;
+                    timerLeft = 0;
 
-                    intakeState = false;
+                    if(timerNoMove > 12){
+                        runLeftIntake = false;
+                        leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                        leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
 
-                    runRightIntake = false;
-                    rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
-                    rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+                        intakeState = false;
+
+                        runRightIntake = false;
+                        rightIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+                        rightIntakeMotor.set(ControlMode.PercentOutput, 0.0);
+
+                    }
+                    timerNoMove++;
                 }
 
             } else {
