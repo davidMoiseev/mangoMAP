@@ -82,6 +82,7 @@ public class Intake extends SubsystemBase {
                     rightIntakeSolenoid.set(DoubleSolenoid.Value.kForward);
                     rightIntakeMotor.set(ControlMode.PercentOutput, (-1 * INTAKE_POWER));
                 } else {
+                    
                     runLeftIntake = false;
                     leftIntakeSolenoid.set(DoubleSolenoid.Value.kReverse);
                     leftIntakeMotor.set(ControlMode.PercentOutput, 0.0);
