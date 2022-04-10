@@ -159,6 +159,10 @@ public final class Constants {
     public static final int LED_DETECT_R = 255;
     public static final int LED_DETECT_G = 0;
     public static final int LED_DETECT_B = 175;
+	
+    public static final int SIDE_LED_BALL_R = 255;
+    public static final int SIDE_LED_BALL_G = 0;
+    public static final int SIDE_LED_BALL_B = 0;	
 
     public static final double LED_SHOOTER_SPEED_THRESH = 75.0;
 
