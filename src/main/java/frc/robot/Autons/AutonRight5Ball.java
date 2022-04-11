@@ -349,7 +349,7 @@ public class AutonRight5Ball extends AutonCommader {
         if (autoState == AutoState.pathToSecondBall_1) {
             autonInProgress = true;
             driveRequested = true;
-            deployRightIntake = false;
+            deployRightIntake = true;
             deployLeftIntake = true;
             hoodPosition = Shot.WALL;
             autoAim = false;
@@ -373,7 +373,7 @@ public class AutonRight5Ball extends AutonCommader {
         if (autoState == AutoState.pathToSecondBall_2) {
             autonInProgress = true;
             driveRequested = true;
-            deployRightIntake = false;
+            deployRightIntake = true;
             deployLeftIntake = true;
             autoAim = false;
             hoodPosition = Shot.WALL;
@@ -496,7 +496,7 @@ public class AutonRight5Ball extends AutonCommader {
         if (autoState == AutoState.driveToFinal) {
             autonInProgress = true;
             driveRequested = true;
-            deployRightIntake = false;
+            deployRightIntake = true;
             deployLeftIntake = false;
             hoodPosition = Shot.PROTECTED;
             autoAim = false;
