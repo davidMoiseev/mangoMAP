@@ -148,7 +148,7 @@ public class RobotState {
         this.ballivatorBottom = sensor;
     }
 
-    public boolean ballivatorBottom(){
+    public boolean getBallivatorBottom(){
         return ballivatorBottom;
     }
 }
