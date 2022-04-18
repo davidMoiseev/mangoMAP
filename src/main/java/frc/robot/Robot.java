@@ -59,7 +59,9 @@ public class Robot extends TimedRobot {
         "climberState", "actualPosTicks", "actualPosDeg", "targetPosDeg", "targetPosTicks",
         "X Pigeon", "Y Pigeon", "Z Pigeon", "Pitch", "Roll", "ClimberReleased",
         "shooterError", "hoodPosition", "TargetX", "TargetY", "TargetTheta", "Robot State Theta", "poseX", "poseY", "Compressor Cur", "ClimberSpeed", "ClimberCurrent",
-        "BallivatorTop", "BallivatorBottom", "NumBalls");
+        "BallivatorTop", "BallivatorBottom", "NumBalls",
+        "Current Draw 1", "Current Draw 3", "Current Draw 5", "Current Draw 7",
+        "Current Supply 1", "Current Supply 3", "Current Supply 5", "Current Supply 7");
 
 
     robotState = new RobotState();
@@ -80,6 +82,9 @@ public class Robot extends TimedRobot {
 
     // PortForwarder.add(5800, "limelight.local", 5800);
     // PortForwarder.add(5801, "limelight.local", 5801);
+    // PortForwarder.add(5801, "limelight.local", 5802);
+    // PortForwarder.add(5801, "limelight.local", 5803);
+    // PortForwarder.add(5801, "limelight.local", 5804);
     // PortForwarder.add(5805, "limelight.local", 5805);
 
 

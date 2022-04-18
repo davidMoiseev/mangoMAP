@@ -9,8 +9,6 @@ import static frc.robot.Constants.*;
 public class Lights extends SubsystemBase{
     AddressableLED mainLed;
     AddressableLEDBuffer mainLedBuffer;
-    AddressableLED sideLed;
-    AddressableLEDBuffer sideLedBuffer;
 
     private int r;
     private int g;
@@ -22,7 +20,7 @@ public class Lights extends SubsystemBase{
         this.robotState = robotState;
 
         mainLed = new AddressableLED(0);  //0
-        mainLedBuffer = new AddressableLEDBuffer(26);  //26
+        mainLedBuffer = new AddressableLEDBuffer(25);  //26
         mainLed.setLength(mainLedBuffer.getLength());
 
         for (int i = 0; i < mainLedBuffer.getLength(); i++) {
@@ -31,17 +29,6 @@ public class Lights extends SubsystemBase{
 
         mainLed.setData(mainLedBuffer);
         mainLed.start();
-
-        // sideLed = new AddressableLED(1);
-        // sideLedBuffer = new AddressableLEDBuffer(4);
-        // sideLed.setLength(sideLedBuffer.getLength());
-
-        // for (int i = 0; i < sideLedBuffer.getLength(); i++) {
-        //    sideLedBuffer.setRGB(i, 0, 0, 0);
-        // }
-
-        // sideLed.setData(sideLedBuffer);
-        // sideLed.start();
        
     }
     @Override
@@ -72,23 +59,14 @@ public class Lights extends SubsystemBase{
             mainLedBuffer.setRGB(i, LED_DISABLE_R, LED_DISABLE_G, LED_DISABLE_B);
         }
         mainLed.setData(mainLedBuffer);
-
-        // for (int i = 0; i < sideLedBuffer.getLength(); i++) {
-        //     sideLedBuffer.setRGB(i, LED_DISABLE_R, LED_DISABLE_G, LED_DISABLE_B);
-        // }
-        // sideLed.setData(sideLedBuffer);
     }
     public void setLightsAuton() {
         for (int i = 0; i < mainLedBuffer.getLength(); i++) {
             mainLedBuffer.setRGB(i, LED_AUTON_R, LED_AUTON_G, LED_AUTON_B);
         }
         mainLed.setData(mainLedBuffer);
-
-        // for (int i = 0; i < sideLedBuffer.getLength(); i++) {
-        //     sideLedBuffer.setRGB(i, LED_AUTON_R, LED_AUTON_G, LED_AUTON_B);
-        // }
-        // sideLed.setData(sideLedBuffer);
     }
+    
     public void setLightsTeleop() {
         if ((robotState.getShooterOn() == true) && (Math.abs(robotState.getTargetShooterSpeed() - robotState.getActualShooterSpeed()) < LED_SHOOTER_SPEED_THRESH)) {
             r = LED_SHOOT_R;
@@ -100,7 +78,7 @@ public class Lights extends SubsystemBase{
             b = LED_TELEOP_B;
         }
 
-        for (int i = 0; i < mainLedBuffer.getLength(); i++) {
+        for (int i = 8; i < mainLedBuffer.getLength() - 8; i++) {
             mainLedBuffer.setRGB(i, r, g, b);
         }
 
@@ -108,40 +86,46 @@ public class Lights extends SubsystemBase{
         if (robotState.getBallivatorTop() == true) {
             for (int i = 6; i < 8; i++) {
                 mainLedBuffer.setRGB(i, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
-                mainLedBuffer.setRGB(i + 12, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
+                mainLedBuffer.setRGB(i + 11, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
             }
-            // for (int i = 0; i < 2; i++) {
-            //     sideLedBuffer.setRGB(i, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
-            // }
+            for (int i = 0; i < 2; i++) {
+                mainLedBuffer.setRGB(i, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
+                mainLedBuffer.setRGB(i + 23, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
+            }
 
         } else {
             for (int i = 6; i < 8; i++) {
                 mainLedBuffer.setRGB(i, 0, 0, 0);
-                mainLedBuffer.setRGB(i + 12, 0, 0, 0);
+                mainLedBuffer.setRGB(i + 11, 0, 0, 0);
             }
-            // for (int i = 0; i < 2; i++) {
-            //     sideLedBuffer.setRGB(i, 0, 0, 0);
-            // }
+            for (int i = 0; i < 2; i++) {
+                mainLedBuffer.setRGB(i ,0, 0, 0);
+                mainLedBuffer.setRGB(i + 23, 0, 0, 0);
+            }
         }
         if (robotState.getBallivatorBottom() == true) {
             for (int i = 4; i < 6; i++) {
                 mainLedBuffer.setRGB(i, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
-                mainLedBuffer.setRGB(i + 16, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
+                mainLedBuffer.setRGB(i + 15, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
             }
-            // for (int i = 2; i < 4; i++) {
-            //     sideLedBuffer.setRGB(i, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
-            // }
+            for (int i = 2; i < 4; i++) {
+                mainLedBuffer.setRGB(i, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
+                mainLedBuffer.setRGB(i + 19, SIDE_LED_BALL_R, SIDE_LED_BALL_G, SIDE_LED_BALL_B);
+            }
+
         } else {
             for (int i = 4; i < 6; i++) {
                 mainLedBuffer.setRGB(i, 0, 0, 0);
-                mainLedBuffer.setRGB(i + 16, 0, 0, 0);
+                mainLedBuffer.setRGB(i + 15, 0, 0, 0);
             }
-            // for (int i = 2; i < 4; i++) {
-            //     sideLedBuffer.setRGB(i, 0, 0, 0);
-            // }
+            for (int i = 2; i < 4; i++) {
+                mainLedBuffer.setRGB(i, 0, 0, 0);
+                mainLedBuffer.setRGB(i + 19, 0, 0, 0);
+            }
+
         }
 
         mainLed.setData(mainLedBuffer);
-        // sideLed.setData(sideLedBuffer);
+
     }
 }

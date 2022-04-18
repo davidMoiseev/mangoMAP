@@ -1,15 +1,23 @@
 package com.swervedrivespecialties.swervelib.ctre;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.swervedrivespecialties.swervelib.DriveController;
 import com.swervedrivespecialties.swervelib.DriveControllerFactory;
 import com.swervedrivespecialties.swervelib.ModuleConfiguration;
+
+import org.hotutilites.hotlogger.HotLogger;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import static frc.robot.Constants.*;
 
 public final class Falcon500DriveControllerFactoryBuilder {
     private static final double TICKS_PER_ROTATION = 2048.0;
@@ -68,8 +76,9 @@ public final class Falcon500DriveControllerFactoryBuilder {
             }
 
             motor.setNeutralMode(NeutralMode.Brake);
-            motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 30, 45, 1));
-
+            motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 5, 10, 1));
+            motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, NORMAL_DRIVE_CURRENT, PEAK_DRIVE_CURRENT, DRIVE_CURRENT_THRESHOLD));
+            
             motor.setInverted(moduleConfiguration.isDriveInverted() ? TalonFXInvertType.Clockwise : TalonFXInvertType.CounterClockwise);
             motor.setSensorPhase(true);
 
@@ -100,6 +109,10 @@ public final class Falcon500DriveControllerFactoryBuilder {
         @Override
         public void setReferenceVoltage(double voltage) {
             motor.set(TalonFXControlMode.PercentOutput, voltage / nominalVoltage);
+
+            HotLogger.Log("Current Draw " + Integer.toString(motor.getDeviceID()), motor.getStatorCurrent());
+            HotLogger.Log("Current Supply " + Integer.toString(motor.getDeviceID()), motor.getSupplyCurrent());
+            // SmartDashboard.putNumber("Motor " + Integer.toString(motor.getDeviceID()), 1);
         }
 
         @Override

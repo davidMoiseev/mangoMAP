@@ -12,13 +12,17 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static boolean REAL_BOT = true;
-    public static boolean COMP_BOT = true;
+    public static boolean COMP_BOT = false;
 
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
     public static final double DRIVETRAIN_WHEELBASE_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
     public static final double MAX_VOLTAGE = 12.0;
+
+    public static final double PEAK_DRIVE_CURRENT = 130;
+    public static final double NORMAL_DRIVE_CURRENT = 90;
+    public static final double DRIVE_CURRENT_THRESHOLD = .1;
 
     public static final double MAX_VELOCITY_METERS_PER_SECOND = REAL_BOT ?
         6380.0 / 60.0 *
@@ -63,7 +67,8 @@ public final class Constants {
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
     public static final double SHOOTER_SPEED_FENDER = 1050.0; //2200
-    public static final double SHOOTER_SPEED_WALL = 2100.0;
+    public static final double SHOOTER_SPEED_WALL = 2050.0; // 2100
+    public static final double SHOOTER_SPEED_AUTO5B = 2150.0;
     public static final double SHOOTER_SPEED_TARMACK = 1975.0;
     public static final double SHOOTER_SPEED_AUTO = 1825; // 1930 
     public static final double SHOOTER_SPEED_BLUEAUTO2 = 1975; // Lower 30, 1945
@@ -166,7 +171,7 @@ public final class Constants {
 
     public static final double LED_SHOOTER_SPEED_THRESH = 75.0;
 
-    public static final double INTAKE_POWER = 0.9;
+    public static final double INTAKE_POWER = 0.85;
 
     public static final boolean FANCY_DISABLE = true;
 }
