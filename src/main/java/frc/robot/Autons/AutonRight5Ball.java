@@ -277,7 +277,7 @@ public class AutonRight5Ball extends AutonCommader {
         }
         if (autoState == AutoState.prepareToShootInitialBall) {
             autonInProgress = true;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.AUTO5B;
             pigeon.initializeAuton(this);
             autoAim = false;
             if(timer.get() > .25) {
@@ -289,7 +289,7 @@ public class AutonRight5Ball extends AutonCommader {
         if (autoState == AutoState.shootInitialBall) {
             autonInProgress = true;
             driveRequested = false;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.AUTO5B;
             // shoot = true;
             autoAim = false;
             
@@ -305,7 +305,7 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = true;
             deployRightIntake = true;
             deployLeftIntake = false;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.AUTO5B;
             autoAim = false;
             desiredState = new State(timer.get(), .6/1.5*timer.get(), .6/1.5, new Pose2d(lastDesiredState.poseMeters.getX()/1.5*timer.get(),
                                                                     lastDesiredState.poseMeters.getY()-1.15/1.5*timer.get(),
@@ -330,7 +330,7 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = true;
             deployRightIntake = true;
             deployLeftIntake = false;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.AUTO5B;
             desiredState = lastDesiredState;
             setTargetTheta(Rotation2d.fromDegrees(0));
             autoAim = false;
@@ -349,9 +349,9 @@ public class AutonRight5Ball extends AutonCommader {
         if (autoState == AutoState.pathToSecondBall_1) {
             autonInProgress = true;
             driveRequested = true;
-            deployRightIntake = true;
+            deployRightIntake = false;
             deployLeftIntake = true;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.AUTO5B;
             autoAim = false;
 
             desiredState = new State(timer.get(), .1/1*timer.get(), .1/1, new Pose2d(lastDesiredState.poseMeters.getX()-1.5/1*timer.get(),
@@ -373,10 +373,10 @@ public class AutonRight5Ball extends AutonCommader {
         if (autoState == AutoState.pathToSecondBall_2) {
             autonInProgress = true;
             driveRequested = true;
-            deployRightIntake = true;
+            deployRightIntake = false;
             deployLeftIntake = true;
             autoAim = false;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.AUTO5B;
             shoot = true;
 
             desiredState = new State(timer.get(), .075/1*timer.get(),  .075/1, new Pose2d(lastDesiredState.poseMeters.getX()-.75/1*timer.get(),
@@ -400,16 +400,16 @@ public class AutonRight5Ball extends AutonCommader {
             autonInProgress = true;
             driveRequested = true;
             deployRightIntake = false;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.AUTO5B;
             shoot = true;
             desiredState = lastDesiredState;
             setTargetTheta(Rotation2d.fromDegrees(35));
             autoAim = false;
             
-            if(timer.get() < 1){
-                deployLeftIntake = true;
-            } else {
+            if(timer.get() > .25){
                 deployLeftIntake = false;
+            } else {
+                deployLeftIntake = true;
             }
 
             SmartDashboard.putNumber("TargetX", desiredState.poseMeters.getTranslation().getX());
@@ -428,7 +428,7 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = true;
             deployRightIntake = true;
             deployLeftIntake = false;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.AUTO5B;
             autoAim = false;
 
             desiredState = new State(timer.get(), .075/1.5*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX()-3.5/1.5*timer.get(),
@@ -452,7 +452,7 @@ public class AutonRight5Ball extends AutonCommader {
             driveRequested = true;
             deployRightIntake = true;
             deployLeftIntake = false;
-            hoodPosition = Shot.WALL;
+            hoodPosition = Shot.PROTECTED;
             autoAim = false;
 
             desiredState = new State(timer.get(), .075/.5*timer.get(),  .075/.5, new Pose2d(lastDesiredState.poseMeters.getX()-.5/.5*timer.get(),
@@ -496,10 +496,15 @@ public class AutonRight5Ball extends AutonCommader {
         if (autoState == AutoState.driveToFinal) {
             autonInProgress = true;
             driveRequested = true;
-            deployRightIntake = true;
             deployLeftIntake = false;
             hoodPosition = Shot.PROTECTED;
             autoAim = false;
+
+            if(timer.get() > .5){
+                deployRightIntake = true;
+            } else {
+                deployRightIntake = false;
+            }
 
             desiredState = new State(timer.get(), .075/1.5*timer.get(),  .075/1.5, new Pose2d(lastDesiredState.poseMeters.getX()+3/1.5*timer.get(),
                                                                     lastDesiredState.poseMeters.getY()/1.5*timer.get(),

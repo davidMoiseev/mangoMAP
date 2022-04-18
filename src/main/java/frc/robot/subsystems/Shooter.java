@@ -29,7 +29,7 @@ public class Shooter extends SubsystemBase{
         WALL,
         TARMACK,
         PROTECTED, AUTO, AUTO2, BLUEAUTO2, CHAOS
-     , CLIMB}
+     , CLIMB, AUTO5B}
 
     double pGain = 0.00026;
     double iGain = 0.00005;//Not good yet
@@ -133,6 +133,12 @@ public class Shooter extends SubsystemBase{
             targetRPM = 0;
             disableShooter = true;
             hoodPosition = Shot.CLIMB;
+        }else if(commander.getHoodPosition() == Shot.AUTO5B){
+            inside(Piston.RETRACT);
+            outside(Piston.EXTEND);
+            targetRPM = SHOOTER_SPEED_AUTO5B;
+            disableShooter = false;
+            hoodPosition = Shot.AUTO5B;
         } else if (commander.getHoodPosition() == Shot.CHAOS){
             inside(Piston.EXTEND);
             outside(Piston.EXTEND);
