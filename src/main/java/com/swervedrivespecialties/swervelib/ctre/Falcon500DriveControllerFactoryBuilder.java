@@ -69,7 +69,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             TalonFX motor = new TalonFX(driveConfiguration);
             CtreUtils.checkCtreError(motor.configAllSettings(motorConfiguration), "Failed to configure Falcon 500");
-
+            
             if (hasVoltageCompensation()) {
                 // Enable voltage compensation
                 motor.enableVoltageCompensation(true);
@@ -77,7 +77,7 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             motor.setNeutralMode(NeutralMode.Brake);
             motor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 5, 10, 1));
-            motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, NORMAL_DRIVE_CURRENT, PEAK_DRIVE_CURRENT, DRIVE_CURRENT_THRESHOLD));
+            // motor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, NORMAL_DRIVE_CURRENT, PEAK_DRIVE_CURRENT, DRIVE_CURRENT_THRESHOLD));
             
             motor.setInverted(moduleConfiguration.isDriveInverted() ? TalonFXInvertType.Clockwise : TalonFXInvertType.CounterClockwise);
             motor.setSensorPhase(true);
