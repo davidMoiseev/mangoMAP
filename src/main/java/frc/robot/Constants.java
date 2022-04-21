@@ -12,7 +12,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public final class Constants {
     public static boolean REAL_BOT = true;
-    public static boolean COMP_BOT = false;
+    public static boolean COMP_BOT = true;
 
     public static final double DRIVETRAIN_TRACKWIDTH_METERS = REAL_BOT ? 0.57785 : 0.4445;
 
@@ -21,7 +21,7 @@ public final class Constants {
     public static final double MAX_VOLTAGE = 12.0;
 
     public static final double PEAK_DRIVE_CURRENT = 130;
-    public static final double NORMAL_DRIVE_CURRENT = 90;
+    public static final double NORMAL_DRIVE_CURRENT = 110;
     public static final double DRIVE_CURRENT_THRESHOLD = .1;
 
     public static final double MAX_VELOCITY_METERS_PER_SECOND = REAL_BOT ?
