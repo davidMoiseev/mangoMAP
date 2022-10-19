@@ -36,7 +36,7 @@ public class Limelight extends SensorBase{
         SmartDashboard.putNumber("LimelightArea", area);
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(6);
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
+        // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Limelight extends SensorBase{
         txReal = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
         tyReal = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
         Detecting = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
+        // NetworkTableInstance.getDefault().getTable("limelight").getEntry("stream").setNumber(2);
 
 
         robotState.setDetecting(Detecting);

@@ -7,7 +7,9 @@ import org.hotutilites.hotlogger.HotLogger;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.net.PortForwarder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,6 +48,7 @@ public class Robot extends TimedRobot {
   private Object autonSelectionPrev;
   private Lights lights;
   private AutonPost2Ball post2Ball;
+  // private PowerDistribution PDP;
 
   public Timer timer;
 
@@ -61,7 +64,7 @@ public class Robot extends TimedRobot {
         "shooterError", "hoodPosition", "TargetX", "TargetY", "TargetTheta", "Robot State Theta", "poseX", "poseY", "Compressor Cur", "ClimberSpeed", "ClimberCurrent",
         "BallivatorTop", "BallivatorBottom", "NumBalls",
         "Current Draw 1", "Current Draw 3", "Current Draw 5", "Current Draw 7",
-        "Current Supply 1", "Current Supply 3", "Current Supply 5", "Current Supply 7");
+        "Current Supply 1", "Current Supply 3", "Current Supply 5", "Current Supply 7", "Battery Voltage");
 
 
     robotState = new RobotState();
@@ -73,6 +76,7 @@ public class Robot extends TimedRobot {
     climber = new Climber(robotState, hub);
     limelight = new Limelight(robotState);
     lights = new Lights(robotState);
+    // PDP = new PowerDistribution();
 
     timer = new Timer();
     
@@ -80,12 +84,12 @@ public class Robot extends TimedRobot {
 
     NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
 
-    // PortForwarder.add(5800, "limelight.local", 5800);
-    // PortForwarder.add(5801, "limelight.local", 5801);
-    // PortForwarder.add(5801, "limelight.local", 5802);
-    // PortForwarder.add(5801, "limelight.local", 5803);
-    // PortForwarder.add(5801, "limelight.local", 5804);
-    // PortForwarder.add(5805, "limelight.local", 5805);
+    PortForwarder.add(5800, "limelight.local", 5800);
+    PortForwarder.add(5801, "limelight.local", 5801);
+    PortForwarder.add(5802, "limelight.local", 5802);
+    PortForwarder.add(5803, "limelight.local", 5803);
+    PortForwarder.add(5804, "limelight.local", 5804);
+    PortForwarder.add(5805, "limelight.local", 5805);
 
 
     autonSelection = 0; // RIGHT_RED, RIGHT_BLUE, LEFT, RIGHT_5
@@ -104,6 +108,7 @@ public class Robot extends TimedRobot {
     climber.logData();
     lights.logData();
 
+    // HotLogger.Log("Battery Voltage", PDP.getVoltage()); 
     HotLogger.Log("Compressor Cur", hub.getCompressorCurrent());
   }
 
@@ -193,6 +198,7 @@ public class Robot extends TimedRobot {
     ballSupervisor.zeroSensor();
     drivetrain.zeroActuators();
     drivetrain.zeroSensor();
+
     hub.enableCompressorAnalog(MINIMUM_PRESSURE, MAXIMUM_PRESSURE);
     lights.setLightsTeleop(); 
   }

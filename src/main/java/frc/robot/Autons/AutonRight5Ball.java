@@ -455,8 +455,8 @@ public class AutonRight5Ball extends AutonCommader {
             hoodPosition = Shot.PROTECTED;
             autoAim = false;
 
-            desiredState = new State(timer.get(), .075/.5*timer.get(),  .075/.5, new Pose2d(lastDesiredState.poseMeters.getX()-.5/.5*timer.get(),
-                                                                    lastDesiredState.poseMeters.getY()-.2/.5*timer.get(),
+            desiredState = new State(timer.get(), .075/.5*timer.get(),  .075/.5, new Pose2d(lastDesiredState.poseMeters.getX()-.53/.5*timer.get(),
+                                                                    lastDesiredState.poseMeters.getY()-.23/.5*timer.get(),
                                                                     lastDesiredState.poseMeters.getRotation()), 
                                                                     1000);
             setTargetTheta(Rotation2d.fromDegrees(315));

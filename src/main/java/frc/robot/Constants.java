@@ -62,7 +62,7 @@ public final class Constants {
     public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = REAL_BOT ? 7 : 6;
     public static final int BACK_RIGHT_MODULE_STEER_MOTOR = REAL_BOT ? 8 : 8;
     public static final int BACK_RIGHT_MODULE_STEER_ENCODER = REAL_BOT ? 19 : 18;
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(172.265625) : -Math.toRadians(348.92578125) : -Math.toRadians(212.2890625);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = REAL_BOT ? COMP_BOT ? -Math.toRadians(0) : -Math.toRadians(348.92578125) : -Math.toRadians(212.2890625); // 172.265625
 
     public static final int RIGHT_INTAKE_MOTOR = 10;
     public static final int LEFT_INTAKE_MOTOR = 9;
